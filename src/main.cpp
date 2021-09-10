@@ -50,10 +50,10 @@ int main( int argc, char* args[])
 						break;
 					}
 				}
-			}
 
-			//rendu à 60FPS
-			SDL_Delay( 1.0 / 60 );
+				//rendu à 60FPS
+				SDL_Delay(1.0 / 60);
+			}
 		}
 	}
 
