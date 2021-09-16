@@ -6,9 +6,9 @@ class Particle
 public:
 	Particle();
 	Particle(Vector3D* initialPos, float mass);
-	~Particle();
+	//~Particle();
 
-	void Move();
+	//void Move();
 	void Update(float deltaTime);
 
 

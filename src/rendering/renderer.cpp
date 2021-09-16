@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "sphere.h"
 
 // modèle 3d de la pyramide avec les normales
 GLfloat pyramidVertices[] =
@@ -35,6 +36,8 @@ GLuint pyramidIndices[] =
 	10, 12, 11, // Right side
 	13, 15, 14 // Facing side
 };
+
+Sphere s(0.5f, 24, 24);
 
 //constructeur
 Renderer::Renderer(SDL_Window* targetWindow)
@@ -73,18 +76,22 @@ Renderer::Renderer(SDL_Window* targetWindow)
 	glGenBuffers(1, &EBO);
 	glBindVertexArray(VAO);
 
+
+	printf("vertices : %d", s.vertices.size());
+	printf("; indices : %d", s.indices.size());
+
 	//ajout des vertices
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(pyramidVertices), pyramidVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, s.vertices.size() * sizeof(s.vertices), &(s.vertices[0]), GL_STATIC_DRAW);
 
 	//ajout des indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(pyramidIndices), pyramidIndices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, s.indices.size() * sizeof(s.indices), &(s.indices[0]), GL_STATIC_DRAW);
 
 	//indique a OpenGL comment lires les données
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
 	glEnableVertexAttribArray(0); //vertices (location = 0)
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1); //normales (location = 1)
 
 	//lie le VBO, VAO et EBO à 0 pour ne pas les modifier accidentellement
@@ -102,7 +109,7 @@ Renderer::Renderer(SDL_Window* targetWindow)
 }
 
 float t = 0;
-void Renderer::Update()
+void Renderer::Update(Scene scene)
 {
     t += 0.01f;
     //float r = (1 + sin(t)) * 0.5f;
@@ -114,24 +121,35 @@ void Renderer::Update()
 	glUseProgram(defaultShader.program);
 
 	//transformations de la caméra avec des matrices
-	glm::mat4 model = glm::mat4(1.0f);
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 proj = glm::mat4(1.0f);
-	model = glm::rotate(model, glm::radians(t*100), glm::vec3(0, 1.0f, 0));
-	view = glm::translate(view, glm::vec3(0, -0.5f, -3.0f));
-	view = glm::rotate(view, glm::radians(30.0f), glm::vec3(1.0f, 0, 0));
-	proj = glm::perspective(glm::radians(45.0f), (float)(SCREEN_WIDTH / SCREEN_HEIGHT), 0.1f, 100.0f);
-	int modelLoc = glGetUniformLocation(defaultShader.program, "model");
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	int viewLoc = glGetUniformLocation(defaultShader.program, "view");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	int projLoc = glGetUniformLocation(defaultShader.program, "proj");
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+
+	
 
 	//position de la lumière
 	glUniform3f(glGetUniformLocation(defaultShader.program, "lightPos"), 2, 2, 2);
 
-	//affiche la pyramide
+	//affiche les gameobjects
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, sizeof(pyramidIndices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+	for (int i = 0; i < scene.GetObjectsCount(); i++)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 proj = glm::mat4(1.0f);
+
+		Vector3D* pos = scene.gameObjects[i].GetPosition();
+		model = glm::translate(model, glm::vec3(pos->x, pos->y, pos->z));
+		//model = glm::rotate(model, glm::radians(t * (i+1) * 50), glm::vec3(0, 1.0f, 0));
+		
+		view = glm::translate(view, glm::vec3(0, -0.5f, -3.0f));
+		//view = glm::rotate(view, glm::radians(30.0f), glm::vec3(1.0f, 0, 0));
+		proj = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f);
+
+		int modelLoc = glGetUniformLocation(defaultShader.program, "model");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		int viewLoc = glGetUniformLocation(defaultShader.program, "view");
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		int projLoc = glGetUniformLocation(defaultShader.program, "proj");
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+
+		glDrawElements(GL_TRIANGLES, s.indices.size(), GL_UNSIGNED_INT, 0);
+	}
 }

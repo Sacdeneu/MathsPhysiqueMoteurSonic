@@ -18,7 +18,7 @@ Particle::Particle()
 Particle::Particle(Vector3D* initialPos, float mass)
 {
 	position = initialPos;
-	mass = mass;
+	this->mass = mass;
 
 	velocity = new Vector3D(0, 0, 0);
 	acceleration = new Vector3D(0, 0, 0);
@@ -30,5 +30,5 @@ Particle::Particle(Vector3D* initialPos, float mass)
 
 void Particle::Update(float deltaTime)
 {
-	position 
+ 
 }
