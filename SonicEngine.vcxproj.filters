@@ -44,7 +44,7 @@
     <ClInclude Include="src\rendering\shader.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
-    <ClInclude Include="Particle.h">
+    <ClInclude Include="src\Physics\Particle.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering\scene.h">

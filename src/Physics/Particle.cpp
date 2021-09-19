@@ -1,5 +1,5 @@
 #include "Particle.h"
-
+#include "Math.h"
 
 
 Particle::Particle()
@@ -28,7 +28,24 @@ Particle::Particle(Vector3D* initialPos, float mass)
 	color = new Vector3D(0, 0, 0);
 }
 
+Particle::~Particle() 
+{
+
+}
+
+
+
+void Particle::AddForce(Vector3D* force) 
+{
+	//acceleration = force * GetMass();
+}
+
 void Particle::Update(float deltaTime)
 {
- 
+	// Update Position
+	//position = position + (velocity * deltaTime) + acceleration * (powf(t, 2) / 2);
+
+	// Update Velocit�
+	//velocity = (velocity * powf(damping, t)) + acceleration * deltaTime;
+
 }
