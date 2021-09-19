@@ -13,6 +13,7 @@ class Vector3D
 		Vector3D(float, float, float);
 		float Norm(float, float, float);
 		float NormSquare(float);
+		float NormSquare(Vector3D);
 		Vector3D Normalisation(float, Vector3D);
 		Vector3D ScalarMultiply(float, Vector3D);
 		Vector3D Addition(Vector3D, Vector3D);
@@ -20,7 +21,8 @@ class Vector3D
 		Vector3D Multiply(Vector3D, Vector3D);
 		float ScalarProduct(Vector3D, Vector3D);
 		Vector3D CrossProduct(Vector3D, Vector3D);
-
+		Vector3D operator+(Vector3D&);
+		Vector3D operator-(Vector3D&);
 		friend std::ostream & operator<<(std::ostream &os, Vector3D v);
 
 };

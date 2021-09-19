@@ -71,8 +71,11 @@ int main( int argc, char* args[])
 
 	Vector3D vector1 = Vector3D(1, 2, 3);
 	Vector3D vector2 = Vector3D(4, 5, 6);
+	Vector3D vector3 = vector1 + vector2;
+	Vector3D vector4 = vector1 - vector2;
 	std::cout << "Norm " << vector1.Norm(vector1.x, vector1.y, vector1.z) << std::endl;
 	std::cout << "NormSquare " << vector1.NormSquare(vector1.Norm(vector1.x, vector1.y, vector1.z)) << std::endl;
+	std::cout << "NormSquare 2 " << vector1.NormSquare(vector1) << std::endl;
 	std::cout << "Normalisation " << vector1.Normalisation(vector1.Norm(vector1.x, vector1.y, vector1.z), vector1) << std::endl;
 	std::cout << "ScalarMultiply " << vector1.ScalarMultiply(5.0, vector1) << std::endl;
 	std::cout << "Addition " << vector1.Addition(vector1, vector2) << std::endl;
@@ -80,6 +83,10 @@ int main( int argc, char* args[])
 	std::cout << "Multiply " << vector1.Multiply(vector1, vector2) << std::endl;
 	std::cout << "ScalarProduct " << vector1.ScalarProduct(vector1, vector2) << std::endl;
 	std::cout << "CrossProduct " <<vector1.CrossProduct(vector1, vector2) << std::endl;
+	std::cout << "Vector3 Addition " << vector3 << std::endl;
+	std::cout << "Vector4 Substraction " << vector4 << std::endl;
+
+
 
 
 

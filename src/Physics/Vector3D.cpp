@@ -7,6 +7,14 @@ std::ostream & operator<<(std::ostream &os, Vector3D v)
 	return os;
 }
 
+Vector3D Vector3D::operator+( Vector3D& vector){
+	return Addition(*this, vector); 
+}
+
+Vector3D Vector3D::operator-(Vector3D& vector) {
+	return Substraction(*this, vector);
+}
+
 Vector3D::Vector3D(float x, float y, float z)
 {
 	this->x= x;
@@ -23,6 +31,12 @@ float Vector3D::Norm(float x, float y , float z)
 float Vector3D::NormSquare(float norm)
 {
 	float normSquare = norm * norm;
+	return normSquare;
+}
+
+float Vector3D::NormSquare(Vector3D vector)
+{
+	float normSquare = x * x + y * y + z * z;
 	return normSquare;
 }
 
