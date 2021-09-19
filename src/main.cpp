@@ -1,6 +1,8 @@
 #include <SDL.h>
 #include <stdio.h>
 #include "rendering/renderer.h"
+#include "../Vector3D.h"
+
 
 bool runGame = true;
 
@@ -59,9 +61,24 @@ int main( int argc, char* args[])
 		}
 	}
 
+	Vector3D vector1 = Vector3D(1, 2, 3);
+	Vector3D vector2 = Vector3D(4, 5, 6);
+	std::cout << "Norm " << vector1.Norm(vector1.x, vector1.y, vector1.z) << std::endl;
+	std::cout << "NormSquare " << vector1.NormSquare(vector1.Norm(vector1.x, vector1.y, vector1.z)) << std::endl;
+	std::cout << "Normalisation " << vector1.Normalisation(vector1.Norm(vector1.x, vector1.y, vector1.z), vector1) << std::endl;
+	std::cout << "ScalarMultiply " << vector1.ScalarMultiply(5.0, vector1) << std::endl;
+	std::cout << "Addition " << vector1.Addition(vector1, vector2) << std::endl;
+	std::cout << "Substraction " << vector1.Substraction(vector1, vector2) << std::endl;
+	std::cout << "Multiply " << vector1.Multiply(vector1, vector2) << std::endl;
+	std::cout << "ScalarProduct " << vector1.ScalarProduct(vector1, vector2) << std::endl;
+	std::cout << "CrossProduct " <<vector1.CrossProduct(vector1, vector2) << std::endl;
+
+
+
 	//destruction de la fenêtre
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+
 
 	return 0;
 }
