@@ -9,5 +9,5 @@ void main()
 	vec3 normal = normalize(Normal);
 	vec3 lightDirection = normalize(lightPos - pos);
 	float diffuse = max(dot(normal, lightDirection), 0.0f);
-	FragColor = vec4(0.9f, 0.8f, 0.7f, 1.0f) * diffuse + ambiant;
+	FragColor = vec4(0.168f, 0.384f, 0.96f, 1.0f) * (diffuse + ambiant);
 }

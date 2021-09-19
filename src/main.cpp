@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <stdio.h>
 #include "rendering/renderer.h"
+#include "rendering/scene.h"
 #include "../Vector3D.h"
 
 
@@ -47,12 +48,19 @@ int main( int argc, char* args[])
 		else //si la fenêtre a été crée
 		{
 			Renderer renderer = Renderer(window);
+			Scene scene;
+
+			Particle p1(new Vector3D(0, 1, 0), 1);
+			scene.AddParticle(p1);
+
+			Particle p2(new Vector3D(1, 0, -2), 1);
+			scene.AddParticle(p2);
 
 			//boucle de jeu
 			while (runGame)
 			{
 				handleInputs();
-				renderer.Update();
+				renderer.Update(scene);
 				SDL_GL_SwapWindow(window);
 
 				//rendu à 60FPS
