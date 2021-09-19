@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "rendering/renderer.h"
 #include "rendering/scene.h"
-#include "../Vector3D.h"
+#include "Physics/Vector3D.h"
 
 
 bool runGame = true;
