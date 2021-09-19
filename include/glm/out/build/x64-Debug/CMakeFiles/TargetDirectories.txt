@@ -1,0 +1,2 @@
+C:/Users/Alexandre/Desktop/Maitrise UQAC/Mathématiques et physique pour le jeu vidéo/SonicEngine/include/glm/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/Alexandre/Desktop/Maitrise UQAC/Mathématiques et physique pour le jeu vidéo/SonicEngine/include/glm/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
