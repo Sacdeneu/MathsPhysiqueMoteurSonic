@@ -9,9 +9,9 @@ class Scene
 public:
 	Scene();
 	int GetObjectsCount();
-	void AddParticle(Particle p);
-	void RemoveParticle(Particle p);
-	std::vector<Particle> gameObjects;
+	void AddParticle(Particle* p);
+	void RemoveParticle(Particle* p);
+	std::vector<Particle*> gameObjects;
 };
 #endif
 

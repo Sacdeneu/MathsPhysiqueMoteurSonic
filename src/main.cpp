@@ -50,11 +50,16 @@ int main( int argc, char* args[])
 			Renderer renderer = Renderer(window);
 			Scene scene;
 
-			Particle p1(new Vector3D(0, 1, 0), 1);
-			scene.AddParticle(p1);
+			// Création des particles
+			std::shared_ptr<Particle> p1 = std::make_shared<Particle>(Particle(Vector3D(-2, 1, -1), 1));
+			scene.AddParticle(p1.get());
+			// Trajectoire de la particule
+			p1->AddVelocity(Vector3D(1, 1, 0));
+			// La seule force est la force gravitationelle
+			p1->AddForce(Vector3D(0, -1, 0));
 
-			Particle p2(new Vector3D(1, 0, -2), 1);
-			scene.AddParticle(p2);
+
+			int lastTickTime = SDL_GetTicks();
 
 			//boucle de jeu
 			while (runGame)
@@ -62,6 +67,14 @@ int main( int argc, char* args[])
 				handleInputs();
 				renderer.Update(scene);
 				SDL_GL_SwapWindow(window);
+
+				// Update des particules
+				int now = SDL_GetTicks();
+				int deltaTime = now - lastTickTime;
+
+				p1->Update(deltaTime / 1000.0f);
+
+				lastTickTime = now;
 
 				//rendu à 60FPS
 				SDL_Delay(1000 / 60);

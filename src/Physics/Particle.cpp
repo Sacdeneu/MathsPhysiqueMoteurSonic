@@ -1,51 +1,62 @@
 #include "Particle.h"
 #include "Math.h"
+#include "Vector3D.h"
 
 
 Particle::Particle()
 {
-	position = new Vector3D(0, 0, 0);
-	velocity = new Vector3D(0, 0, 0);
-	acceleration = new Vector3D(0, 0, 0);
+	position = Vector3D(0, 0, 0);
+	velocity = Vector3D(0, 0, 0);
+	acceleration = Vector3D(0, 0, 0);
 
-	damping = 1;
+	damping = 0.95;
 	mass = 1;
 	size = 1;
-	color = new Vector3D(0, 0, 0);
+	color = Vector3D(0, 0, 0);
 
 }
 
-Particle::Particle(Vector3D* initialPos, float mass)
+Particle::Particle(Vector3D initialPos, float mass)
 {
 	position = initialPos;
 	this->mass = mass;
 
-	velocity = new Vector3D(0, 0, 0);
-	acceleration = new Vector3D(0, 0, 0);
-	damping = 1;
+	velocity = Vector3D(0, 0, 0);
+	acceleration = Vector3D(0, 0, 0);
+	damping = 0.95;
 
 	size = 1;
-	color = new Vector3D(0, 0, 0);
+	color = Vector3D(0, 0, 0);
 }
 
-Particle::~Particle() 
+/*Particle::~Particle()
 {
 
+}*/
+
+
+
+void Particle::AddVelocity(Vector3D force)
+{
+	velocity = force;
 }
-
-
-
-void Particle::AddForce(Vector3D* force) 
+void Particle::AddForce(Vector3D force) 
 {
-	//acceleration = force * GetMass();
+	acceleration = force * GetMass();
 }
 
 void Particle::Update(float deltaTime)
 {
 	// Update Position
-	//position = position + (velocity * deltaTime) + acceleration * (powf(t, 2) / 2);
+	// Si je ne fais pas ça, ça ne compile pas
+	Vector3D velocityDeltaTime = (velocity * deltaTime);
+	Vector3D accelerationDeltaTime = acceleration * (powf(deltaTime, 2) / 2);
 
-	// Update Velocit�
-	//velocity = (velocity * powf(damping, t)) + acceleration * deltaTime;
+	position = position + velocityDeltaTime + accelerationDeltaTime;
+
+	// Update Velocity
+	// Si je ne fais pas ça, ça ne compile pas
+	Vector3D accelerationTest = (acceleration * deltaTime);
+	velocity = (velocity * powf(damping, deltaTime)) + accelerationTest;
 
 }

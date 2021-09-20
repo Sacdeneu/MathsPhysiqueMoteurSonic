@@ -135,8 +135,8 @@ void Renderer::Update(Scene scene)
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 proj = glm::mat4(1.0f);
 
-		Vector3D* pos = scene.gameObjects[i].GetPosition();
-		model = glm::translate(model, glm::vec3(pos->x, pos->y, pos->z));
+		Vector3D pos = scene.gameObjects[i]->GetPosition();
+		model = glm::translate(model, glm::vec3(pos.x, pos.y, pos.z));
 		//model = glm::rotate(model, glm::radians(t * (i+1) * 50), glm::vec3(0, 1.0f, 0));
 		
 		view = glm::translate(view, glm::vec3(0, -0.5f, -3.0f));

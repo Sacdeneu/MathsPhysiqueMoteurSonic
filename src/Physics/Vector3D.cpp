@@ -15,6 +15,16 @@ Vector3D Vector3D::operator-(Vector3D& vector) {
 	return Substraction(*this, vector);
 }
 
+Vector3D Vector3D::operator*(float scalar) {
+	return ScalarMultiply(scalar , *this);
+}
+
+Vector3D::Vector3D()
+{
+	this->x = 0;
+	this->y = 0;
+	this->z = 0;
+}
 Vector3D::Vector3D(float x, float y, float z)
 {
 	this->x= x;
