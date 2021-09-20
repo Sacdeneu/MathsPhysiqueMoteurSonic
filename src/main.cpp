@@ -1,13 +1,27 @@
 #include <SDL.h>
 #include <stdio.h>
+#include <stdlib.h> 
 #include "rendering/renderer.h"
 #include "rendering/scene.h"
 #include "Physics/Vector3D.h"
 
-
 bool runGame = true;
 
-int handleInputs()
+void CreateParticle(Scene* scene, float velX, float velY)
+{
+	// Création des particles
+	//std::shared_ptr<Particle> p = std::make_shared<Particle>(Particle(Vector3D(-5, 1, -5), 1));
+	float randZ = (-10 + rand() % 20) * 0.2f;
+	Particle* p = new Particle(Vector3D(-5, 1, -5), 1);
+	scene->AddParticle(p);
+	// Trajectoire de la particule
+	p->SetVelocity(Vector3D(velX, velY, randZ));
+	// La seule force est la force gravitationelle
+	p->SetAcceleration(Vector3D(0, -9.81f, 0));
+}
+
+bool mouseButtonDown = false;
+int HandleInputs(Scene* scene, Renderer* renderer)
 {
 	SDL_Event event;
 	while(SDL_PollEvent(&event))
@@ -19,7 +33,35 @@ int handleInputs()
 			break;
 
 		case SDL_KEYDOWN:
-			printf("Detection d'une touche\n");
+			if (event.key.keysym.sym == SDLK_SPACE)
+			{
+				int pixelMouseX, pixelMouseY;
+				SDL_GetMouseState(&pixelMouseX, &pixelMouseY);
+				float mouseX = pixelMouseX * 1.0f / SCREEN_WIDTH;
+				float mouseY = 1 - (pixelMouseY * 1.0f / SCREEN_HEIGHT);
+				CreateParticle(scene, mouseX * 15, mouseY * 15);
+			}
+			else
+				renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, true);
+			break;
+
+		case SDL_KEYUP:
+			renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, false);
+			break;
+
+		case SDL_MOUSEMOTION:
+			if(mouseButtonDown)
+				renderer->camera.UpdateMouseInput(event.motion.xrel, event.motion.yrel);
+			break;
+
+		case SDL_MOUSEBUTTONDOWN:
+			if (event.button.button == SDL_BUTTON_LEFT)
+				mouseButtonDown = true;
+			break;
+
+		case SDL_MOUSEBUTTONUP:
+			if (event.button.button == SDL_BUTTON_LEFT)
+				mouseButtonDown = false;
 			break;
 
 		default:
@@ -28,6 +70,7 @@ int handleInputs()
 	}
 	return 1;
 }
+
 
 int main( int argc, char* args[])
 {
@@ -47,34 +90,32 @@ int main( int argc, char* args[])
 		}
 		else //si la fenêtre a été crée
 		{
-			Renderer renderer = Renderer(window);
-			Scene scene;
+			Renderer* renderer = new Renderer(window);
+			Scene* scene = new Scene();
 
-			// Création des particles
-			std::shared_ptr<Particle> p1 = std::make_shared<Particle>(Particle(Vector3D(-2, 1, -1), 1));
-			scene.AddParticle(p1.get());
-			// Trajectoire de la particule
-			p1->AddVelocity(Vector3D(1, 1, 0));
-			// La seule force est la force gravitationelle
-			p1->AddForce(Vector3D(0, -1, 0));
+			Particle* p1 = new Particle(Vector3D(-5, 1, -5), 1);
+			scene->AddParticle(p1);
 
-
-			int lastTickTime = SDL_GetTicks();
+			Uint64 lastUpdate = SDL_GetPerformanceCounter();
 
 			//boucle de jeu
 			while (runGame)
 			{
-				handleInputs();
-				renderer.Update(scene);
+				//calcul de dt
+				Uint64 now = SDL_GetPerformanceCounter();
+				float deltaTime = ((now - lastUpdate) / (float)SDL_GetPerformanceFrequency());
+				lastUpdate = now;
+
+				//mise à jour des entrées
+				HandleInputs(scene, renderer);
+
+				//mise à jour de la physique et de la logique
+				scene->Update(deltaTime);
+				renderer->camera.Update(deltaTime);
+
+				//mise à jour de l'affichage
+				renderer->Update(scene);
 				SDL_GL_SwapWindow(window);
-
-				// Update des particules
-				int now = SDL_GetTicks();
-				int deltaTime = now - lastTickTime;
-
-				p1->Update(deltaTime / 1000.0f);
-
-				lastTickTime = now;
 
 				//rendu à 60FPS
 				SDL_Delay(1000 / 60);

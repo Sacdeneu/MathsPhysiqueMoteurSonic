@@ -11,6 +11,8 @@ public:
 	int GetObjectsCount();
 	void AddParticle(Particle* p);
 	void RemoveParticle(Particle* p);
+	void Update(float deltaTime);
+
 	std::vector<Particle*> gameObjects;
 };
 #endif

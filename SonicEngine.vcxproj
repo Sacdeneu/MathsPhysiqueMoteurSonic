@@ -148,6 +148,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Physics\Particle.cpp" />
     <ClCompile Include="src\Physics\Vector3D.cpp" />
+    <ClCompile Include="src\rendering\camera.cpp" />
     <ClCompile Include="src\rendering\renderer.cpp" />
     <ClCompile Include="src\rendering\scene.cpp" />
     <ClCompile Include="src\rendering\shader.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="src\Physics\Particle.h" />
     <ClInclude Include="src\Physics\Vector3D.h" />
+    <ClInclude Include="src\rendering\camera.h" />
     <ClInclude Include="src\rendering\renderer.h" />
     <ClInclude Include="src\rendering\scene.h" />
     <ClInclude Include="src\rendering\shader.h" />

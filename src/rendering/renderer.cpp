@@ -1,6 +1,7 @@
 #include "renderer.h"
 #include "sphere.h"
 
+
 // modèle 3d de la pyramide avec les normales
 GLfloat pyramidVertices[] =
 { // vertex (location 0)  / normales (location 1)
@@ -76,10 +77,6 @@ Renderer::Renderer(SDL_Window* targetWindow)
 	glGenBuffers(1, &EBO);
 	glBindVertexArray(VAO);
 
-
-	printf("vertices : %d", s.vertices.size());
-	printf("; indices : %d", s.indices.size());
-
 	//ajout des vertices
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, s.vertices.size() * sizeof(s.vertices), &(s.vertices[0]), GL_STATIC_DRAW);
@@ -101,15 +98,11 @@ Renderer::Renderer(SDL_Window* targetWindow)
 
 	glEnable(GL_DEPTH_TEST);
 
-    /*
-    //Vsync
-    if (SDL_GL_SetSwapInterval(1) < 0)
-        printf("Impossible d'activer la synchronisation verticale ! Erreur SDL : %s\n", SDL_GetError());
-    */
+	camera.SetPosition(0, 1, 5);
 }
 
 float t = 0;
-void Renderer::Update(Scene scene)
+void Renderer::Update(Scene* scene)
 {
     t += 0.01f;
     //float r = (1 + sin(t)) * 0.5f;
@@ -120,35 +113,26 @@ void Renderer::Update(Scene scene)
 
 	glUseProgram(defaultShader.program);
 
-	//transformations de la caméra avec des matrices
-
-	
-
-	//position de la lumière
-	glUniform3f(glGetUniformLocation(defaultShader.program, "lightPos"), 2, 2, 2);
+	//transformations de la caméra
+	glm::vec3 viewPos = camera.position;
+	camera.SetMatrix(45, 0.1f, 100.0f, defaultShader, "cameraMatrix");
 
 	//affiche les gameobjects
 	glBindVertexArray(VAO);
-	for (int i = 0; i < scene.GetObjectsCount(); i++)
+	for (int i = 0; i < scene->GetObjectsCount(); i++)
 	{
 		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 proj = glm::mat4(1.0f);
 
-		Vector3D pos = scene.gameObjects[i]->GetPosition();
+		Vector3D pos = scene->gameObjects[i]->GetPosition();
 		model = glm::translate(model, glm::vec3(pos.x, pos.y, pos.z));
 		//model = glm::rotate(model, glm::radians(t * (i+1) * 50), glm::vec3(0, 1.0f, 0));
-		
-		view = glm::translate(view, glm::vec3(0, -0.5f, -3.0f));
-		//view = glm::rotate(view, glm::radians(30.0f), glm::vec3(1.0f, 0, 0));
-		proj = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f);
 
 		int modelLoc = glGetUniformLocation(defaultShader.program, "model");
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		int viewLoc = glGetUniformLocation(defaultShader.program, "view");
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		int projLoc = glGetUniformLocation(defaultShader.program, "proj");
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+
+		//position de la lumière
+		glUniform3f(glGetUniformLocation(defaultShader.program, "lightDir"), -0.2f, -1.0f, -0.3f);
+		glUniform3f(glGetUniformLocation(defaultShader.program, "viewPos"), viewPos.x, viewPos.y, viewPos.z);
 
 		glDrawElements(GL_TRIANGLES, s.indices.size(), GL_UNSIGNED_INT, 0);
 	}

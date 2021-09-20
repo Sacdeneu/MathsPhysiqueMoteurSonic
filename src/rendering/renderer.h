@@ -9,6 +9,7 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
+#include "camera.h"
 #include "shader.h"
 #include "scene.h"
 
@@ -19,7 +20,8 @@ class Renderer
 {
 public:
 	Renderer(SDL_Window* targetWindow);
-	void Update(Scene scene);
+	Camera camera;
+	void Update(Scene* scene);
 private:
 	SDL_GLContext context;
 	Shader defaultShader;

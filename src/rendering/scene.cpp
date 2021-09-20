@@ -14,6 +14,14 @@ void Scene::AddParticle(Particle* p)
 	gameObjects.push_back(p);
 }
 
+void Scene::Update(float dt)
+{
+	for (int i = 0; i < gameObjects.size(); i++)
+	{
+		gameObjects[i]->Update(dt);
+	}
+}
+
 void Scene::RemoveParticle(Particle* p)
 {
 	for (int i = 0; i < gameObjects.size(); i++)

@@ -10,23 +10,23 @@ public:
 
 
 	void Update(float deltaTime);
-	void AddVelocity(Vector3D force);
-	void AddForce(Vector3D force);
+	void SetVelocity(Vector3D newVelocity);
+	void SetAcceleration(Vector3D newAcceleration);
 
 	// Accesseur
 	inline Vector3D GetPosition() { return position; }
 	inline Vector3D GetVelocity() { return velocity; }
 	inline Vector3D GetAcceleration() { return acceleration; }
 	inline float GetDamping() { return damping; }
-	inline float GetMass() { return 1/mass; }
-
+	inline float GetMass() { return 1.0f / invMass; }
+	inline void SetMass(float newMass) { invMass = 1.0f / newMass; }
 
 private: 
 	Vector3D position;
 	Vector3D velocity;
 	Vector3D acceleration;
 	float damping;
-	float mass;
+	float invMass;
 
 
 

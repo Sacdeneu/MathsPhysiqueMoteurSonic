@@ -2,6 +2,7 @@
 #include "Math.h"
 #include "Vector3D.h"
 
+#define GRAVITY 9.81f
 
 Particle::Particle()
 {
@@ -9,21 +10,20 @@ Particle::Particle()
 	velocity = Vector3D(0, 0, 0);
 	acceleration = Vector3D(0, 0, 0);
 
-	damping = 0.95;
-	mass = 1;
+	damping = 0.98f;
+	invMass = 1;
 	size = 1;
 	color = Vector3D(0, 0, 0);
-
 }
 
 Particle::Particle(Vector3D initialPos, float mass)
 {
 	position = initialPos;
-	this->mass = mass;
+	this->invMass = mass;
 
 	velocity = Vector3D(0, 0, 0);
 	acceleration = Vector3D(0, 0, 0);
-	damping = 0.95;
+	damping = 0.98f;
 
 	size = 1;
 	color = Vector3D(0, 0, 0);
@@ -34,29 +34,24 @@ Particle::Particle(Vector3D initialPos, float mass)
 
 }*/
 
-
-
-void Particle::AddVelocity(Vector3D force)
+void Particle::SetVelocity(Vector3D newVelocity)
 {
-	velocity = force;
-}
-void Particle::AddForce(Vector3D force) 
-{
-	acceleration = force * GetMass();
+	velocity = newVelocity;
 }
 
-void Particle::Update(float deltaTime)
+void Particle::SetAcceleration(Vector3D newAcceleration) 
+{
+	acceleration = newAcceleration;
+}
+
+void Particle::Update(float dt)
 {
 	// Update Position
-	// Si je ne fais pas ça, ça ne compile pas
-	Vector3D velocityDeltaTime = (velocity * deltaTime);
-	Vector3D accelerationDeltaTime = acceleration * (powf(deltaTime, 2) / 2);
-
-	position = position + velocityDeltaTime + accelerationDeltaTime;
+	Vector3D deltaPosition = (velocity * dt); //delta position = offset de la position d'une frame à l'autre
+	position = position + deltaPosition;
 
 	// Update Velocity
-	// Si je ne fais pas ça, ça ne compile pas
-	Vector3D accelerationTest = (acceleration * deltaTime);
-	velocity = (velocity * powf(damping, deltaTime)) + accelerationTest;
+	Vector3D deltaVelocity = (acceleration * invMass * dt); //delta velocity = difference de vélocité d'une frame à l'autre
+	velocity = (velocity * powf(damping, dt)) + deltaVelocity; //on applique le damping
 
 }

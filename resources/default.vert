@@ -2,17 +2,17 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
 
-out vec3 Normal;
-out vec3 pos;
+out vec3 vertexNormal;
+out vec3 fragPos;
 
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 proj;
+uniform mat4 cameraMatrix;
 
 void main()
 {
-	pos = vec3(model * vec4(aPos, 1.0f));
+	fragPos = vec3(model * vec4(aPos, 1.0f));
+	vertexNormal = vec3(model * vec4(aNormal, 1.0f));
+
+	gl_Position = cameraMatrix * vec4(fragPos, 1.0);
 	
-	gl_Position = proj * view * model * vec4(aPos, 1.0);
-	Normal = vec3(model * vec4(aPos, 1.0f));
 }
