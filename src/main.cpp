@@ -12,7 +12,7 @@ void CreateParticle(Scene* scene, float velX, float velY)
 	// Création des particles
 	//std::shared_ptr<Particle> p = std::make_shared<Particle>(Particle(Vector3D(-5, 1, -5), 1));
 	float randZ = (-10 + rand() % 20) * 0.4f;
-	Particle* p = new Particle(Vector3D(0, 0, 0), 1);
+	Particle* p = new Particle(Vector3D(0, 0, 0), 0.1f * (1 + rand() % 50));
 	scene->AddParticle(p);
 	// Trajectoire de la particule
 	p->SetVelocity(Vector3D(velX, velY, randZ));
@@ -20,8 +20,6 @@ void CreateParticle(Scene* scene, float velX, float velY)
 	p->SetAcceleration(Vector3D(0, -9.81f, 0));
 }
 
-
-Particle* debug = new Particle();
 bool mouseButtonDown = false;
 int HandleInputs(Scene* scene, Renderer* renderer)
 {
@@ -97,7 +95,6 @@ int main( int argc, char* args[])
 			//particule seule au centre du monde, sert de repère
 			Particle* p1 = new Particle(Vector3D(0, 0, 0), 1);
 			scene->AddParticle(p1);
-			scene->AddParticle(debug);
 
 			Uint64 lastUpdate = SDL_GetPerformanceCounter();
 
@@ -142,7 +139,6 @@ int main( int argc, char* args[])
 	std::cout << "CrossProduct " <<vector1.CrossProduct(vector1, vector2) << std::endl;
 	std::cout << "Vector3 Addition " << vector3 << std::endl;
 	std::cout << "Vector4 Substraction " << vector4 << std::endl;
-
 
 
 

@@ -29,6 +29,14 @@ Particle::Particle(Vector3D initialPos, float mass)
 	color = Vector3D(0, 0, 0);
 }
 
+void Particle::SetMass(float newMass)
+{
+	if (newMass != 0)
+		invMass = 1.0f / newMass;
+	else
+		invMass = 1; //valeur par défaut si newMass est nul
+}
+
 /*Particle::~Particle()
 {
 
@@ -39,7 +47,8 @@ void Particle::SetVelocity(Vector3D newVelocity)
 	velocity = newVelocity;
 }
 
-void Particle::SetAcceleration(Vector3D newAcceleration) 
+//accélération en m/s^2 donc la force ne rentre pas en compte ici
+void Particle::SetAcceleration(Vector3D newAcceleration)
 {
 	acceleration = newAcceleration;
 }
@@ -51,7 +60,7 @@ void Particle::Update(float dt)
 	position = position + deltaPosition;
 
 	// Update Velocity
-	Vector3D deltaVelocity = (acceleration * invMass * dt); //delta velocity = difference de vélocité d'une frame à l'autre
+	Vector3D deltaVelocity = acceleration * dt; //delta velocity = difference de vélocité d'une frame à l'autre
 	velocity = (velocity * powf(damping, dt)) + deltaVelocity; //on applique le damping
 
 }

@@ -97,6 +97,10 @@ void Renderer::Update(Scene* scene)
 	glm::vec3 viewPos = camera.position;
 	camera.SetMatrix(60, 0.1f, 500.0f, defaultShader, "cameraMatrix");
 
+	//position de la lumière
+	glUniform3f(glGetUniformLocation(defaultShader.program, "lightDir"), -0.8f, -1.0f, -0.3f);
+	glUniform3f(glGetUniformLocation(defaultShader.program, "viewPos"), viewPos.x, viewPos.y, viewPos.z);
+
 	//affiche les particules
 	sphereVAO.Bind();
 	for (int i = 0; i < scene->GetObjectsCount(); i++)
@@ -107,12 +111,11 @@ void Renderer::Update(Scene* scene)
 		model = glm::translate(model, glm::vec3(pos.x, pos.y, pos.z));
 		//model = glm::rotate(model, glm::radians(t * (i+1) * 50), glm::vec3(0, 1.0f, 0));
 
+		float radius = cbrt(scene->gameObjects[i]->GetMass());
+		model = glm::scale(model, glm::vec3(radius, radius, radius));
+
 		int modelLoc = glGetUniformLocation(defaultShader.program, "model");
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-		//position de la lumière
-		glUniform3f(glGetUniformLocation(defaultShader.program, "lightDir"), -0.8f, -1.0f, -0.3f);
-		glUniform3f(glGetUniformLocation(defaultShader.program, "viewPos"), viewPos.x, viewPos.y, viewPos.z);
 
 		glDrawElements(GL_TRIANGLES, s.indices.size(), GL_UNSIGNED_INT, 0);
 	}
