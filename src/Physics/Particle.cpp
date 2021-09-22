@@ -16,14 +16,14 @@ Particle::Particle()
 	color = Vector3D(0, 0, 0);
 }
 
-Particle::Particle(Vector3D initialPos, float mass)
+Particle::Particle(Vector3D initialPos, float mass, float initialDamping)
 {
 	position = initialPos;
-	this->invMass = mass;
+	SetMass(mass);
 
 	velocity = Vector3D(0, 0, 0);
 	acceleration = Vector3D(0, 0, 0);
-	damping = 0.98f;
+	damping = initialDamping;
 
 	size = 1;
 	color = Vector3D(0, 0, 0);

@@ -5,7 +5,7 @@ class Particle
 {
 public:
 	Particle();
-	Particle(Vector3D initialPos, float mass);
+	Particle(Vector3D initialPos, float mass, float damping = 0.98f);
 	//~Particle();
 
 

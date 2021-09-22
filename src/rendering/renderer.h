@@ -16,6 +16,11 @@
 #include "VBO.h"
 #include "EBO.h"
 
+#define IMGUI_IMPL_OPENGL_LOADER_GLEW
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
+#include "imgui_impl_opengl3.h"
+
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 

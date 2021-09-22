@@ -25,6 +25,9 @@ Renderer::Renderer(SDL_Window* targetWindow)
 	//défini le set fonctions opengl à utiliser
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
+	ImGui_ImplSDL2_InitForOpenGL(targetWindow, context);
+	ImGui_ImplOpenGL3_Init("#version 330");
+
 	//debug
     printf("Version OpenGL: %s\nGPU: %s\nVersion GLEW: %s\n", glGetString(GL_VERSION), glGetString(GL_RENDERER), glewGetString(GLEW_VERSION));
 

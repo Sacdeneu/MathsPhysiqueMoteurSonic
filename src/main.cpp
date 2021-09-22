@@ -6,13 +6,16 @@
 #include "Physics/Vector3D.h"
 
 bool runGame = true;
+float particleMass = 1;
+float randomZDirection = 2.5f;
+float particleDamping = 0.98f;
 
 void CreateParticle(Scene* scene, float velX, float velY)
 {
 	// Création des particles
 	//std::shared_ptr<Particle> p = std::make_shared<Particle>(Particle(Vector3D(-5, 1, -5), 1));
-	float randZ = (-10 + rand() % 20) * 0.4f;
-	Particle* p = new Particle(Vector3D(0, 0, 0), 0.1f * (1 + rand() % 50));
+	float randZ = (-100 + rand() % 200) * randomZDirection * 0.01f;
+	Particle* p = new Particle(Vector3D(0, 0, 0), particleMass, particleDamping);
 	scene->AddParticle(p);
 	// Trajectoire de la particule
 	p->SetVelocity(Vector3D(velX, velY, randZ));
@@ -26,6 +29,8 @@ int HandleInputs(Scene* scene, Renderer* renderer)
 	SDL_Event event;
 	while(SDL_PollEvent(&event))
 	{
+		ImGui_ImplSDL2_ProcessEvent(&event);
+
 		switch (event.type)
 		{
 		case SDL_QUIT: //ferme le jeu quand on ferme la fenetre
@@ -55,12 +60,12 @@ int HandleInputs(Scene* scene, Renderer* renderer)
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
-			if (event.button.button == SDL_BUTTON_LEFT)
+			if (event.button.button == SDL_BUTTON_RIGHT)
 				mouseButtonDown = true;
 			break;
 
 		case SDL_MOUSEBUTTONUP:
-			if (event.button.button == SDL_BUTTON_LEFT)
+			if (event.button.button == SDL_BUTTON_RIGHT)
 				mouseButtonDown = false;
 			break;
 
@@ -69,6 +74,29 @@ int HandleInputs(Scene* scene, Renderer* renderer)
 		}
 	}
 	return 1;
+}
+
+void MakeImGuiWindow(Scene* scene, float physicsUpdateTime)
+{
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::Begin("Inspector", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	ImGui::SetWindowSize(ImVec2(0, 0));
+	ImGui::SetWindowPos(ImVec2(20, 20));
+
+	ImGui::Text("Particules dans la scene: %d", scene->GetObjectsCount());
+	ImGui::Text("Mise a jour de la physique: %.5fms", physicsUpdateTime);
+	ImGui::Dummy(ImVec2(0.0f, 20.0f));
+	ImGui::PushItemWidth(150);
+	ImGui::SliderFloat("Masse des particules", &particleMass, 0.1, 10, "%.2f");
+	ImGui::SliderFloat("Dispersion Z", &randomZDirection, 0, 5, "%.1f");
+	ImGui::SliderFloat("Damping", &particleDamping, 0, 1, "%.2f");
+
+	ImGui::End();
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 int main( int argc, char* args[])
@@ -89,6 +117,10 @@ int main( int argc, char* args[])
 		}
 		else //si la fenêtre a été crée
 		{
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO(); (void)io;
+			ImGui::StyleColorsDark();
+
 			Renderer* renderer = new Renderer(window);
 			Scene* scene = new Scene();
 
@@ -101,20 +133,22 @@ int main( int argc, char* args[])
 			//boucle de jeu
 			while (runGame)
 			{
+				//mise à jour des entrées
+				HandleInputs(scene, renderer);
+
 				//calcul de dt
 				Uint64 now = SDL_GetPerformanceCounter();
 				float deltaTime = ((now - lastUpdate) / (float)SDL_GetPerformanceFrequency());
 				lastUpdate = now;
 
-				//mise à jour des entrées
-				HandleInputs(scene, renderer);
-
 				//mise à jour de la physique et de la logique
 				scene->Update(deltaTime);
+				float physicsUpdateTime = ((SDL_GetPerformanceCounter() - lastUpdate) / (float)SDL_GetPerformanceFrequency()) * 1000;
 				renderer->camera.Update(deltaTime);
 
 				//mise à jour de l'affichage
 				renderer->Update(scene);
+				MakeImGuiWindow(scene, physicsUpdateTime);
 				SDL_GL_SwapWindow(window);
 
 				//rendu à 60FPS
@@ -140,13 +174,12 @@ int main( int argc, char* args[])
 	std::cout << "Vector3 Addition " << vector3 << std::endl;
 	std::cout << "Vector4 Substraction " << vector4 << std::endl;
 
-
-
-
 	//destruction de la fenêtre
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
 	SDL_DestroyWindow(window);
 	SDL_Quit();
-
 
 	return 0;
 }

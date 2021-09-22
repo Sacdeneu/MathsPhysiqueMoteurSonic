@@ -45,10 +45,9 @@ void Camera::UpdateKeyboardInput(char key, bool state)
 
 void Camera::UpdateMouseInput(float mouseX, float mouseY)
 {
-
 	float halfPi = 1.57079f;
-	rotX += mouseX * 0.0012f;
-	rotY += mouseY * 0.0012f;
+	rotX -= mouseX * 0.0012f;
+	rotY -= mouseY * 0.0012f;
 	rotY = rotY > halfPi ? halfPi : rotY < -halfPi ? -halfPi : rotY;
 	forward = glm::vec3(cos(rotY) * sin(rotX), sin(rotY), cos(rotY) * cos(rotX));
 	right = glm::cross(forward, up);
