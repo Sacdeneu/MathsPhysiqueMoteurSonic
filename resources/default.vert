@@ -11,7 +11,7 @@ uniform mat4 cameraMatrix;
 void main()
 {
 	fragPos = vec3(model * vec4(aPos, 1.0f));
-	vertexNormal = vec3(model * vec4(aNormal, 1.0f));
+	vertexNormal = aNormal;
 
 	gl_Position = cameraMatrix * vec4(fragPos, 1.0);
 	

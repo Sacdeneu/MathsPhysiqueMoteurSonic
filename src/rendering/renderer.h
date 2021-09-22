@@ -12,6 +12,9 @@
 #include "camera.h"
 #include "shader.h"
 #include "scene.h"
+#include "VAO.h"
+#include "VBO.h"
+#include "EBO.h"
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
@@ -24,8 +27,10 @@ public:
 	void Update(Scene* scene);
 private:
 	SDL_GLContext context;
-	Shader defaultShader;
-	GLuint VAO, VBO, EBO;
+	Shader defaultShader, gridShader;
+	VAO sphereVAO, gridVAO;
+	std::vector<GLfloat> gridVertices;
+	std::vector<GLuint> gridIndices;
 };
 
 #endif

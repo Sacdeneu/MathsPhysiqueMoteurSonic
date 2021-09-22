@@ -1,43 +1,6 @@
 #include "renderer.h"
 #include "sphere.h"
 
-
-// modèle 3d de la pyramide avec les normales
-GLfloat pyramidVertices[] =
-{ // vertex (location 0)  / normales (location 1)
-	-0.5f, 0.0f,  0.5f,	    0.0f, -1.0f, 0.0f, // Bottom side
-	-0.5f, 0.0f, -0.5f,	    0.0f, -1.0f, 0.0f, // Bottom side
-	 0.5f, 0.0f, -0.5f,	    0.0f, -1.0f, 0.0f, // Bottom side
-	 0.5f, 0.0f,  0.5f,     0.0f, -1.0f, 0.0f, // Bottom side
-
-	-0.5f, 0.0f,  0.5f,     -0.8f, 0.5f,  0.0f, // Left Side
-	-0.5f, 0.0f, -0.5f,     -0.8f, 0.5f,  0.0f, // Left Side
-	 0.0f, 1.2f,  0.0f,     -0.8f, 0.5f,  0.0f, // Left Side
-
-	-0.5f, 0.0f, -0.5f,     0.0f, 0.5f, -0.8f, // Non-facing side
-	 0.5f, 0.0f, -0.5f,     0.0f, 0.5f, -0.8f, // Non-facing side
-	 0.0f, 1.2f,  0.0f,     0.0f, 0.5f, -0.8f, // Non-facing side
-
-	 0.5f, 0.0f, -0.5f,     0.8f, 0.5f,  0.0f, // Right side
-	 0.5f, 0.0f,  0.5f,     0.8f, 0.5f,  0.0f, // Right side
-	 0.0f, 1.2f,  0.0f,     0.8f, 0.5f,  0.0f, // Right side
-
-	 0.5f, 0.0f,  0.5f,     0.0f, 0.5f,  0.8f, // Facing side
-	-0.5f, 0.0f,  0.5f,     0.0f, 0.5f,  0.8f, // Facing side
-	 0.0f, 1.2f,  0.0f,     0.0f, 0.5f,  0.8f  // Facing side
-};
-
-//liste des triangles (chaque entier est l'id d'un vertex)
-GLuint pyramidIndices[] =
-{
-	0, 1, 2, // Bottom side
-	0, 2, 3, // Bottom side
-	4, 6, 5, // Left side
-	7, 9, 8, // Non-facing side
-	10, 12, 11, // Right side
-	13, 15, 14 // Facing side
-};
-
 Sphere s(0.5f, 24, 24);
 
 //constructeur
@@ -69,56 +32,73 @@ Renderer::Renderer(SDL_Window* targetWindow)
 	glClearColor(0.172f, 0.184f, 0.2f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 	
+	//génération des shaders
 	defaultShader = Shader("resources/default.vert", "resources/default.frag");
+	gridShader = Shader("resources/grid.vert", "resources/grid.frag");
 
-	//generation du Vertex Array Object, Vertex Buffer Object et Element Buffer Object
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	glBindVertexArray(VAO);
+	//génération du VAO de la sphère
+	sphereVAO.Init();
+	sphereVAO.Bind();
+	VBO sphereVBO(s.vertices);
+	EBO sphereEBO(s.indices);
 
-	//ajout des vertices
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, s.vertices.size() * sizeof(s.vertices), &(s.vertices[0]), GL_STATIC_DRAW);
+	// vertex (location = 0)
+	sphereVAO.LinkAttrib(sphereVBO, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)0);
+	// normal (location = 1)
+	sphereVAO.LinkAttrib(sphereVBO, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
 
-	//ajout des indices
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, s.indices.size() * sizeof(s.indices), &(s.indices[0]), GL_STATIC_DRAW);
-
-	//indique a OpenGL comment lires les données
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
-	glEnableVertexAttribArray(0); //vertices (location = 0)
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1); //normales (location = 1)
-
-	//lie le VBO, VAO et EBO à 0 pour ne pas les modifier accidentellement
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//unbind des liens pour ne pas les laisser actifs lors des assignations suivantes
+	sphereVAO.Unbind();
+	sphereVBO.Unbind();
+	sphereEBO.Unbind();
 
 	glEnable(GL_DEPTH_TEST);
+	camera.SetPosition(0, 3, 15);
 
-	camera.SetPosition(0, 1, 5);
+	//génération de la grille
+	int minGrid = -20;
+	int maxGrid = 20;
+	for (int i = minGrid; i <= maxGrid; i++)
+	{
+		gridVertices.push_back(minGrid);
+		gridVertices.push_back(0);
+		gridVertices.push_back(i);
+
+		gridVertices.push_back(maxGrid);
+		gridVertices.push_back(0);
+		gridVertices.push_back(i);
+
+		gridVertices.push_back(i);
+		gridVertices.push_back(0);
+		gridVertices.push_back(minGrid);
+
+		gridVertices.push_back(i);
+		gridVertices.push_back(0);
+		gridVertices.push_back(maxGrid);
+	}
+
+	//VAO de la grille
+	gridVAO.Init();
+	gridVAO.Bind();
+	VBO gridVBO(gridVertices);
+	gridVAO.LinkAttrib(gridVBO, 0, 3, GL_FLOAT, 3 * sizeof(GLfloat), (void*)0);
+	gridVAO.Unbind();
+	gridVBO.Unbind();
 }
 
 float t = 0;
 void Renderer::Update(Scene* scene)
 {
-    t += 0.01f;
-    //float r = (1 + sin(t)) * 0.5f;
-    //float g = (1 + sin(t*1.1f)) * 0.5f;
-    //float b = (1 + sin(1+t*1.2f)) * 0.5f;
-	//glClearColor(r, g, b, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUseProgram(defaultShader.program);
 
 	//transformations de la caméra
 	glm::vec3 viewPos = camera.position;
-	camera.SetMatrix(45, 0.1f, 100.0f, defaultShader, "cameraMatrix");
+	camera.SetMatrix(60, 0.1f, 500.0f, defaultShader, "cameraMatrix");
 
-	//affiche les gameobjects
-	glBindVertexArray(VAO);
+	//affiche les particules
+	sphereVAO.Bind();
 	for (int i = 0; i < scene->GetObjectsCount(); i++)
 	{
 		glm::mat4 model = glm::mat4(1.0f);
@@ -131,9 +111,18 @@ void Renderer::Update(Scene* scene)
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
 		//position de la lumière
-		glUniform3f(glGetUniformLocation(defaultShader.program, "lightDir"), -0.2f, -1.0f, -0.3f);
+		glUniform3f(glGetUniformLocation(defaultShader.program, "lightDir"), -0.8f, -1.0f, -0.3f);
 		glUniform3f(glGetUniformLocation(defaultShader.program, "viewPos"), viewPos.x, viewPos.y, viewPos.z);
 
 		glDrawElements(GL_TRIANGLES, s.indices.size(), GL_UNSIGNED_INT, 0);
 	}
+
+	//affichage de la grille
+	glUseProgram(gridShader.program);
+	camera.SetMatrix(60, 0.1f, 500.0f, gridShader, "cameraMatrix");
+	gridVAO.Bind();
+	glm::mat4 model = glm::mat4(1.0f);
+	int modelLoc = glGetUniformLocation(defaultShader.program, "model");
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	glDrawArrays(GL_LINES, 0, gridVertices.size() / 3);
 }

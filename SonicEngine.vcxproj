@@ -149,20 +149,25 @@
     <ClCompile Include="src\Physics\Particle.cpp" />
     <ClCompile Include="src\Physics\Vector3D.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
+    <ClCompile Include="src\rendering\EBO.cpp" />
     <ClCompile Include="src\rendering\renderer.cpp" />
     <ClCompile Include="src\rendering\scene.cpp" />
     <ClCompile Include="src\rendering\shader.cpp" />
     <ClCompile Include="src\rendering\sphere.cpp" />
+    <ClCompile Include="src\rendering\VAO.cpp" />
+    <ClCompile Include="src\rendering\VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Particle.h" />
     <ClInclude Include="src\Physics\Particle.h" />
     <ClInclude Include="src\Physics\Vector3D.h" />
     <ClInclude Include="src\rendering\camera.h" />
+    <ClInclude Include="src\rendering\EBO.h" />
     <ClInclude Include="src\rendering\renderer.h" />
     <ClInclude Include="src\rendering\scene.h" />
     <ClInclude Include="src\rendering\shader.h" />
     <ClInclude Include="src\rendering\sphere.h" />
+    <ClInclude Include="src\rendering\VAO.h" />
+    <ClInclude Include="src\rendering\VBO.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="bin\glew32.dll">
@@ -173,6 +178,8 @@
     </CopyFileToFolders>
     <None Include="resources\default.frag" />
     <None Include="resources\default.vert" />
+    <None Include="resources\grid.frag" />
+    <None Include="resources\grid.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

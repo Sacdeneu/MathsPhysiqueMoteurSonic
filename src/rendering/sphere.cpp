@@ -37,7 +37,7 @@ Sphere::Sphere(float radius, int rows, int columns)
             nz = z * lengthInv;
             vertices.push_back(nx);
             vertices.push_back(ny);
-            vertices.push_back(ny);
+            vertices.push_back(nz);
         }
     }
 

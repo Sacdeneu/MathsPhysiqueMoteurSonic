@@ -11,8 +11,8 @@ void CreateParticle(Scene* scene, float velX, float velY)
 {
 	// Création des particles
 	//std::shared_ptr<Particle> p = std::make_shared<Particle>(Particle(Vector3D(-5, 1, -5), 1));
-	float randZ = (-10 + rand() % 20) * 0.2f;
-	Particle* p = new Particle(Vector3D(-5, 1, -5), 1);
+	float randZ = (-10 + rand() % 20) * 0.4f;
+	Particle* p = new Particle(Vector3D(0, 0, 0), 1);
 	scene->AddParticle(p);
 	// Trajectoire de la particule
 	p->SetVelocity(Vector3D(velX, velY, randZ));
@@ -20,6 +20,8 @@ void CreateParticle(Scene* scene, float velX, float velY)
 	p->SetAcceleration(Vector3D(0, -9.81f, 0));
 }
 
+
+Particle* debug = new Particle();
 bool mouseButtonDown = false;
 int HandleInputs(Scene* scene, Renderer* renderer)
 {
@@ -39,7 +41,7 @@ int HandleInputs(Scene* scene, Renderer* renderer)
 				SDL_GetMouseState(&pixelMouseX, &pixelMouseY);
 				float mouseX = pixelMouseX * 1.0f / SCREEN_WIDTH;
 				float mouseY = 1 - (pixelMouseY * 1.0f / SCREEN_HEIGHT);
-				CreateParticle(scene, mouseX * 15, mouseY * 15);
+				CreateParticle(scene, -10 + mouseX * 20, mouseY * 15);
 			}
 			else
 				renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, true);
@@ -71,7 +73,6 @@ int HandleInputs(Scene* scene, Renderer* renderer)
 	return 1;
 }
 
-
 int main( int argc, char* args[])
 {
 	//initialisation
@@ -93,8 +94,10 @@ int main( int argc, char* args[])
 			Renderer* renderer = new Renderer(window);
 			Scene* scene = new Scene();
 
-			Particle* p1 = new Particle(Vector3D(-5, 1, -5), 1);
+			//particule seule au centre du monde, sert de repère
+			Particle* p1 = new Particle(Vector3D(0, 0, 0), 1);
 			scene->AddParticle(p1);
+			scene->AddParticle(debug);
 
 			Uint64 lastUpdate = SDL_GetPerformanceCounter();
 

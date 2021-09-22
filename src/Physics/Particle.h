@@ -20,6 +20,7 @@ public:
 	inline float GetDamping() { return damping; }
 	inline float GetMass() { return 1.0f / invMass; }
 	inline void SetMass(float newMass) { invMass = 1.0f / newMass; }
+	inline void SetPosition(Vector3D newPos) { position = newPos; }
 
 private: 
 	Vector3D position;

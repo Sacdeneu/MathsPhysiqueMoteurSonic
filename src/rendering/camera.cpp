@@ -5,6 +5,8 @@ Camera::Camera()
 {
 	position = glm::vec3();
 	rotX = 3.14159f;
+	rotY = -0.15f;
+	UpdateMouseInput(0, 0);
 }
 
 void Camera::SetPosition(float x, float y, float z)
@@ -22,9 +24,10 @@ void Camera::SetMatrix(float FOVdeg, float nearPlane, float farPlane, Shader& sh
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
 
-	// Makes camera look in the right direction from the right position
+	//direction de la camera
 	view = glm::lookAt(position, position + forward, up);
-	// Adds perspective to the scene
+
+	//perspective
 	projection = glm::perspective(glm::radians(FOVdeg), (float)SCREEN_WIDTH / SCREEN_HEIGHT, nearPlane, farPlane);
 
 	// Exports the camera matrix to the Vertex Shader
