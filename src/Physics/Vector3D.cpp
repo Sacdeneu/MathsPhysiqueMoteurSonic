@@ -11,16 +11,17 @@ std::ostream & operator<<(std::ostream &os, Vector3D v)
 	return os;
 }
 
-Vector3D Vector3D::operator+( Vector3D& vector){
-	return Addition(*this, vector); 
+Vector3D Vector3D::operator+(const Vector3D& vector){
+	return Addition(vector); 
 }
 
-Vector3D Vector3D::operator-(Vector3D& vector) {
-	return Substraction(*this, vector);
+Vector3D Vector3D::operator-(const Vector3D& vector) {
+	return Substraction(vector);
 }
+
 
 Vector3D Vector3D::operator*(float scalar) {
-	return ScalarMultiply(scalar , *this);
+	return ScalarMultiply(scalar);
 }
 
 // CONSTRUCTEURS
@@ -41,64 +42,56 @@ Vector3D::Vector3D(float x, float y, float z)
 
 // FONCTIONS
 
-float Vector3D::Norm(float x, float y , float z)
+float Vector3D::Norm(Vector3D vector)
 {
-	float norm = sqrt(x * x + y * y + z * z);
+	float norm = sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 	return norm;
 }
 
-
-float Vector3D::NormSquare(float norm)
-{
-	float normSquare = norm * norm;
-	return normSquare;
-}
-
-
 float Vector3D::NormSquare(Vector3D vector)
 {
-	float normSquare = x * x + y * y + z * z;
+	float normSquare = vector.x * vector.x + vector.y * vector.y + vector.z * vector.z;
 	return normSquare;
 }
 
 
-Vector3D Vector3D::Normalisation(float norm, Vector3D vector)
+Vector3D Vector3D::Normalisation(Vector3D vector)
 {
-	float newX = vector.x / norm;
-	float newY = vector.y / norm;
-	float newZ = vector.z / norm;
+	float newX = vector.x / Norm(vector);
+	float newY = vector.y / Norm(vector);
+	float newZ = vector.z / Norm(vector);
 	Vector3D newVectorNormalised = Vector3D(newX, newY, newZ);
 	return newVectorNormalised;
 }
 
 
-Vector3D Vector3D::ScalarMultiply(float scalar, Vector3D vector)
+Vector3D Vector3D::ScalarMultiply(float scalar)
 {
-	float newX = vector.x * scalar;
-	float newY = vector.y * scalar;
-	float newZ = vector.z * scalar;
+	float newX = x * scalar;
+	float newY = y * scalar;
+	float newZ = z * scalar;
 	Vector3D newVector = Vector3D(newX, newY, newZ);
 	return newVector;
 }
 
 
-Vector3D Vector3D::Addition(Vector3D vector1, Vector3D vector2)
+Vector3D Vector3D::Addition(Vector3D vectortoAdd)
 {
-	Vector3D newVector = Vector3D(vector1.x+vector2.x, vector1.y + vector2.y, vector1.z + vector2.z);
+	Vector3D newVector = Vector3D(x + vectortoAdd.x, y + vectortoAdd.y, z + vectortoAdd.z);
 
 	return Vector3D(newVector);
 }
 
-Vector3D Vector3D::Substraction(Vector3D vector1, Vector3D vector2)
+Vector3D Vector3D::Substraction(Vector3D vectortoSubstract)
 {
-	Vector3D newVector = Vector3D(vector1.x - vector2.x, vector1.y - vector2.y, vector1.z - vector2.z);
+	Vector3D newVector = Vector3D(x - vectortoSubstract.x, y - vectortoSubstract.y, z - vectortoSubstract.z);
 
 	return Vector3D(newVector);
 }
 
-Vector3D Vector3D::Multiply(Vector3D vector1, Vector3D vector2)
+Vector3D Vector3D::Multiply(Vector3D vectortoMultiply)
 {
-	Vector3D newVector = Vector3D(vector1.x * vector2.x, vector1.y * vector2.y, vector1.z * vector2.z);
+	Vector3D newVector = Vector3D(x * vectortoMultiply.x, y * vectortoMultiply.y, z * vectortoMultiply.z);
 
 	return Vector3D(newVector);
 }

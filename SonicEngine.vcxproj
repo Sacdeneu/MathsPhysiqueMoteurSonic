@@ -163,6 +163,7 @@
     <ClCompile Include="src\rendering\sphere.cpp" />
     <ClCompile Include="src\rendering\VAO.cpp" />
     <ClCompile Include="src\rendering\VBO.cpp" />
+    <ClCompile Include="src\tests\testvector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\imgui\imconfig.h" />

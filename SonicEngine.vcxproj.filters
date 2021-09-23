@@ -75,6 +75,9 @@
     <ClCompile Include="include\imgui\imgui_widgets.cpp">
       <Filter>Fichiers sources\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\tests\testvector.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Particle.h">
