@@ -9,6 +9,7 @@ int main(int argc, char* args[])
 	std::cout << "Norm " << Vector3D::Norm(vector1) << std::endl;
 	std::cout << "NormSquare " << Vector3D::NormSquare(vector1) << std::endl;
 	std::cout << "Normalisation " << Vector3D::Normalisation(vector1) << std::endl;
+	std::cout << "Normalisation 2 " << vector1.Normalisation() << std::endl;
 	std::cout << "ScalarMultiply " << vector1.ScalarMultiply(5.0) << std::endl;
 	std::cout << "Addition " << vector1.Addition(vector2) << std::endl;
 	std::cout << "Substraction " << vector1.Substraction(vector2) << std::endl;

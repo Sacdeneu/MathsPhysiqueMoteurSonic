@@ -48,11 +48,9 @@ class Vector3D
 		//FONCTIONS
 
 		/// <summary>
-		/// Calcule la norme d'un vecteur à partir de ses coordonnées
+		/// Calcule la norme d'un vecteur
 		/// </summary>
-		/// <param name="x">Coordonnée sur l'axe x du vecteur</param>
-		/// <param name="y">Coordonnée sur l'axe y du vecteur</param>
-		/// <param name="z">Coordonnée sur l'axe z du vecteur</param>
+		/// <param name="vector">Vecteur dont on calcule la norme</param>
 		/// <returns>Norme du vecteur</returns>
 		static float Norm(Vector3D);
 
@@ -66,40 +64,41 @@ class Vector3D
 		/// <summary>
 		/// Normalise un vecteur (division de chaque coordonnée par la norme)
 		/// </summary>
-		/// <param name="norm">Norme du vecteur</param>
 		/// <param name="vector">Vecteur à normaliser</param>
 		/// <returns>Vecteur normalisé</returns>
 		static Vector3D Normalisation(Vector3D);
 
 		/// <summary>
+		/// Normalise un vecteur (division de chaque coordonnée par la norme)
+		/// </summary>
+		/// <returns>Vecteur normalisé</returns>
+		Vector3D Normalisation();
+
+		/// <summary>
 		/// Multiplie un vecteur par un scalaire
 		/// </summary>
 		/// <param name="scalar">Scalaire</param>
-		/// <param name="vector">Vecteur à multiplier</param>
 		/// <returns>Vecteur multiplé par un scalaire</returns>
 		Vector3D ScalarMultiply(float);
 
 		/// <summary>
 		/// Effectue une addition entre deux vecteurs
 		/// </summary>
-		/// <param name="vector1">Premier vecteur à additionner</param>
-		/// <param name="vector2">Deuxième vecteur à additionner</param>
+		/// <param name="vector">Vecteur à additionner</param>
 		/// <returns>Vecteur somme</returns>
 		Vector3D Addition(Vector3D);
 
 		/// <summary>
 		/// Soustrait deux vecteurs entre eux
 		/// </summary>
-		/// <param name="vector1">Premier vecteur à soustraire</param>
-		/// <param name="vector2">Deuxième vecteur à soustraire</param>
+		/// <param name="vector">Vecteur à soustraire</param>
 		/// <returns>Vecteur somme</returns>
 		Vector3D Substraction(Vector3D);
 
 		/// <summary>
 		/// Multiplie deux vecteurs entre eux
 		/// </summary>
-		/// <param name="vector1">Premier vecteur à multiplier</param>
-		/// <param name="vector2">Second vecteur à multiplier</param>
+		/// <param name="vector1">Vecteur à multiplier</param>
 		/// <returns>Vecteur somme</returns>
 		Vector3D Multiply(Vector3D);
 

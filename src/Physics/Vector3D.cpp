@@ -64,6 +64,15 @@ Vector3D Vector3D::Normalisation(Vector3D vector)
 	return newVectorNormalised;
 }
 
+Vector3D Vector3D::Normalisation()
+{
+	float newX = x / Norm(*this);
+	float newY = y / Norm(*this);
+	float newZ = z / Norm(*this);
+	Vector3D newVectorNormalised = Vector3D(newX, newY, newZ);
+	return newVectorNormalised;
+}
+
 
 Vector3D Vector3D::ScalarMultiply(float scalar)
 {
