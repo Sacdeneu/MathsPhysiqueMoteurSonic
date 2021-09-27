@@ -24,7 +24,7 @@ void CreateParticle(Scene* scene, float velX, float velY)
 }
 
 bool mouseButtonDown = false;
-int HandleInputs(Scene* scene, Renderer* renderer)
+int HandleInputs(Renderer* renderer)
 {
 	SDL_Event event;
 	while(SDL_PollEvent(&event))
@@ -44,7 +44,7 @@ int HandleInputs(Scene* scene, Renderer* renderer)
 				SDL_GetMouseState(&pixelMouseX, &pixelMouseY);
 				float mouseX = pixelMouseX * 1.0f / SCREEN_WIDTH;
 				float mouseY = 1 - (pixelMouseY * 1.0f / SCREEN_HEIGHT);
-				CreateParticle(scene, -10 + mouseX * 20, mouseY * 15);
+				CreateParticle(Scene::mainScene, -10 + mouseX * 20, mouseY * 15);
 			}
 			else
 				renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, true);
@@ -76,7 +76,7 @@ int HandleInputs(Scene* scene, Renderer* renderer)
 	return 1;
 }
 
-void MakeImGuiWindow(Scene* scene, float physicsUpdateTime)
+void MakeImGuiWindow(float physicsUpdateTime)
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
@@ -86,7 +86,7 @@ void MakeImGuiWindow(Scene* scene, float physicsUpdateTime)
 	ImGui::SetWindowSize(ImVec2(0, 0));
 	ImGui::SetWindowPos(ImVec2(20, 20));
 
-	ImGui::Text("Particules dans la scene: %d", scene->GetObjectsCount());
+	ImGui::Text("Particules dans la scene: %d", Scene::mainScene->GetObjectsCount());
 	ImGui::Text("Mise a jour de la physique: %.5fms", physicsUpdateTime);
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 	ImGui::PushItemWidth(150);
@@ -122,11 +122,11 @@ int main( int argc, char* args[])
 			ImGui::StyleColorsDark();
 
 			Renderer* renderer = new Renderer(window);
-			Scene* scene = new Scene();
+			Scene::mainScene = new Scene();
 
 			//particule seule au centre du monde, sert de repère
 			Particle* p1 = new Particle(Vector3D(0, 0, 0), 1);
-			scene->AddParticle(p1);
+			Scene::mainScene->AddParticle(p1);
 
 			Uint64 lastUpdate = SDL_GetPerformanceCounter();
 
@@ -134,7 +134,7 @@ int main( int argc, char* args[])
 			while (runGame)
 			{
 				//mise à jour des entrées
-				HandleInputs(scene, renderer);
+				HandleInputs(renderer);
 
 				//calcul de dt
 				Uint64 now = SDL_GetPerformanceCounter();
@@ -142,18 +142,22 @@ int main( int argc, char* args[])
 				lastUpdate = now;
 
 				//mise à jour de la physique et de la logique
-				scene->Update(deltaTime);
+				Scene::mainScene->Update(deltaTime);
 				float physicsUpdateTime = ((SDL_GetPerformanceCounter() - lastUpdate) / (float)SDL_GetPerformanceFrequency()) * 1000;
 				renderer->camera.Update(deltaTime);
 
 				//mise à jour de l'affichage
-				renderer->Update(scene);
-				MakeImGuiWindow(scene, physicsUpdateTime);
+				renderer->Update(Scene::mainScene);
+				MakeImGuiWindow(physicsUpdateTime);
 				SDL_GL_SwapWindow(window);
 
 				//rendu à 60FPS
 				SDL_Delay(1000 / 60);
 			}
+			
+			delete renderer;
+			delete Scene::mainScene;
+			delete p1; //la particule au centre du monde
 		}
 	}
 

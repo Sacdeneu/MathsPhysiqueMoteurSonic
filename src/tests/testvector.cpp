@@ -1,5 +1,8 @@
 #include "../Physics/Vector3D.h"
 
+//#define TEST_MODE
+
+#ifdef TEST_MODE
 int main(int argc, char* args[])
 {
 	Vector3D vector1 = Vector3D(1, 2, 3);
@@ -20,3 +23,4 @@ int main(int argc, char* args[])
 	std::cout << "Vector4 Substraction " << vector4 << std::endl;
 	return 0;
 }
+#endif

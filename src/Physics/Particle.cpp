@@ -1,6 +1,7 @@
 #include "Particle.h"
 #include "Math.h"
 #include "Vector3D.h"
+#include "../rendering/scene.h"
 
 #define GRAVITY 9.81f
 
@@ -63,4 +64,6 @@ void Particle::Update(float dt)
 	Vector3D deltaVelocity = acceleration * dt; //delta velocity = difference de vélocité d'une frame à l'autre
 	velocity = (velocity * powf(damping, dt)) + deltaVelocity; //on applique le damping
 
+	if (position.y < -500)
+		Scene::mainScene->RemoveParticle(this);
 }

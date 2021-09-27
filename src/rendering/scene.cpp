@@ -1,5 +1,7 @@
 #include "scene.h"
 
+Scene* Scene::mainScene = NULL;
+
 Scene::Scene()
 {
 }
@@ -24,12 +26,6 @@ void Scene::Update(float dt)
 
 void Scene::RemoveParticle(Particle* p)
 {
-	for (int i = 0; i < gameObjects.size(); i++)
-	{
-		if (&gameObjects[i] == &p) //je suis pas sur que cette comparaison fonctionne
-		{
-			gameObjects.erase(gameObjects.begin() + i);
-			return;
-		}
-	}
+	gameObjects.erase(std::remove(gameObjects.begin(), gameObjects.end(), p), gameObjects.end());
+	delete p;
 }

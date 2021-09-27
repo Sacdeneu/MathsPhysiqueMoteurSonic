@@ -14,6 +14,8 @@ public:
 	void Update(float deltaTime);
 
 	std::vector<Particle*> gameObjects;
+
+	static Scene* mainScene;
 };
 #endif
 
