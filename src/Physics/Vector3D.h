@@ -57,7 +57,7 @@ class Vector3D
 		/// <summary>
 		/// Calcule le carré de la norme à partir d'un vecteur donné
 		/// </summary>
-		/// <param name="vector">Vecteur dont on calcule la norme au carré</param>
+		/// <param name="vector">Vecteur dont on calcule la norme au carré à partir du produit scalaire du vecteur avec lui même</param>
 		/// <returns>Norme au carré</returns>
 		static float NormSquare(Vector3D);
 

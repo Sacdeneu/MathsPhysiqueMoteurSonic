@@ -50,7 +50,7 @@ float Vector3D::Norm(Vector3D vector)
 
 float Vector3D::NormSquare(Vector3D vector)
 {
-	float normSquare = vector.x * vector.x + vector.y * vector.y + vector.z * vector.z;
+	float normSquare = ScalarProduct(vector, vector);
 	return normSquare;
 }
 
