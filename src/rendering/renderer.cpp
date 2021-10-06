@@ -128,7 +128,7 @@ void Renderer::Update(Scene* scene)
 	camera.SetMatrix(60, 0.1f, 500.0f, gridShader, "cameraMatrix");
 	gridVAO.Bind();
 	glm::mat4 model = glm::mat4(1.0f);
-	int modelLoc = glGetUniformLocation(defaultShader.program, "model");
+	int modelLoc = glGetUniformLocation(gridShader.program, "model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glDrawArrays(GL_LINES, 0, gridVertices.size() / 3);
 }
