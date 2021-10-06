@@ -152,6 +152,7 @@
     <ClCompile Include="include\imgui\imgui_impl_sdl.cpp" />
     <ClCompile Include="include\imgui\imgui_tables.cpp" />
     <ClCompile Include="include\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="ParticleForceGenerator.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Physics\Particle.cpp" />
     <ClCompile Include="src\Physics\Vector3D.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="include\imgui\imstb_rectpack.h" />
     <ClInclude Include="include\imgui\imstb_textedit.h" />
     <ClInclude Include="include\imgui\imstb_truetype.h" />
+    <ClInclude Include="ParticleForceGenerator.h" />
     <ClInclude Include="src\Physics\Particle.h" />
     <ClInclude Include="src\Physics\Vector3D.h" />
     <ClInclude Include="src\rendering\camera.h" />
