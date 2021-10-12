@@ -3,31 +3,28 @@
 #include "Vector3D.h"
 #include "../rendering/scene.h"
 
-#define GRAVITY 9.81f
+int particleCounter = 0;
 
 Particle::Particle()
 {
+	id = particleCounter++;
+
 	position = Vector3D(0, 0, 0);
 	velocity = Vector3D(0, 0, 0);
-	acceleration = Vector3D(0, 0, 0);
 
 	damping = 0.98f;
 	invMass = 1;
-	size = 1;
-	color = Vector3D(0, 0, 0);
 }
 
 Particle::Particle(Vector3D initialPos, float mass, float initialDamping)
 {
+	id = particleCounter++;
+
 	position = initialPos;
 	SetMass(mass);
 
 	velocity = Vector3D(0, 0, 0);
-	acceleration = Vector3D(0, 0, 0);
 	damping = initialDamping;
-
-	size = 1;
-	color = Vector3D(0, 0, 0);
 }
 
 void Particle::SetMass(float newMass)
@@ -48,12 +45,6 @@ void Particle::SetVelocity(Vector3D newVelocity)
 	velocity = newVelocity;
 }
 
-//accélération en m/s^2 donc la force ne rentre pas en compte ici
-void Particle::SetAcceleration(Vector3D newAcceleration)
-{
-	acceleration = newAcceleration;
-}
-
 void Particle::Update(float dt)
 {
 	// Update Position
@@ -61,9 +52,12 @@ void Particle::Update(float dt)
 	position = position + deltaPosition;
 
 	// Update Velocity
+	Vector3D acceleration = totalForce * invMass;
 	Vector3D deltaVelocity = acceleration * dt; //delta velocity = difference de vélocité d'une frame à l'autre
-	velocity = (velocity * powf(damping, dt)) + deltaVelocity; //on applique le damping
+	velocity = velocity + deltaVelocity;
 
-	if (position.y < -500)
+	CleanTotalForce();
+
+	if (position.y < -100)
 		Scene::mainScene->RemoveParticle(this);
 }

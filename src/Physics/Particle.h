@@ -8,10 +8,8 @@ public:
 	Particle(Vector3D initialPos, float mass, float damping = 0.98f);
 	//~Particle();
 
-
 	void Update(float deltaTime);
 	void SetVelocity(Vector3D newVelocity);
-	void SetAcceleration(Vector3D newAcceleration);
 
 	inline void SetMass(float newMass);
 	inline float GetMass() { return 1.0f / invMass; }
@@ -19,21 +17,18 @@ public:
 	// Accesseur
 	inline Vector3D GetPosition() { return position; }
 	inline Vector3D GetVelocity() { return velocity; }
-	inline Vector3D GetAcceleration() { return acceleration; }
 	inline float GetDamping() { return damping; }
+	inline void AddForce(Vector3D force) { totalForce = totalForce + force; }
+	inline void CleanTotalForce() { totalForce = Vector3D(0, 0, 0); }
 
 private: 
 	Vector3D position;
 	Vector3D velocity;
-	Vector3D acceleration;
 	float damping;
 	float invMass;
 
-
-
 public:
-	float size;
-	Vector3D color;
-
+	int id;
+	Vector3D totalForce;
 };
 

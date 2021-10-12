@@ -4,11 +4,14 @@
 #include "rendering/renderer.h"
 #include "rendering/scene.h"
 #include "Physics/Vector3D.h"
+#include "Physics/forcesRegister.h"
+#include "Physics/particleGravityGenerator.h"
 
 bool runGame = true;
 float particleMass = 1;
 float randomZDirection = 2.5f;
 float particleDamping = 0.98f;
+ForcesRegister forcesRegister;
 
 void CreateParticle(Scene* scene, float velX, float velY)
 {
@@ -20,7 +23,7 @@ void CreateParticle(Scene* scene, float velX, float velY)
 	// Trajectoire de la particule
 	p->SetVelocity(Vector3D(velX, velY, randZ));
 	// La seule force est la force gravitationelle
-	p->SetAcceleration(Vector3D(0, -9.81f, 0));
+	forcesRegister.AddEntry(p, new ParticleGravityGenerator());
 }
 
 bool mouseButtonDown = false;
@@ -122,7 +125,7 @@ int main( int argc, char* args[])
 			ImGui::StyleColorsDark();
 
 			Renderer* renderer = new Renderer(window);
-			Scene::mainScene = new Scene();
+			Scene::mainScene = new Scene(&forcesRegister);
 
 			//particule seule au centre du monde, sert de repère
 			Particle* p1 = new Particle(Vector3D(0, 0, 0), 1);
@@ -142,6 +145,7 @@ int main( int argc, char* args[])
 				lastUpdate = now;
 
 				//mise à jour de la physique et de la logique
+				forcesRegister.Update(deltaTime);
 				Scene::mainScene->Update(deltaTime);
 				float physicsUpdateTime = ((SDL_GetPerformanceCounter() - lastUpdate) / (float)SDL_GetPerformanceFrequency()) * 1000;
 				renderer->camera.Update(deltaTime);

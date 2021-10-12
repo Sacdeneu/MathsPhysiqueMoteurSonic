@@ -2,8 +2,9 @@
 
 Scene* Scene::mainScene = NULL;
 
-Scene::Scene()
+Scene::Scene(ForcesRegister* forcesRegister)
 {
+	this->forcesRegister = forcesRegister;
 }
 
 int Scene::GetObjectsCount()
@@ -26,6 +27,7 @@ void Scene::Update(float dt)
 
 void Scene::RemoveParticle(Particle* p)
 {
+	forcesRegister->DeleteParticle(p);
 	gameObjects.erase(std::remove(gameObjects.begin(), gameObjects.end(), p), gameObjects.end());
 	delete p;
 }
