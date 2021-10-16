@@ -6,6 +6,7 @@
 #include "Physics/Vector3D.h"
 #include "Physics/forcesRegister.h"
 #include "Physics/particleGravityGenerator.h"
+#include "Physics/particleDampingGenerator.h"
 
 bool runGame = true;
 float particleMass = 1;
@@ -22,8 +23,9 @@ void CreateParticle(Scene* scene, float velX, float velY)
 	scene->AddParticle(p);
 	// Trajectoire de la particule
 	p->SetVelocity(Vector3D(velX, velY, randZ));
-	// La seule force est la force gravitationelle
+	// Les seules forces sont la force gravitationelle et le damping
 	forcesRegister.AddEntry(p, new ParticleGravityGenerator());
+	forcesRegister.AddEntry(p, new ParticleDampingGenerator());
 }
 
 bool mouseButtonDown = false;

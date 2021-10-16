@@ -155,6 +155,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Physics\forcesRegister.cpp" />
     <ClCompile Include="src\Physics\Particle.cpp" />
+    <ClCompile Include="src\Physics\particleDampingGenerator.cpp" />
     <ClCompile Include="src\Physics\particleGravityGenerator.cpp" />
     <ClCompile Include="src\Physics\Vector3D.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="ParticleForceGenerator.h" />
     <ClInclude Include="src\Physics\forcesRegister.h" />
     <ClInclude Include="src\Physics\Particle.h" />
+    <ClInclude Include="src\Physics\particleDampingGenerator.h" />
     <ClInclude Include="src\Physics\particleGravityGenerator.h" />
     <ClInclude Include="src\Physics\Vector3D.h" />
     <ClInclude Include="src\rendering\camera.h" />

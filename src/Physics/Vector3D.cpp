@@ -15,6 +15,10 @@ Vector3D Vector3D::operator+(const Vector3D& vector){
 	return Addition(vector); 
 }
 
+Vector3D Vector3D::operator-() {
+	return Vector3D(-this->x, -this->y, -this->z);
+}
+
 Vector3D Vector3D::operator-(const Vector3D& vector) {
 	return Substraction(vector);
 }

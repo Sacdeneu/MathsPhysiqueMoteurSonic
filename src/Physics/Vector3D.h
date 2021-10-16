@@ -25,6 +25,7 @@ class Vector3D
 		float z;
 
 		// SURCHARGES D'OPERATEURS
+		Vector3D operator- ();
 		Vector3D operator+(const Vector3D&);
 		Vector3D operator-(const Vector3D&);
 		Vector3D operator*(float);
