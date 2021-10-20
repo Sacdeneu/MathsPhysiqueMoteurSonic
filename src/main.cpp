@@ -150,10 +150,6 @@ int main( int argc, char* args[])
 			Renderer* renderer = new Renderer(window);
 			Scene::mainScene = new Scene(&forcesRegister);
 
-			//particule seule au centre du monde, sert de repère
-			Particle* p1 = new Particle(Vector3D(0, 0, 0), 1);
-			Scene::mainScene->AddParticle(p1);
-
 			Uint64 lastUpdate = SDL_GetPerformanceCounter();
 
 			//boucle de jeu
@@ -184,7 +180,6 @@ int main( int argc, char* args[])
 			
 			delete renderer;
 			delete Scene::mainScene;
-			delete p1; //la particule au centre du monde
 		}
 	}
 

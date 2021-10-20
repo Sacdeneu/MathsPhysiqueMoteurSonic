@@ -38,6 +38,7 @@ Renderer::Renderer(SDL_Window* targetWindow)
 	//génération des shaders
 	defaultShader = Shader("resources/default.vert", "resources/default.frag");
 	gridShader = Shader("resources/grid.vert", "resources/grid.frag");
+	mapShader = Shader("resources/map.vert", "resources/map.frag");
 
 	//génération du VAO de la sphère
 	sphereVAO.Init();
@@ -87,6 +88,34 @@ Renderer::Renderer(SDL_Window* targetWindow)
 	gridVAO.LinkAttrib(gridVBO, 0, 3, GL_FLOAT, 3 * sizeof(GLfloat), (void*)0);
 	gridVAO.Unbind();
 	gridVBO.Unbind();
+
+	cubeVertices = {
+		.5f,.5f,.5f,0,1,0,    .5f,.5f,-.5f,0,1,0,    -.5f,.5f,-.5f,0,1,0,    -.5f,.5f,.5f,0,1,0,   //top
+		.5f,-.5f,.5f,0,-1,0,  .5f,-.5f,-.5f,0,-1,0,  -.5f,-.5f,-.5f,0,-1,0,  -.5f,-.5f,.5f,0,-1,0, //bottom
+		.5f,.5f,-.5f,0,0,1,   .5f,-.5f,-.5f,0,0,1,   -.5f,-.5f,-.5f,0,0,1,   -.5f,.5f,-.5f,0,0,1,  //front
+		.5f,.5f,.5f,0,0,-1,   .5f,-.5f,.5f,0,0,-1,   -.5f,-.5f,.5f,0,0,-1,   -.5f,.5f,.5f,0,0,-1,  //back
+		-.5f,.5f,.5f,-1,0,0,  -.5f,-.5f,.5f,-1,0,0,  -.5f,-.5f,-.5f,-1,0,0,  -.5f,.5f,-.5f,-1,0,0, //left
+		.5f,.5f,.5f,1,0,0,    .5f,-.5f,.5f,1,0,0,    .5f,-.5f,-.5f,1,0,0,    .5f,.5f,-.5f,1,0,0    //right
+	};
+
+	cubeIndices = {
+		0,1,2,0,2,3,
+		4,5,6,4,6,7,
+		8,9,10,8,10,11,
+		12,13,14,12,14,15,
+		16,17,18,16,18,19,
+		20,21,22,20,22,23
+	};
+
+	cubeVAO.Init();
+	cubeVAO.Bind();
+	VBO cubeVBO(cubeVertices);
+	EBO cubeEBO(cubeIndices);
+	cubeVAO.LinkAttrib(cubeVBO, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)0);
+	cubeVAO.LinkAttrib(cubeVBO, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	cubeVAO.Unbind();
+	cubeVBO.Unbind();
+	cubeEBO.Unbind();
 }
 
 float t = 0;
@@ -122,7 +151,31 @@ void Renderer::Update(Scene* scene)
 
 		glDrawElements(GL_TRIANGLES, s.indices.size(), GL_UNSIGNED_INT, 0);
 	}
+	sphereVAO.Unbind();
 
+	//affiche la map
+	glUseProgram(mapShader.program);
+	glUniform3f(glGetUniformLocation(mapShader.program, "lightDir"), -0.8f, -1.0f, 0.3f);
+	glUniform3f(glGetUniformLocation(mapShader.program, "viewPos"), viewPos.x, viewPos.y, viewPos.z);
+	camera.SetMatrix(60, 0.1f, 500.0f, mapShader, "cameraMatrix");
+	cubeVAO.Bind();
+	for (int i = 0; i < scene->map.size(); i++)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+
+		Vector3D pos = scene->map[i].position;
+		Vector3D scale = scene->map[i].scale;
+		model = glm::translate(model, glm::vec3(pos.x, pos.y, pos.z));
+		model = glm::scale(model, glm::vec3(scale.x, scale.y, scale.z));
+
+		int modelLoc = glGetUniformLocation(mapShader.program, "model");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		glDrawElements(GL_TRIANGLES, cubeIndices.size(), GL_UNSIGNED_INT, 0);
+	}
+	cubeVAO.Unbind();
+
+	/*
 	//affichage de la grille
 	glUseProgram(gridShader.program);
 	camera.SetMatrix(60, 0.1f, 500.0f, gridShader, "cameraMatrix");
@@ -131,4 +184,5 @@ void Renderer::Update(Scene* scene)
 	int modelLoc = glGetUniformLocation(gridShader.program, "model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glDrawArrays(GL_LINES, 0, gridVertices.size() / 3);
+	*/
 }

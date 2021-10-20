@@ -32,10 +32,12 @@ public:
 	void Update(Scene* scene);
 private:
 	SDL_GLContext context;
-	Shader defaultShader, gridShader;
-	VAO sphereVAO, gridVAO;
+	Shader defaultShader, gridShader, mapShader;
+	VAO sphereVAO, gridVAO, cubeVAO;
 	std::vector<GLfloat> gridVertices;
 	std::vector<GLuint> gridIndices;
+	std::vector<GLfloat> cubeVertices;
+	std::vector<GLuint> cubeIndices;
 };
 
 #endif

@@ -187,6 +187,12 @@
     <None Include="resources\grid.vert">
       <Filter>Fichiers de ressources</Filter>
     </None>
+    <None Include="resources\map.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="resources\map.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="bin\glew32.dll">
