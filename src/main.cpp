@@ -152,10 +152,10 @@ int main( int argc, char* args[])
 
 			// Collision + particles de tests
 			ParticleContactGenerator* particleContactGenerator = new ParticleContactGenerator();
-			Particle* p = new Particle(Vector3D(0, 1, 0), 1);
-			Particle* p2 = new Particle(Vector3D(0.9, 0.9, 0), 1);
-			Scene::mainScene->AddParticle(p);
-			Scene::mainScene->AddParticle(p2);
+			//Particle* p = new Particle(Vector3D(0, 0, 0), 1);
+			//Particle* p2 = new Particle(Vector3D(0.9, 0.9, 0), 1);
+			//Scene::mainScene->AddParticle(p);
+			//Scene::mainScene->AddParticle(p2);
 
 			Uint64 lastUpdate = SDL_GetPerformanceCounter();
 
@@ -178,6 +178,7 @@ int main( int argc, char* args[])
 
 				//test collisions
 				particleContactGenerator->UpdateContactSphere(Scene::mainScene->gameObjects);
+				particleContactGenerator->UpdateContactSphereTransform(Scene::mainScene->gameObjects, Scene::mainScene->map);
 
 				//mise à jour de l'affichage
 				renderer->Update(Scene::mainScene);
