@@ -10,6 +10,8 @@
 #include "Physics/particleAnchoredSpringGenerator.h"
 #include "Physics/particleSpringGenerator.h"
 
+#include "Physics/ParticleContactGenerator.h"
+
 bool runGame = true;
 float particleMass = 1;
 float randomZDirection = 2.5f;
@@ -148,6 +150,13 @@ int main( int argc, char* args[])
 			Renderer* renderer = new Renderer(window);
 			Scene::mainScene = new Scene(&forcesRegister);
 
+			// Collision + particles de tests
+			ParticleContactGenerator* particleContactGenerator = new ParticleContactGenerator();
+			Particle* p = new Particle(Vector3D(0, 1, 0), 1);
+			Particle* p2 = new Particle(Vector3D(0.9, 0.9, 0), 1);
+			Scene::mainScene->AddParticle(p);
+			Scene::mainScene->AddParticle(p2);
+
 			Uint64 lastUpdate = SDL_GetPerformanceCounter();
 
 			//boucle de jeu
@@ -166,6 +175,9 @@ int main( int argc, char* args[])
 				Scene::mainScene->Update(deltaTime);
 				float physicsUpdateTime = ((SDL_GetPerformanceCounter() - lastUpdate) / (float)SDL_GetPerformanceFrequency()) * 1000;
 				renderer->camera.Update(deltaTime);
+
+				//test collisions
+				particleContactGenerator->UpdateContactSphere(Scene::mainScene->gameObjects);
 
 				//mise à jour de l'affichage
 				renderer->Update(Scene::mainScene);

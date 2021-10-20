@@ -156,6 +156,8 @@
     <ClCompile Include="src\Physics\forcesRegister.cpp" />
     <ClCompile Include="src\Physics\Particle.cpp" />
     <ClCompile Include="src\Physics\particleAnchoredSpringGenerator.cpp" />
+    <ClCompile Include="src\Physics\ParticleContact.cpp" />
+    <ClCompile Include="src\Physics\ParticleContactGenerator.cpp" />
     <ClCompile Include="src\Physics\particleDampingGenerator.cpp" />
     <ClCompile Include="src\Physics\particleGravityGenerator.cpp" />
     <ClCompile Include="src\Physics\particleSpringGenerator.cpp" />
@@ -184,6 +186,8 @@
     <ClInclude Include="src\Physics\forcesRegister.h" />
     <ClInclude Include="src\Physics\Particle.h" />
     <ClInclude Include="src\Physics\particleAnchoredSpringGenerator.h" />
+    <ClInclude Include="src\Physics\ParticleContact.h" />
+    <ClInclude Include="src\Physics\ParticleContactGenerator.h" />
     <ClInclude Include="src\Physics\particleDampingGenerator.h" />
     <ClInclude Include="src\Physics\particleGravityGenerator.h" />
     <ClInclude Include="src\Physics\particleSpringGenerator.h" />
