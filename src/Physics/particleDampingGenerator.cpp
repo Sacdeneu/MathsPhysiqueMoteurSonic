@@ -3,8 +3,8 @@
 
 ParticleDampingGenerator::ParticleDampingGenerator()
 {
-	k1 = 0.98f;
-	k2 = 0.02f;
+	k1 = 0.1f;
+	k2 = 0.01f;
 }
 
 void ParticleDampingGenerator::UpdateForce(Particle* particle, float deltaTime)

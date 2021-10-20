@@ -7,6 +7,8 @@
 #include "Physics/forcesRegister.h"
 #include "Physics/particleGravityGenerator.h"
 #include "Physics/particleDampingGenerator.h"
+#include "Physics/particleAnchoredSpringGenerator.h"
+#include "Physics/particleSpringGenerator.h"
 
 bool runGame = true;
 float particleMass = 1;
@@ -26,6 +28,21 @@ void CreateParticle(Scene* scene, float velX, float velY)
 	// Les seules forces sont la force gravitationelle et le damping
 	forcesRegister.AddEntry(p, new ParticleGravityGenerator());
 	forcesRegister.AddEntry(p, new ParticleDampingGenerator());
+	forcesRegister.AddEntry(p, new ParticleAnchoredSpringGenerator());
+}
+
+void CreateSpring(Scene* scene)
+{
+	// Création des particles
+	Particle* p1 = new Particle(Vector3D(-2, 2, 0), particleMass, particleDamping);
+	scene->AddParticle(p1);
+	Particle* p2 = new Particle(Vector3D(2, 2, 0), particleMass * 2, particleDamping);
+	scene->AddParticle(p2);
+	// Les seules forces sont la force gravitationelle et le damping
+	forcesRegister.AddEntry(p1, new ParticleDampingGenerator());
+	forcesRegister.AddEntry(p1, new ParticleSpringGenerator(p2));
+	forcesRegister.AddEntry(p2, new ParticleDampingGenerator());
+	forcesRegister.AddEntry(p2, new ParticleSpringGenerator(p1));
 }
 
 bool mouseButtonDown = false;
@@ -50,6 +67,10 @@ int HandleInputs(Renderer* renderer)
 				float mouseX = pixelMouseX * 1.0f / SCREEN_WIDTH;
 				float mouseY = 1 - (pixelMouseY * 1.0f / SCREEN_HEIGHT);
 				CreateParticle(Scene::mainScene, -10 + mouseX * 20, mouseY * 15);
+			}
+			else if (event.key.keysym.sym == SDLK_r)
+			{
+				CreateSpring(Scene::mainScene);
 			}
 			else
 				renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, true);

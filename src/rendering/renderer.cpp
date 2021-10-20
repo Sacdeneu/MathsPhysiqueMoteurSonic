@@ -64,20 +64,20 @@ Renderer::Renderer(SDL_Window* targetWindow)
 	for (int i = minGrid; i <= maxGrid; i++)
 	{
 		gridVertices.push_back(minGrid);
-		gridVertices.push_back(0);
 		gridVertices.push_back(i);
+		gridVertices.push_back(0);
 
 		gridVertices.push_back(maxGrid);
-		gridVertices.push_back(0);
 		gridVertices.push_back(i);
+		gridVertices.push_back(0);
 
 		gridVertices.push_back(i);
-		gridVertices.push_back(0);
 		gridVertices.push_back(minGrid);
+		gridVertices.push_back(0);
 
 		gridVertices.push_back(i);
-		gridVertices.push_back(0);
 		gridVertices.push_back(maxGrid);
+		gridVertices.push_back(0);
 	}
 
 	//VAO de la grille

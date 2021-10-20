@@ -58,25 +58,22 @@ float Vector3D::NormSquare(Vector3D vector)
 	return normSquare;
 }
 
-
 Vector3D Vector3D::Normalisation(Vector3D vector)
 {
-	float newX = vector.x / Norm(vector);
-	float newY = vector.y / Norm(vector);
-	float newZ = vector.z / Norm(vector);
+	float norm = Norm(vector);
+	if (norm == 0)
+		return Vector3D(0, 0, 0);
+	float newX = vector.x / norm;
+	float newY = vector.y / norm;
+	float newZ = vector.z / norm;
 	Vector3D newVectorNormalised = Vector3D(newX, newY, newZ);
 	return newVectorNormalised;
 }
 
 Vector3D Vector3D::Normalisation()
 {
-	float newX = x / Norm(*this);
-	float newY = y / Norm(*this);
-	float newZ = z / Norm(*this);
-	Vector3D newVectorNormalised = Vector3D(newX, newY, newZ);
-	return newVectorNormalised;
+	return Vector3D::Normalisation(*this);
 }
-
 
 Vector3D Vector3D::ScalarMultiply(float scalar)
 {
