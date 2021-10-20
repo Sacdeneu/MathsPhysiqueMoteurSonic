@@ -11,12 +11,11 @@ Particle::Particle()
 
 	position = Vector3D(0, 0, 0);
 	velocity = Vector3D(0, 0, 0);
-
-	damping = 0.98f;
-	invMass = 1;
+	
+	SetMass(1);
 }
 
-Particle::Particle(Vector3D initialPos, float mass, float initialDamping)
+Particle::Particle(Vector3D initialPos, float mass)
 {
 	id = particleCounter++;
 
@@ -24,7 +23,6 @@ Particle::Particle(Vector3D initialPos, float mass, float initialDamping)
 	SetMass(mass);
 
 	velocity = Vector3D(0, 0, 0);
-	damping = initialDamping;
 }
 
 void Particle::SetMass(float newMass)
@@ -33,6 +31,8 @@ void Particle::SetMass(float newMass)
 		invMass = 1.0f / newMass;
 	else
 		invMass = 1; //valeur par défaut si newMass est nul
+
+	radius = cbrt(newMass);
 }
 
 /*Particle::~Particle()

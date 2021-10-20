@@ -13,7 +13,6 @@
 bool runGame = true;
 float particleMass = 1;
 float randomZDirection = 2.5f;
-float particleDamping = 0.98f;
 ForcesRegister forcesRegister;
 
 void CreateParticle(Scene* scene, float velX, float velY)
@@ -21,7 +20,7 @@ void CreateParticle(Scene* scene, float velX, float velY)
 	// Création des particles
 	//std::shared_ptr<Particle> p = std::make_shared<Particle>(Particle(Vector3D(-5, 1, -5), 1));
 	float randZ = (-100 + rand() % 200) * randomZDirection * 0.01f;
-	Particle* p = new Particle(Vector3D(0, 0, 0), particleMass, particleDamping);
+	Particle* p = new Particle(Vector3D(0, 0, 0), particleMass);
 	scene->AddParticle(p);
 	// Trajectoire de la particule
 	p->SetVelocity(Vector3D(velX, velY, randZ));
@@ -34,9 +33,9 @@ void CreateParticle(Scene* scene, float velX, float velY)
 void CreateSpring(Scene* scene)
 {
 	// Création des particles
-	Particle* p1 = new Particle(Vector3D(-2, 2, 0), particleMass, particleDamping);
+	Particle* p1 = new Particle(Vector3D(-2, 2, 0), particleMass);
 	scene->AddParticle(p1);
-	Particle* p2 = new Particle(Vector3D(2, 2, 0), particleMass * 2, particleDamping);
+	Particle* p2 = new Particle(Vector3D(2, 2, 0), particleMass * 2);
 	scene->AddParticle(p2);
 	// Les seules forces sont la force gravitationelle et le damping
 	forcesRegister.AddEntry(p1, new ParticleDampingGenerator());
@@ -118,7 +117,6 @@ void MakeImGuiWindow(float physicsUpdateTime)
 	ImGui::PushItemWidth(150);
 	ImGui::SliderFloat("Masse des particules", &particleMass, 0.1, 10, "%.2f");
 	ImGui::SliderFloat("Dispersion Z", &randomZDirection, 0, 5, "%.1f");
-	ImGui::SliderFloat("Damping", &particleDamping, 0, 1, "%.2f");
 
 	ImGui::End();
 	ImGui::Render();

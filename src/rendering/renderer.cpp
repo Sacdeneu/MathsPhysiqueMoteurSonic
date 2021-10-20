@@ -143,7 +143,7 @@ void Renderer::Update(Scene* scene)
 		model = glm::translate(model, glm::vec3(pos.x, pos.y, pos.z));
 		//model = glm::rotate(model, glm::radians(t * (i+1) * 50), glm::vec3(0, 1.0f, 0));
 
-		float radius = cbrt(scene->gameObjects[i]->GetMass());
+		float radius = scene->gameObjects[i]->GetRadius();
 		model = glm::scale(model, glm::vec3(radius, radius, radius));
 
 		int modelLoc = glGetUniformLocation(defaultShader.program, "model");
