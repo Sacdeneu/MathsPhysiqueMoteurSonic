@@ -10,7 +10,7 @@
 #include "Physics/particleAnchoredSpringGenerator.h"
 #include "Physics/particleSpringGenerator.h"
 
-#include "Physics/ParticleContactGenerator.h"
+#include "Physics/ParticleContactSolver.h"
 
 bool runGame = true;
 float particleMass = 1;
@@ -151,7 +151,7 @@ int main( int argc, char* args[])
 			Scene::mainScene = new Scene(&forcesRegister);
 
 			// Collision + particles de tests
-			ParticleContactGenerator* particleContactGenerator = new ParticleContactGenerator();
+			ParticleContactSolver* particleContactSolver = new ParticleContactSolver();
 			//Particle* p = new Particle(Vector3D(0, 0, 0), 1);
 			//Particle* p2 = new Particle(Vector3D(0.9, 0.9, 0), 1);
 			//Scene::mainScene->AddParticle(p);
@@ -177,8 +177,7 @@ int main( int argc, char* args[])
 				renderer->camera.Update(deltaTime);
 
 				//test collisions
-				particleContactGenerator->UpdateContactSphere(Scene::mainScene->gameObjects);
-				particleContactGenerator->UpdateContactSphereTransform(Scene::mainScene->gameObjects, Scene::mainScene->map);
+				particleContactSolver->UpdateCollisions(Scene::mainScene, 1);
 
 				//mise à jour de l'affichage
 				renderer->Update(Scene::mainScene);

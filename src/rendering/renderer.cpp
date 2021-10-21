@@ -1,7 +1,7 @@
 #include "renderer.h"
 #include "sphere.h"
 
-Sphere s(0.5f, 24, 24);
+Sphere s(1.0f, 24, 24);
 
 //constructeur
 Renderer::Renderer(SDL_Window* targetWindow)

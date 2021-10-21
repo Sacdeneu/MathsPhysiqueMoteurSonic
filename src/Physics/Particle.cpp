@@ -32,7 +32,9 @@ void Particle::SetMass(float newMass)
 	else
 		invMass = 1; //valeur par défaut si newMass est nul
 
-	radius = cbrt(newMass);
+	//toutes les particules ont une densité constante,
+	//on calcule le rayon comme étant la racine cubique de la masse afin que la masse paraisse visuellement correcte
+	radius = cbrt(newMass) * 0.5f;
 }
 
 /*Particle::~Particle()

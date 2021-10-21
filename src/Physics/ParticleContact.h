@@ -7,19 +7,18 @@ class ParticleContact
 {
 public:
 	ParticleContact();
-	ParticleContact(Particle* A, Particle* B, Vector3D contactNormal, float interpenetration);
+	ParticleContact(Particle* a, Particle* b, Vector3D contactNormal, float interpenetration);
 	~ParticleContact() = default;
 
 	// Pour résoudre la superposition des deux particules
 	void ResolveInterpenetration();
 
-private:
-	Particle* contacts[2];
-	float coef;
-	Vector3D contactNormal;
+	inline Vector3D GetNormal() { return normal; }
+	inline float GetInterpenetration() { return interpenetration; }
 
-	// utilisé pour calculer les distance a laquelle les 2 particules 
-	// doivent bouger pour résoudre la collision
+private:
+	Particle* particles[2];
+	Vector3D normal;
 	float interpenetration; 
 
 

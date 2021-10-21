@@ -16,7 +16,7 @@ Scene::Scene(ForcesRegister* forcesRegister)
 
 void Scene::AddCubeToMap(Vector3D position, Vector3D scale)
 {
-	Transform transform;
+	AABB transform;
 	transform.position = position;
 	transform.scale = scale;
 	map.push_back(transform);

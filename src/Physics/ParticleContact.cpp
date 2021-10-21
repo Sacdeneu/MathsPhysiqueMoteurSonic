@@ -4,16 +4,12 @@ ParticleContact::ParticleContact()
 {
 }
 
-ParticleContact::ParticleContact(Particle* A, Particle* B, Vector3D contactNormal, float interpenetration)
+ParticleContact::ParticleContact(Particle* a, Particle* b, Vector3D contactNormal, float interpenetration)
 {
-	contacts[0] = A;
-	contacts[1] = B;
-	this->contactNormal = contactNormal;
+	this->particles[0] = a;
+	this->particles[1] = b;
+	this->normal = contactNormal;
 	this->interpenetration = interpenetration;
-
-
-
-
 }
 
 void ParticleContact::ResolveInterpenetration()

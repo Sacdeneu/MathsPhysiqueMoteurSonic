@@ -1,80 +1,77 @@
 #include "ParticleContactGenerator.h"
 #include "Math.h"
 
-std::vector<ParticleContact*> ParticleContactGenerator::UpdateContactSphere(std::vector<Particle*> particles)
+std::vector<ParticleContact>* ParticleContactGenerator::UpdateContacts(Scene* scene)
 {
-	std::vector<ParticleContact*> collisions;
-	for (size_t i = 0; i < particles.size(); i++)
+	std::vector<ParticleContact>* collisions = new std::vector<ParticleContact>();
+	int particleCount = scene->GetObjectsCount();
+	int aabbCount = scene->map.size();
+
+	//pour chaque particule on vérifie la collision...
+	for (size_t i = 0; i < particleCount; i++)
 	{
-		for (size_t j = 0; j < particles.size(); j++)
+		//...avec toutes les autres particules pas encore explorées...
+		for (size_t j = i + 1; j < particleCount; j++)
 		{
-			// On ne peut pas checker la collision avec les mêmes particles
-			if (i != j) 
-			{
-				// Contact
-				if (CheckSphereIntersection(particles[i], particles[j]))
-				{
-					Vector3D normal = Vector3D::Normalisation(particles[i]->GetPosition() - particles[j]->GetPosition());
-					float interpenetration = particles[i]->GetRadius() * 0.5f + particles[j]->GetRadius() * 0.5f -
-											 std::abs(Vector3D::Norm(particles[i]->GetPosition() - particles[j]->GetPosition()));
-					
-					std::cout << "Collision detected\n";
-					std::cout << normal;
-					std::cout << '\n';
-					std::cout << interpenetration;
-					std::cout << '\n';
-					collisions.push_back(new ParticleContact(particles[i], particles[j], normal, interpenetration));
-				}
-			}
+			ParticleContact* newContact = CheckCollision(scene->gameObjects[i], scene->gameObjects[j]);
+			if (newContact != NULL) //si il y a eu de collision
+				collisions->push_back(*newContact);
+		}
+
+		//...et avec les AABB qui consistuent le niveau
+		for (size_t j = 0; j < aabbCount; j++)
+		{
+			ParticleContact* newContact = CheckCollision(scene->gameObjects[i], &scene->map[j]);
+			if (newContact != NULL) //si il y a eu de collision
+				collisions->push_back(*newContact);
 		}
 	}
+
 	return collisions;
 }
 
-std::vector<ParticleContact*> ParticleContactGenerator::UpdateContactSphereTransform(std::vector<Particle*> particles, std::vector<Transform> transforms)
+//Sphere / Sphere
+ParticleContact* ParticleContactGenerator::CheckCollision(Particle* a, Particle* b)
 {
-	std::vector<ParticleContact*> collisions;
-	for (size_t i = 0; i < particles.size(); i++)
-	{
-		for (size_t j = 0; j < transforms.size(); j++)
-		{
-			if (CheckSphereTransformIntersection(particles[i], transforms[j]))
-			{
-				std::cout << "Collision Sphere AABB detected\n";
+	//on détermine le direction et la distance des deux particules
+	float radius = a->GetRadius() + b->GetRadius();
+	Vector3D dir = a->GetPosition() - b->GetPosition();
+	float distance = std::abs(Vector3D::NormSquare(dir));
 
-			}
-		}
-	}
-	return collisions;
+	//si elles ne se touchent pas, on ne génère pas de contact
+	if (distance > radius)
+		return NULL;
+
+	//si elles se touchent on calcule la normale et l'interpenetration...
+	Vector3D normal = Vector3D::Normalisation(dir);
+	float interpenetration = radius - Vector3D::Norm(dir);
+
+	//...et on génère le contact
+	return new ParticleContact(a, b, normal, interpenetration);
 }
 
-
-bool ParticleContactGenerator::CheckSphereIntersection(Particle* A, Particle* B)
+//Sphere / AABB
+ParticleContact* ParticleContactGenerator::CheckCollision(Particle* a, AABB* b)
 {
-	float radius = A->GetRadius() * 0.5f + B->GetRadius() * 0.5f;
-	float distance = std::abs(Vector3D::NormSquare(A->GetPosition() - B->GetPosition()));
+	//on détermine le point le plus proche de la particule compris dans l'AABB
+	Vector3D nearestPointInAABB;
+	nearestPointInAABB.x = max(b->GetMinX(), min(a->GetPosition().x, b->GetMaxX()));
+	nearestPointInAABB.y = max(b->GetMinY(), min(a->GetPosition().y, b->GetMaxY()));
+	nearestPointInAABB.z = max(b->GetMinZ(), min(a->GetPosition().z, b->GetMaxZ()));
+	
+	//on calcule la distance entre ce point et la particule
+	float distance = Vector3D::Norm(nearestPointInAABB - a->GetPosition());
 
-	return (distance < radius);
+	//si distance entre le point et la particule est plus grand que le rayon,
+	//alors la particule ne touche pas l'AABB on ne génère pas de contact
+	if (distance > a->GetRadius())
+		return NULL;
+
+	float interpenetration = a->GetRadius() - distance;
+
+	//si la particule est entièrement dans l'AABB (interpenetration = rayon)
+	//alors on met la normale vers le haut pour pousser les particules coincées à l'interieur de l'AABB
+	Vector3D normal = interpenetration == a->GetRadius() ? Vector3D(0, 1, 0) : Vector3D::Normalisation(nearestPointInAABB - a->GetPosition());
+
+	return new ParticleContact(a, NULL, normal, interpenetration);
 }
-
-bool ParticleContactGenerator::CheckSphereTransformIntersection(Particle* A, Transform B)
-{
-	// On calcul les distances en X, Y et Z
-	Vector3D distance = A->GetPosition() - B.position;
-	distance.x = std::abs(distance.x);
-	distance.y = std::abs(distance.y);
-	distance.z = std::abs(distance.z);
-
-	// On calcule la taille du transform / rectangle
-	Vector3D size(A->GetRadius() * 0.5f + B.scale.x * 0.5, A->GetRadius() * 0.5f + B.scale.y * 0.5, A->GetRadius() * 0.5f + B.scale.z * 0.5);
-
-	return (distance.x < size.x && distance.y < size.y && distance.z < size.z);
-}
-
-
-/*Vector3D ParticleContactGenerator::CalculateNormal(Particle* A, Transform* B)
-{
-	Vector3D normal(0, 0, 0);
-
-	return normal;
-}*/
