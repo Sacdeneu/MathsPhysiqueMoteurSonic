@@ -71,7 +71,7 @@ ParticleContact* ParticleContactGenerator::CheckCollision(Particle* a, AABB* b)
 
 	//si la particule est entièrement dans l'AABB (interpenetration = rayon)
 	//alors on met la normale vers le haut pour pousser les particules coincées à l'interieur de l'AABB
-	Vector3D normal = interpenetration == a->GetRadius() ? Vector3D(0, 1, 0) : Vector3D::Normalisation(nearestPointInAABB - a->GetPosition());
+	Vector3D normal = interpenetration == a->GetRadius() ? Vector3D(0, 1, 0) : Vector3D::Normalisation(a->GetPosition() - nearestPointInAABB);
 
-	return new ParticleContact(a, NULL, normal, interpenetration);
+	return new ParticleContact(a, (Particle*)b, normal, interpenetration);
 }

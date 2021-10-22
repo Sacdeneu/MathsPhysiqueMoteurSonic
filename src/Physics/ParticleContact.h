@@ -10,8 +10,7 @@ public:
 	ParticleContact(Particle* a, Particle* b, Vector3D contactNormal, float interpenetration);
 	~ParticleContact() = default;
 
-	// Pour résoudre la superposition des deux particules
-	void ResolveInterpenetration();
+	void Resolve();
 
 	inline Vector3D GetNormal() { return normal; }
 	inline float GetInterpenetration() { return interpenetration; }

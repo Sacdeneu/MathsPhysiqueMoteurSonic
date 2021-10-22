@@ -163,8 +163,8 @@ void Renderer::Update(Scene* scene)
 	{
 		glm::mat4 model = glm::mat4(1.0f);
 
-		Vector3D pos = scene->map[i].position;
-		Vector3D scale = scene->map[i].scale;
+		Vector3D pos = scene->map[i].GetPosition();
+		Vector3D scale = scene->map[i].GetScale();
 		model = glm::translate(model, glm::vec3(pos.x, pos.y, pos.z));
 		model = glm::scale(model, glm::vec3(scale.x, scale.y, scale.z));
 

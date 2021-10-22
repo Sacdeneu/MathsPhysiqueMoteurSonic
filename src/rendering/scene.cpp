@@ -12,14 +12,16 @@ Scene::Scene(ForcesRegister* forcesRegister)
 	AddCubeToMap(Vector3D(7, -7, 0), Vector3D(2, 6, 6));
 	AddCubeToMap(Vector3D(9, -8, 0), Vector3D(2, 4, 6));
 	AddCubeToMap(Vector3D(11, -9, 0), Vector3D(2, 2, 6));
+	AddCubeToMap(Vector3D(-10.5f, -10, 0), Vector3D(1, 4, 20));
+	AddCubeToMap(Vector3D(30.5f, -10, 0), Vector3D(1, 4, 20));
+	AddCubeToMap(Vector3D(10, -10, 10.5f), Vector3D(40, 4, 1));
+	AddCubeToMap(Vector3D(10, -10, -10.5f), Vector3D(40, 4, 1));
 }
 
 void Scene::AddCubeToMap(Vector3D position, Vector3D scale)
 {
-	AABB transform;
-	transform.position = position;
-	transform.scale = scale;
-	map.push_back(transform);
+	AABB aabb(position, scale);
+	map.push_back(aabb);
 }
 
 int Scene::GetObjectsCount()

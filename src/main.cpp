@@ -14,7 +14,7 @@
 
 bool runGame = true;
 float particleMass = 1;
-float randomZDirection = 2.5f;
+float randomZDirection = 0;// 2.5f;
 ForcesRegister forcesRegister;
 
 void CreateParticle(Scene* scene, float velX, float velY)
@@ -22,14 +22,14 @@ void CreateParticle(Scene* scene, float velX, float velY)
 	// Création des particles
 	//std::shared_ptr<Particle> p = std::make_shared<Particle>(Particle(Vector3D(-5, 1, -5), 1));
 	float randZ = (-100 + rand() % 200) * randomZDirection * 0.01f;
-	Particle* p = new Particle(Vector3D(0, 0, 0), particleMass);
+	Particle* p = new Particle(Vector3D(0, 2, 0), particleMass);
 	scene->AddParticle(p);
 	// Trajectoire de la particule
 	p->SetVelocity(Vector3D(velX, velY, randZ));
 	// Les seules forces sont la force gravitationelle et le damping
 	forcesRegister.AddEntry(p, new ParticleGravityGenerator());
 	forcesRegister.AddEntry(p, new ParticleDampingGenerator());
-	forcesRegister.AddEntry(p, new ParticleAnchoredSpringGenerator());
+	//forcesRegister.AddEntry(p, new ParticleAnchoredSpringGenerator());
 }
 
 void CreateSpring(Scene* scene)
@@ -173,11 +173,12 @@ int main( int argc, char* args[])
 				//mise à jour de la physique et de la logique
 				forcesRegister.Update(deltaTime);
 				Scene::mainScene->Update(deltaTime);
-				float physicsUpdateTime = ((SDL_GetPerformanceCounter() - lastUpdate) / (float)SDL_GetPerformanceFrequency()) * 1000;
-				renderer->camera.Update(deltaTime);
-
+				
 				//test collisions
-				particleContactSolver->UpdateCollisions(Scene::mainScene, 1);
+				particleContactSolver->UpdateCollisions(Scene::mainScene, 4);
+				float physicsUpdateTime = ((SDL_GetPerformanceCounter() - lastUpdate) / (float)SDL_GetPerformanceFrequency()) * 1000;
+
+				renderer->camera.Update(deltaTime);
 
 				//mise à jour de l'affichage
 				renderer->Update(Scene::mainScene);
