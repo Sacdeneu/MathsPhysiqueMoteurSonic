@@ -9,7 +9,7 @@ class ParticleLink
 public:
 	ParticleLink() = default;
 	ParticleLink(Particle* A, Particle* B, float sizeLink);
-	virtual std::vector<ParticleContact> AddContacts();
+	virtual void AddContacts(std::vector<ParticleContact>* listContact);
 
 
 protected:

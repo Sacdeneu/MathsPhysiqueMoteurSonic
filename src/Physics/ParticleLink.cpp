@@ -8,8 +8,7 @@ ParticleLink::ParticleLink(Particle* A, Particle* B, float lengthLink)
 
 }
 
-std::vector<ParticleContact> ParticleLink::AddContacts()
+void ParticleLink::AddContacts(std::vector<ParticleContact>* listContact)
 {
-	std::vector<ParticleContact> res;
-	return res;
+
 }

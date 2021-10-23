@@ -12,6 +12,12 @@ void ParticleContactSolver::UpdateCollisions(Scene* scene, int iterations)
 		std::cout << "Contacts : " << contacts->size() << std::endl;
 #endif
 
+		// On regarde si les liens de particules génèrent des collisions supplémentaires
+		for (size_t i = 0; i < particlesLink.size(); i++)
+		{
+			particlesLink[i]->AddContacts(contacts);
+		}
+
 		for (int j = 0; j < contacts->size(); j++)
 		{
 			contacts->at(j).Resolve();
@@ -22,4 +28,10 @@ void ParticleContactSolver::UpdateCollisions(Scene* scene, int iterations)
 #endif
 		}
 	}
+}
+
+// à bouger dans scene.cpp si c'est plus cohérent niveau architecture
+void ParticleContactSolver::AddParticleLink(ParticleLink* p)
+{
+	particlesLink.push_back(p);
 }

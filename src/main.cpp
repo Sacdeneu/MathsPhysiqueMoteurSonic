@@ -11,6 +11,8 @@
 #include "Physics/particleSpringGenerator.h"
 
 #include "Physics/ParticleContactSolver.h"
+#include "Physics/ParticleCable.h"
+#include "Physics/ParticleRod.h"
 
 bool runGame = true;
 float particleMass = 1;
@@ -152,10 +154,11 @@ int main( int argc, char* args[])
 
 			// Collision + particles de tests
 			ParticleContactSolver* particleContactSolver = new ParticleContactSolver();
-			//Particle* p = new Particle(Vector3D(0, 0, 0), 1);
-			//Particle* p2 = new Particle(Vector3D(0.9, 0.9, 0), 1);
-			//Scene::mainScene->AddParticle(p);
-			//Scene::mainScene->AddParticle(p2);
+			CreateParticle(Scene::mainScene, 0, 5);
+			CreateParticle(Scene::mainScene, -5, 7);
+			ParticleCable* cable = new ParticleCable(Scene::mainScene->gameObjects[0],
+													 Scene::mainScene->gameObjects[1], 2);
+			particleContactSolver->AddParticleLink(cable);
 
 			Uint64 lastUpdate = SDL_GetPerformanceCounter();
 
