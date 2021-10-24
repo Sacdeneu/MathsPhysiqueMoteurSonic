@@ -14,6 +14,7 @@ public:
 
 	void UpdateCollisions(Scene* scene, int iterations);
 	void AddParticleLink(ParticleLink* p);
+	void RemoveAllParticleLink();
 
 private:
 	std::vector<ParticleLink*> particlesLink;

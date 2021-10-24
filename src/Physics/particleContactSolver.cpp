@@ -35,3 +35,12 @@ void ParticleContactSolver::AddParticleLink(ParticleLink* p)
 {
 	particlesLink.push_back(p);
 }
+void ParticleContactSolver::RemoveAllParticleLink()
+{
+	for (int i = particlesLink.size() - 1; i >= 0; i--)
+	{
+		auto p = particlesLink[i];
+		particlesLink.erase(std::remove(particlesLink.begin(), particlesLink.end(), particlesLink[i]), particlesLink.end());
+		delete p;
+	}
+}
