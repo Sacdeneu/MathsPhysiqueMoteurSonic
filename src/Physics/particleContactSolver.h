@@ -2,6 +2,7 @@
 #include "Vector3D.h"
 #include "Particle.h"
 #include "ParticleContactGenerator.h"
+#include "ParticleLink.h"
 #include "../rendering/scene.h"
 #include <vector>
 
@@ -12,7 +13,10 @@ public:
 	~ParticleContactSolver() = default;
 
 	void UpdateCollisions(Scene* scene, int iterations);
+	void AddParticleLink(ParticleLink* p);
+	void RemoveAllParticleLink();
 
 private:
+	std::vector<ParticleLink*> particlesLink;
 	ParticleContactGenerator generator;
 };

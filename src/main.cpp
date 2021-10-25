@@ -11,10 +11,23 @@
 #include "Physics/particleSpringGenerator.h"
 
 #include "Physics/ParticleContactSolver.h"
+#include "Physics/ParticleCable.h"
+#include "Physics/ParticleRod.h"
+
+#include <functional>
 
 bool runGame = true;
 float particleMass = 1;
 float randomZDirection = 0;// 2.5f;
+
+int particleId1 = -1;
+int particleId2 = -1;
+float lengthParticleLink = 2;
+
+std::function<void()> cableButton; 
+std::function<void()> rodButton;
+std::function<void()> resetButton;
+
 ForcesRegister forcesRegister;
 
 void CreateParticle(Scene* scene, float velX, float velY)
@@ -44,6 +57,56 @@ void CreateSpring(Scene* scene)
 	forcesRegister.AddEntry(p1, new ParticleSpringGenerator(p2));
 	forcesRegister.AddEntry(p2, new ParticleDampingGenerator());
 	forcesRegister.AddEntry(p2, new ParticleSpringGenerator(p1));
+}
+
+void CreateRod(Scene* scene, ParticleContactSolver* contactSolver)
+{
+	// Si les id sont négatifs on créer les deux particles
+	if (particleId1 < 0 || particleId2 < 0)
+	{
+		particleId1 = Scene::mainScene->gameObjects.size();
+		particleId2 = particleId1 + 1;
+		CreateParticle(scene, rand() % 10 - 5, rand() % 10 - 5);
+		CreateParticle(scene, rand() % 10 - 5, rand() % 10 - 5);
+	}
+
+
+	if (particleId1 >= Scene::mainScene->gameObjects.size() || particleId2 >= Scene::mainScene->gameObjects.size())
+		return;
+
+	ParticleRod* cable = new ParticleRod(Scene::mainScene->gameObjects[particleId1],
+		Scene::mainScene->gameObjects[particleId2], lengthParticleLink);
+	contactSolver->AddParticleLink(cable);
+}
+
+
+void CreateCable(Scene* scene, ParticleContactSolver* contactSolver)
+{
+	// Si les id sont négatifs on créer les deux particles
+	if (particleId1 < 0 || particleId2 < 0)
+	{
+		particleId1 = Scene::mainScene->gameObjects.size();
+		particleId2 = particleId1 + 1;
+		CreateParticle(scene, rand() % 10 - 5, rand() % 10 - 5);
+		CreateParticle(scene, rand() % 10 - 5, rand() % 10 - 5);
+	}
+
+	if (particleId1 >= Scene::mainScene->gameObjects.size() || particleId2 >= Scene::mainScene->gameObjects.size())
+		return;
+
+	ParticleCable* cable = new ParticleCable(Scene::mainScene->gameObjects[particleId1],
+		Scene::mainScene->gameObjects[particleId2], lengthParticleLink);
+	contactSolver->AddParticleLink(cable);
+}
+
+void ResetScene(Scene* scene, ParticleContactSolver* contactSolver)
+{
+	contactSolver->RemoveAllParticleLink();
+	for (int i = Scene::mainScene->gameObjects.size() - 1; i >= 0; i--)
+	{
+		Scene::mainScene->RemoveParticle(Scene::mainScene->gameObjects[i]);
+	}
+
 }
 
 bool mouseButtonDown = false;
@@ -120,6 +183,26 @@ void MakeImGuiWindow(float physicsUpdateTime)
 	ImGui::SliderFloat("Masse des particules", &particleMass, 0.1, 10, "%.2f");
 	ImGui::SliderFloat("Dispersion Z", &randomZDirection, 0, 5, "%.1f");
 
+	ImGui::Dummy(ImVec2(0.0f, 20.0f));
+	ImGui::PushItemWidth(150);
+
+	ImGui::InputInt("Particle 1", &particleId1);
+	ImGui::InputInt("Particle 2", &particleId2);
+	ImGui::SliderFloat("Taille Lien", &lengthParticleLink, 0, 5, "%.1f");
+
+
+	if (ImGui::Button("Creer Tige", ImVec2(150, 20)))
+		rodButton();
+	ImGui::SameLine(160);
+	if (ImGui::Button("Creer Cable", ImVec2(140, 20)))
+		cableButton();
+
+	ImGui::Dummy(ImVec2(0.0f, 20.0f));
+	ImGui::PushItemWidth(150);
+
+	if (ImGui::Button("Reset Scene", ImVec2(300, 20)))
+		resetButton();
+
 	ImGui::End();
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -152,10 +235,11 @@ int main( int argc, char* args[])
 
 			// Collision + particles de tests
 			ParticleContactSolver* particleContactSolver = new ParticleContactSolver();
-			//Particle* p = new Particle(Vector3D(0, 0, 0), 1);
-			//Particle* p2 = new Particle(Vector3D(0.9, 0.9, 0), 1);
-			//Scene::mainScene->AddParticle(p);
-			//Scene::mainScene->AddParticle(p2);
+
+			// Attribut les fonctions pour les boutons du GUI
+			cableButton = std::bind(CreateCable, Scene::mainScene, particleContactSolver);
+			rodButton = std::bind(CreateRod, Scene::mainScene, particleContactSolver);
+			resetButton = std::bind(ResetScene, Scene::mainScene, particleContactSolver);
 
 			Uint64 lastUpdate = SDL_GetPerformanceCounter();
 

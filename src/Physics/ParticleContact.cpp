@@ -1,18 +1,20 @@
 #include "ParticleContact.h"
 
-#define c 0.4f
+
 
 ParticleContact::ParticleContact()
 {
 }
 
-ParticleContact::ParticleContact(Particle* a, Particle* b, Vector3D contactNormal, float interpenetration)
+ParticleContact::ParticleContact(Particle* a, Particle* b, Vector3D contactNormal, float interpenetration, float coefRestitution)
 {
 	this->particles[0] = a;
 	this->particles[1] = b;
 	this->normal = contactNormal;
 	this->interpenetration = interpenetration;
+	this->coefRestitution = coefRestitution;
 }
+
 
 void ParticleContact::Resolve()
 {
@@ -21,7 +23,7 @@ void ParticleContact::Resolve()
 	if (separationVelocity > 0)
 		return;
 	
-	float separationVelocity2 = -c * separationVelocity;
+	float separationVelocity2 = -coefRestitution * separationVelocity;
 	float deltaSeparationVelocity = separationVelocity2 - separationVelocity;
 	Vector3D impulsion = this->normal * (deltaSeparationVelocity / totalMass);
 
