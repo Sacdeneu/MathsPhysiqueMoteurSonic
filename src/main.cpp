@@ -158,11 +158,23 @@ void CreateBlob()
 	}
 }
 
-//##########
-//#        #
-//#  MAIN  #
-//#        #
-//##########
+void CreateSnake(Scene* scene, ParticleContactSolver* contactSolver)
+{
+	//création des particules
+	std::vector<Particle*> particles;
+	int nbParticle = 10;
+	float size = cbrt(particleMass);
+	float spawnX = -6;
+
+	for (int i = 0; i < nbParticle; i++)
+	{
+		spawnX += size;
+		particles.push_back(CreateParticle(scene, Vector3D(spawnX, 1, 0), Vector3D(0, 0, 0)));
+		if(i > 0)
+			contactSolver->generator.AddParticleLink(new ParticleRod(particles[i], particles[i - 1], size));
+	}
+	particles[nbParticle-1]->SetVelocity(Vector3D(20, 0, 0));
+}
 
 //supprime tout les éléments de la scène
 void ResetScene(Scene* scene)
@@ -269,6 +281,9 @@ void MakeImGuiWindow(float physicsUpdateTime)
 
 	if (ImGui::Button("Creer blob", ImVec2(300, 20)))
 		CreateBlob();
+
+	if (ImGui::Button("Creer serpent", ImVec2(148, 20)))
+		CreateSnake(Scene::mainScene, solver);
 
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 	ImGui::PushItemWidth(150);
