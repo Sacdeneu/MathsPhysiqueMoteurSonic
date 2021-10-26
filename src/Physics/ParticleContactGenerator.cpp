@@ -38,7 +38,6 @@ std::vector<ParticleContact>* ParticleContactGenerator::UpdateContacts(Scene* sc
 	return collisions;
 }
 
-//Sphere / Sphere
 ParticleContact* ParticleContactGenerator::CheckCollision(Particle* a, Particle* b)
 {
 	//on détermine le direction et la distance des deux particules
@@ -58,7 +57,6 @@ ParticleContact* ParticleContactGenerator::CheckCollision(Particle* a, Particle*
 	return new ParticleContact(a, b, normal, interpenetration);
 }
 
-//Sphere / AABB
 ParticleContact* ParticleContactGenerator::CheckCollision(Particle* a, AABB* b)
 {
 	//on détermine le point le plus proche de la particule compris dans l'AABB

@@ -7,6 +7,10 @@ class ParticleDampingGenerator : public ParticleForceGenerator
 {
 public:
 	//CONSTRUCTEUR
+
+	/// <summary>
+	/// Initialise un générateur de damping avec k1=0.1 et k2=0.01 (valeurs choisies arbitrairement après tests)
+	/// </summary>
 	ParticleDampingGenerator();
 
 	/// <summary>

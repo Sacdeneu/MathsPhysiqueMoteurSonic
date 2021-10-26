@@ -16,6 +16,7 @@ public:
 	/// <param name="deltaTime">Temps</param>
 	void UpdateForce(Particle* particle, float deltaTime);
 
+	//VARIABLES PRIVEES
 private:
 	Particle* other;
 	float k;

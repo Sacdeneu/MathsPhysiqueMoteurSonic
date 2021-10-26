@@ -16,6 +16,8 @@ public:
 	/// <param name="deltaTime">Temps</param>
 	void UpdateForce(Particle* particle, float deltaTime);
 
+	//VARIABLES PRIVEES
+
 private:
 	Vector3D anchorPoint;
 	float k;
