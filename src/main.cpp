@@ -9,6 +9,8 @@
 #include "Physics/particleDampingGenerator.h"
 #include "Physics/particleAnchoredSpringGenerator.h"
 #include "Physics/particleSpringGenerator.h"
+#include "Physics/particleBungeeGenerator.h"
+#include "Physics/particleArchimedeGenerator.h"
 
 #include "Physics/ParticleContactSolver.h"
 #include "Physics/ParticleCable.h"
@@ -55,6 +57,28 @@ void CreateSpring(Scene* scene)
 	forcesRegister.AddEntry(p2, new ParticleSpringGenerator(p1, particleLinkLength));
 }
 
+void CreateAnchoredSpring(Scene* scene)
+{
+	//création des particles
+	Particle* p = CreateParticle(scene, Vector3D(0, 2, 0), Vector3D(10, 0, randomZDirection));
+	forcesRegister.AddEntry(p, new ParticleAnchoredSpringGenerator(Vector3D(0, 5, 0), particleLinkLength));
+}
+
+void CreateBungee(Scene* scene)
+{
+	//création des particles
+	Particle* p1 = new Particle(Vector3D(-5, 2, 0), particleMass);
+	scene->AddParticle(p1);
+	Particle* p2 = new Particle(Vector3D(5, 2, 0), particleMass * 2);
+	scene->AddParticle(p2);
+
+	//création des forces
+	forcesRegister.AddEntry(p1, new ParticleDampingGenerator());
+	forcesRegister.AddEntry(p1, new ParticleBungeeGenerator(p2, particleLinkLength));
+	forcesRegister.AddEntry(p2, new ParticleDampingGenerator());
+	forcesRegister.AddEntry(p2, new ParticleBungeeGenerator(p1, particleLinkLength));
+}
+
 //crée deux particules reliées par une tige
 void CreateRod(Scene* scene)
 {
@@ -68,7 +92,7 @@ void CreateRod(Scene* scene)
 
 	//...puis on crée le lien
 	ParticleRod* rod = new ParticleRod(first, second, particleLinkLength);
-	particleContactSolver.generator.AddParticleLink(rod);
+	particleContactSolver.generator.AddParticleLinks(rod);
 }
 
 //crée deux particules reliées par un cable
@@ -84,7 +108,7 @@ void CreateCable(Scene* scene)
 
 	//...puis on crée le lien
 	ParticleCable* cable = new ParticleCable(first, second, particleLinkLength);
-	particleContactSolver.generator.AddParticleLink(cable);
+	particleContactSolver.generator.AddParticleLinks(cable);
 }
 
 //créer un cube composé de 8 particules reliées par des tiges
@@ -108,9 +132,16 @@ void CreateRodCube(Scene* scene)
 		for (int j = i + 1; j < 8; j++)
 		{
 			float length = Vector3D::Norm(particles[i]->GetPosition() - particles[j]->GetPosition());
-			particleContactSolver.generator.AddParticleLink(new ParticleRod(particles[i], particles[j], length));
+			particleContactSolver.generator.AddParticleLinks(new ParticleRod(particles[i], particles[j], length));
 		}
 	}
+}
+
+void CreateArchimede(Scene* scene)
+{
+	//création des particles
+	Particle* p = CreateParticle(scene, Vector3D(20, 10, 0), Vector3D(0, 0, 0));
+	forcesRegister.AddEntry(p, new ParticleArchimedeGenerator());
 }
 
 //##########
@@ -120,7 +151,7 @@ void CreateRodCube(Scene* scene)
 //##########
 
 float blobMoveX, blobMoveY = 0;
-float blobForce = 10;
+float blobForce = 4;
 std::vector<Particle*> blobElements;
 
 void UpdateBlobInput(SDL_Keycode key, bool state)
@@ -137,15 +168,32 @@ void AttachNewBlobElement(Particle* p)
 	for (int j = 0; j < blobElements.size(); j++)
 	{
 		Particle* other = blobElements[j];
-		if (other != p && rand() % 10 < 5)
+		if (other != p && rand() % 10 < 4)
 		{
 			Particle* other = blobElements[j];
 			float length = Vector3D::Norm(p->GetPosition() - blobElements[j]->GetPosition());
 			forcesRegister.AddEntry(p, new ParticleSpringGenerator(other, length * 0.5f));
 			forcesRegister.AddEntry(other, new ParticleSpringGenerator(p, length * 0.5f));
-			particleContactSolver.generator.AddParticleLink(new ParticleCable(p, other, length * 2));
+			particleContactSolver.generator.AddParticleLinks(new ParticleCable(p, other, length * 2));
 		}
 	}
+}
+
+void SliceBlob()
+{
+	//TODO: fix cet enfer
+	/*
+	for (int i = 0; i < blobElements.size(); i++)
+	{
+		Particle* p = blobElements[i];
+		blobElements.erase(std::remove(blobElements.begin(), blobElements.end(), p), blobElements.end());
+		forcesRegister.DeleteParticle(p);
+		particleContactSolver.generator.RemoveAllLinksFromParticle(p->id);
+		forcesRegister.AddEntry(p, new ParticleGravityGenerator());
+		forcesRegister.AddEntry(p, new ParticleDampingGenerator());
+		p->isBlob = false;
+	}
+	*/
 }
 
 void UpdateBlobForce()
@@ -187,7 +235,7 @@ void CreateSnake(Scene* scene)
 		spawnX += size;
 		particles.push_back(CreateParticle(scene, Vector3D(spawnX, 1, 0), Vector3D(2, 0, (rand() % 10 - 5) / 5.0f)));
 		if(i > 0)
-			particleContactSolver.generator.AddParticleLink(new ParticleRod(particles[i], particles[i - 1], size));
+			particleContactSolver.generator.AddParticleLinks(new ParticleRod(particles[i], particles[i - 1], size));
 	}
 	particles[nbParticle-1]->SetVelocity(Vector3D(20, 0, 0));
 }
@@ -233,6 +281,8 @@ int HandleInputs(Renderer* renderer)
 				float randZ = (-100 + rand() % 200) * randomZDirection * 0.01f;
 				CreateParticle(Scene::mainScene, Vector3D(0, 1, 0), Vector3D(-10 + mouseX * 20, mouseY * 15, randZ));
 			}
+			else if (event.key.keysym.sym == 'r')
+				SliceBlob();
 			else
 			{
 				renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, true);
@@ -290,14 +340,27 @@ void MakeImGuiWindow(float physicsUpdateTime)
 
 	ImGui::SliderFloat("Taille du lien", &particleLinkLength, 0, 5, "%.1f");
 
+	
+	if (ImGui::Button("Creer ressort ancre", ImVec2(148, 20)))
+		CreateAnchoredSpring(Scene::mainScene);
+	ImGui::SameLine(160);
+	if (ImGui::Button("Creer ressort", ImVec2(148, 20)))
+		CreateSpring(Scene::mainScene);
+	
+	if (ImGui::Button("Creer bungee", ImVec2(148, 20)))
+		CreateBungee(Scene::mainScene);
+	ImGui::SameLine(160);
+	if (ImGui::Button("Creer balle flottante", ImVec2(148, 20)))
+		CreateArchimede(Scene::mainScene);
+
 	if (ImGui::Button("Creer tige", ImVec2(148, 20)))
 		CreateRod(Scene::mainScene);
 	ImGui::SameLine(160);
 	if (ImGui::Button("Creer cable", ImVec2(148, 20)))
 		CreateCable(Scene::mainScene);
 
-	if (ImGui::Button("Creer ressort", ImVec2(148, 20)))
-		CreateSpring(Scene::mainScene);
+	if (ImGui::Button("Creer serpent", ImVec2(148, 20)))
+		CreateSnake(Scene::mainScene);
 	ImGui::SameLine(160);
 	if (ImGui::Button("Creer cube de tiges", ImVec2(148, 20)))
 		CreateRodCube(Scene::mainScene);
@@ -305,8 +368,7 @@ void MakeImGuiWindow(float physicsUpdateTime)
 	if (ImGui::Button("Creer blob", ImVec2(300, 20)))
 		CreateBlob();
 
-	if (ImGui::Button("Creer serpent", ImVec2(148, 20)))
-		CreateSnake(Scene::mainScene);
+	
 
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 	ImGui::PushItemWidth(150);

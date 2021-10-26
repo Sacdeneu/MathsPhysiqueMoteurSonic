@@ -7,7 +7,7 @@ class ParticleAnchoredSpringGenerator : public ParticleForceGenerator
 {
 public:
 	//CONSTRUCTEUR
-	ParticleAnchoredSpringGenerator();
+	ParticleAnchoredSpringGenerator(Vector3D pos, float length);
 
 	/// <summary>
 	/// Mise à jour des forces

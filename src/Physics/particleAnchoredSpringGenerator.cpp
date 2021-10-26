@@ -1,11 +1,11 @@
 #include "particleAnchoredSpringGenerator.h"
 #include "Vector3D.h"
 
-ParticleAnchoredSpringGenerator::ParticleAnchoredSpringGenerator()
+ParticleAnchoredSpringGenerator::ParticleAnchoredSpringGenerator(Vector3D pos, float length)
 {
-	anchorPoint = Vector3D(0, 0, 0);
+	anchorPoint = pos;
 	k = 10.0f;
-	l0 = 5;
+	l0 = length;
 }
 
 void ParticleAnchoredSpringGenerator::UpdateForce(Particle* particle, float deltaTime)

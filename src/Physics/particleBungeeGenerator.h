@@ -7,7 +7,7 @@ class ParticleBungeeGenerator : public ParticleForceGenerator
 {
 public:
 	//CONSTRUCTEUR
-	ParticleBungeeGenerator(Particle* other);
+	ParticleBungeeGenerator(Particle* other, float length);
 
 	/// <summary>
 	/// Mise à jour des forces

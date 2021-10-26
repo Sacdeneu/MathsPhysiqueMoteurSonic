@@ -11,6 +11,9 @@ public:
 	ParticleLink(Particle* A, Particle* B, float sizeLink);
 	virtual ParticleContact* CheckCollision();
 
+	inline Particle* GetParticleA() { return particles[0]; }
+	inline Particle* GetParticleB() { return particles[1]; }
+
 
 protected:
 	Particle* particles[2];

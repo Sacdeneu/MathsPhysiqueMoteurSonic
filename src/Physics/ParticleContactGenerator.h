@@ -13,7 +13,8 @@ public:
 	~ParticleContactGenerator() = default;
 
 	std::vector<ParticleContact>* UpdateContacts(Scene* scene);
-	void AddParticleLink(ParticleLink* p);
+	void AddParticleLinks(ParticleLink* p);
+	void RemoveAllLinksFromParticle(int particleID);
 	void RemoveAllParticleLink();
 
 private:

@@ -84,17 +84,30 @@ ParticleContact* ParticleContactGenerator::CheckCollision(Particle* a, AABB* b)
 	return new ParticleContact(a, (Particle*)b, normal, interpenetration);
 }
 
-void ParticleContactGenerator::AddParticleLink(ParticleLink* p)
+void ParticleContactGenerator::AddParticleLinks(ParticleLink* p)
 {
 	particlesLinks.push_back(p);
+}
+
+void ParticleContactGenerator::RemoveAllLinksFromParticle(int particleID)
+{
+	for (int i = particlesLinks.size() - 1; i >= 0; i--)
+	{
+		auto link = particlesLinks[i];
+		if (link->GetParticleA()->id == particleID || link->GetParticleB()->id == particleID)
+		{
+			particlesLinks.erase(std::remove(particlesLinks.begin(), particlesLinks.end(), particlesLinks[i]), particlesLinks.end());
+			delete link;
+		}		
+	}
 }
 
 void ParticleContactGenerator::RemoveAllParticleLink()
 {
 	for (int i = particlesLinks.size() - 1; i >= 0; i--)
 	{
-		auto p = particlesLinks[i];
+		auto link = particlesLinks[i];
 		particlesLinks.erase(std::remove(particlesLinks.begin(), particlesLinks.end(), particlesLinks[i]), particlesLinks.end());
-		delete p;
+		delete link;
 	}
 }

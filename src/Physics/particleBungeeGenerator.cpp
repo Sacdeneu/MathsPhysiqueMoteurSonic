@@ -1,11 +1,11 @@
 #include "particleBungeeGenerator.h"
 #include "Vector3D.h"
 
-ParticleBungeeGenerator::ParticleBungeeGenerator(Particle* other)
+ParticleBungeeGenerator::ParticleBungeeGenerator(Particle* other, float length)
 {
 	this->other = other;
 	k = 10.0f;
-	l0 = 4;
+	l0 = length;
 }
 
 void ParticleBungeeGenerator::UpdateForce(Particle* particle, float deltaTime)
