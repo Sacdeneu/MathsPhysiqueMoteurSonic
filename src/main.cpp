@@ -78,6 +78,80 @@ void CreateCable(Scene* scene, ParticleContactSolver* contactSolver)
 	contactSolver->generator.AddParticleLink(cable);
 }
 
+//créer un cube composé de 8 particules reliées par des tiges
+void CreateDemoRod(Scene* scene, ParticleContactSolver* contactSolver) {
+	//création des particules
+	CreateParticle(scene, Vector3D(-particleLinkLength * 0.5f, 2, 2), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0)); //côté avant haut-gauche
+	CreateParticle(scene, Vector3D(particleLinkLength * 0.5f, 2, 2), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0)); // côté avant haut-droit
+	CreateParticle(scene, Vector3D(-particleLinkLength * 0.5f, -2, 2), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0)); //côté avant bas-gauche
+	CreateParticle(scene, Vector3D(particleLinkLength * 0.5f, -2, 2), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0)); //côté avant bas-droit
+	CreateParticle(scene, Vector3D(-particleLinkLength * 0.5f, 2, -2), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0)); //côté arrière haut-gauche
+	CreateParticle(scene, Vector3D(particleLinkLength * 0.5f, 2, -2), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0)); // côté arrière haut-droit
+	CreateParticle(scene, Vector3D(-particleLinkLength * 0.5f, -2, -2), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0)); //côté arrière bas-gauche
+	CreateParticle(scene, Vector3D(particleLinkLength * 0.5f, -2, -2), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0)); //côté arrière bas-droit
+
+	//on récupère des pointeurs vers ces particules...
+	Particle* first = scene->gameObjects[scene->gameObjects.size() - 8];
+	Particle* second = scene->gameObjects[scene->gameObjects.size() - 7];
+	Particle* third = scene->gameObjects[scene->gameObjects.size() - 6];
+	Particle* fourth = scene->gameObjects[scene->gameObjects.size() - 5];
+	Particle* fifth = scene->gameObjects[scene->gameObjects.size() - 4];
+	Particle* sixth = scene->gameObjects[scene->gameObjects.size() - 3];
+	Particle* seventh = scene->gameObjects[scene->gameObjects.size() - 2];
+	Particle* eight = scene->gameObjects[scene->gameObjects.size() - 1];
+
+	//...puis on crée le lien
+	ParticleRod* rod = new ParticleRod(first, second, particleLinkLength);
+	ParticleRod* rod2 = new ParticleRod(second, fourth, particleLinkLength);
+	ParticleRod* rod3 = new ParticleRod(fourth, third, particleLinkLength);
+	ParticleRod* rod4 = new ParticleRod(third, first, particleLinkLength);
+
+
+	ParticleRod* rod5 = new ParticleRod(fifth, sixth, particleLinkLength);
+	ParticleRod* rod6 = new ParticleRod(sixth, eight, particleLinkLength);
+	ParticleRod* rod7 = new ParticleRod(eight, seventh, particleLinkLength);
+	ParticleRod* rod8 = new ParticleRod(seventh, fifth, particleLinkLength);
+
+
+	ParticleRod* rod9 = new ParticleRod(first, fifth, particleLinkLength);
+	ParticleRod* rod10 = new ParticleRod(second, sixth, particleLinkLength);
+	ParticleRod* rod11 = new ParticleRod(third, seventh, particleLinkLength);
+	ParticleRod* rod12 = new ParticleRod(fourth, eight, particleLinkLength);
+
+
+	/*ParticleRod* rod13 = new ParticleRod(first, fourth, particleLinkLength);
+	ParticleRod* rod14 = new ParticleRod(second, third, particleLinkLength);
+	ParticleRod* rod15 = new ParticleRod(fifth, eight, particleLinkLength);
+	ParticleRod* rod16 = new ParticleRod(sixth, seventh, particleLinkLength);
+
+	ParticleRod* rod17 = new ParticleRod(first, seventh, particleLinkLength);
+	ParticleRod* rod18 = new ParticleRod(second, eight, particleLinkLength);
+	ParticleRod* rod19 = new ParticleRod(third, fifth, particleLinkLength);
+	ParticleRod* rod20 = new ParticleRod(fourth, sixth, particleLinkLength);*/
+
+
+	contactSolver->generator.AddParticleLink(rod);
+	contactSolver->generator.AddParticleLink(rod2);
+	contactSolver->generator.AddParticleLink(rod3);
+	contactSolver->generator.AddParticleLink(rod4);
+	contactSolver->generator.AddParticleLink(rod5);
+	contactSolver->generator.AddParticleLink(rod6);
+	contactSolver->generator.AddParticleLink(rod7);
+	contactSolver->generator.AddParticleLink(rod8);
+	contactSolver->generator.AddParticleLink(rod9);
+	contactSolver->generator.AddParticleLink(rod10);
+	contactSolver->generator.AddParticleLink(rod11);
+	contactSolver->generator.AddParticleLink(rod12);
+	/*contactSolver->generator.AddParticleLink(rod13);
+	contactSolver->generator.AddParticleLink(rod14);
+	contactSolver->generator.AddParticleLink(rod15);
+	contactSolver->generator.AddParticleLink(rod16);
+	contactSolver->generator.AddParticleLink(rod17);
+	contactSolver->generator.AddParticleLink(rod18);
+	contactSolver->generator.AddParticleLink(rod19);
+	contactSolver->generator.AddParticleLink(rod20);*/
+}
+
 //supprime tout les éléments de la scène
 void ResetScene(Scene* scene, ParticleContactSolver* contactSolver)
 {
@@ -173,6 +247,8 @@ void MakeImGuiWindow(float physicsUpdateTime, ParticleContactSolver* solver)
 
 	if (ImGui::Button("Creer ressort", ImVec2(148, 20)))
 		CreateSpring(Scene::mainScene);
+	if (ImGui::Button("Creer demo tige", ImVec2(148, 20)))
+		CreateDemoRod(Scene::mainScene, solver);
 
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 	ImGui::PushItemWidth(150);
