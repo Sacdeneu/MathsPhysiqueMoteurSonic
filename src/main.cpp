@@ -14,91 +14,71 @@
 #include "Physics/ParticleCable.h"
 #include "Physics/ParticleRod.h"
 
-#include <functional>
-
 bool runGame = true;
 float particleMass = 1;
 float randomZDirection = 0;// 2.5f;
-
-int particleId1 = -1;
-int particleId2 = -1;
-float lengthParticleLink = 2;
-
-std::function<void()> cableButton; 
-std::function<void()> rodButton;
-std::function<void()> resetButton;
+float particleLinkLength = 2;
 
 ForcesRegister forcesRegister;
 
-void CreateParticle(Scene* scene, float velX, float velY)
+void CreateParticle(Scene* scene, Vector3D pos, Vector3D velocity = Vector3D(0, 0, 0))
 {
-	// Création des particles
-	//std::shared_ptr<Particle> p = std::make_shared<Particle>(Particle(Vector3D(-5, 1, -5), 1));
-	float randZ = (-100 + rand() % 200) * randomZDirection * 0.01f;
-	Particle* p = new Particle(Vector3D(0, 2, 0), particleMass);
+	Particle* p = new Particle(pos, particleMass);
 	scene->AddParticle(p);
-	// Trajectoire de la particule
-	p->SetVelocity(Vector3D(velX, velY, randZ));
-	// Les seules forces sont la force gravitationelle et le damping
+	p->SetVelocity(velocity);
+
 	forcesRegister.AddEntry(p, new ParticleGravityGenerator());
 	forcesRegister.AddEntry(p, new ParticleDampingGenerator());
-	//forcesRegister.AddEntry(p, new ParticleAnchoredSpringGenerator());
 }
 
 void CreateSpring(Scene* scene)
 {
-	// Création des particles
+	//création des particles
 	Particle* p1 = new Particle(Vector3D(-2, 2, 0), particleMass);
 	scene->AddParticle(p1);
 	Particle* p2 = new Particle(Vector3D(2, 2, 0), particleMass * 2);
 	scene->AddParticle(p2);
-	// Les seules forces sont la force gravitationelle et le damping
+
+	//création des forces
 	forcesRegister.AddEntry(p1, new ParticleDampingGenerator());
 	forcesRegister.AddEntry(p1, new ParticleSpringGenerator(p2));
 	forcesRegister.AddEntry(p2, new ParticleDampingGenerator());
 	forcesRegister.AddEntry(p2, new ParticleSpringGenerator(p1));
 }
 
+//crée deux particules reliées par une tige
 void CreateRod(Scene* scene, ParticleContactSolver* contactSolver)
 {
-	// Si les id sont négatifs on créer les deux particles
-	if (particleId1 < 0 || particleId2 < 0)
-	{
-		particleId1 = Scene::mainScene->gameObjects.size();
-		particleId2 = particleId1 + 1;
-		CreateParticle(scene, rand() % 10 - 5, rand() % 10 - 5);
-		CreateParticle(scene, rand() % 10 - 5, rand() % 10 - 5);
-	}
+	//création des particules
+	CreateParticle(scene, Vector3D(-particleLinkLength * 0.5f, 2, 0), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0));
+	CreateParticle(scene, Vector3D(particleLinkLength * 0.5f, 2, 0), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0));
+	
+	//on récupère des pointeurs vers ces particules...
+	Particle* first = scene->gameObjects[scene->gameObjects.size() - 2];
+	Particle* second = scene->gameObjects[scene->gameObjects.size() - 1];
 
-
-	if (particleId1 >= Scene::mainScene->gameObjects.size() || particleId2 >= Scene::mainScene->gameObjects.size())
-		return;
-
-	ParticleRod* cable = new ParticleRod(Scene::mainScene->gameObjects[particleId1],
-		Scene::mainScene->gameObjects[particleId2], lengthParticleLink);
-	contactSolver->generator.AddParticleLink(cable);
+	//...puis on crée le lien
+	ParticleRod* rod = new ParticleRod(first, second, particleLinkLength);
+	contactSolver->generator.AddParticleLink(rod);
 }
 
-
+//crée deux particules reliées par un cable
 void CreateCable(Scene* scene, ParticleContactSolver* contactSolver)
 {
-	// Si les id sont négatifs on créer les deux particles
-	if (particleId1 < 0 || particleId2 < 0)
-	{
-		particleId1 = Scene::mainScene->gameObjects.size();
-		particleId2 = particleId1 + 1;
-		CreateParticle(scene, 0, rand() % 10 - 5);
-		CreateParticle(scene, 5 + rand() % 2, rand() % 10 - 5);
-	}
+	//création des particules
+	CreateParticle(scene, Vector3D(-particleLinkLength * 0.5f, 2, 0), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0));
+	CreateParticle(scene, Vector3D(particleLinkLength * 0.5f, 2, 0), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0));
 
-	if (particleId1 >= Scene::mainScene->gameObjects.size() || particleId2 >= Scene::mainScene->gameObjects.size())
-		return;
+	//on récupère des pointeurs vers ces particules...
+	Particle* first = scene->gameObjects[scene->gameObjects.size() - 2];
+	Particle* second = scene->gameObjects[scene->gameObjects.size() - 1];
 
-	ParticleCable* cable = new ParticleCable(Scene::mainScene->gameObjects[particleId1],
-		Scene::mainScene->gameObjects[particleId2], lengthParticleLink);
+	//...puis on crée le lien
+	ParticleCable* cable = new ParticleCable(first, second, particleLinkLength);
 	contactSolver->generator.AddParticleLink(cable);
 }
 
+//supprime tout les éléments de la scène
 void ResetScene(Scene* scene, ParticleContactSolver* contactSolver)
 {
 	contactSolver->generator.RemoveAllParticleLink();
@@ -129,11 +109,8 @@ int HandleInputs(Renderer* renderer)
 				SDL_GetMouseState(&pixelMouseX, &pixelMouseY);
 				float mouseX = pixelMouseX * 1.0f / SCREEN_WIDTH;
 				float mouseY = 1 - (pixelMouseY * 1.0f / SCREEN_HEIGHT);
-				CreateParticle(Scene::mainScene, -10 + mouseX * 20, mouseY * 15);
-			}
-			else if (event.key.keysym.sym == SDLK_r)
-			{
-				CreateSpring(Scene::mainScene);
+				float randZ = (-100 + rand() % 200) * randomZDirection * 0.01f;
+				CreateParticle(Scene::mainScene, Vector3D(0, 1, 0), Vector3D(-10 + mouseX * 20, mouseY * 15, randZ));
 			}
 			else
 				renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, true);
@@ -165,7 +142,8 @@ int HandleInputs(Renderer* renderer)
 	return 1;
 }
 
-void MakeImGuiWindow(float physicsUpdateTime)
+//création de la fenetre graphique
+void MakeImGuiWindow(float physicsUpdateTime, ParticleContactSolver* solver)
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
@@ -185,22 +163,22 @@ void MakeImGuiWindow(float physicsUpdateTime)
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 	ImGui::PushItemWidth(150);
 
-	ImGui::InputInt("Particle 1", &particleId1);
-	ImGui::InputInt("Particle 2", &particleId2);
-	ImGui::SliderFloat("Taille Lien", &lengthParticleLink, 0, 5, "%.1f");
+	ImGui::SliderFloat("Taille du lien", &particleLinkLength, 0, 5, "%.1f");
 
-
-	if (ImGui::Button("Creer Tige", ImVec2(150, 20)))
-		rodButton();
+	if (ImGui::Button("Creer tige", ImVec2(148, 20)))
+		CreateRod(Scene::mainScene, solver);
 	ImGui::SameLine(160);
-	if (ImGui::Button("Creer Cable", ImVec2(140, 20)))
-		cableButton();
+	if (ImGui::Button("Creer cable", ImVec2(148, 20)))
+		CreateCable(Scene::mainScene, solver);
+
+	if (ImGui::Button("Creer ressort", ImVec2(148, 20)))
+		CreateSpring(Scene::mainScene);
 
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 	ImGui::PushItemWidth(150);
 
 	if (ImGui::Button("Reset Scene", ImVec2(300, 20)))
-		resetButton();
+		ResetScene(Scene::mainScene, solver);
 
 	ImGui::End();
 	ImGui::Render();
@@ -232,13 +210,7 @@ int main( int argc, char* args[])
 			Renderer* renderer = new Renderer(window);
 			Scene::mainScene = new Scene(&forcesRegister);
 
-			// Collision + particles de tests
 			ParticleContactSolver* particleContactSolver = new ParticleContactSolver();
-
-			// Attribut les fonctions pour les boutons du GUI
-			cableButton = std::bind(CreateCable, Scene::mainScene, particleContactSolver);
-			rodButton = std::bind(CreateRod, Scene::mainScene, particleContactSolver);
-			resetButton = std::bind(ResetScene, Scene::mainScene, particleContactSolver);
 
 			Uint64 lastUpdate = SDL_GetPerformanceCounter();
 
@@ -265,7 +237,7 @@ int main( int argc, char* args[])
 
 				//mise à jour de l'affichage
 				renderer->Update(Scene::mainScene);
-				MakeImGuiWindow(physicsUpdateTime);
+				MakeImGuiWindow(physicsUpdateTime, particleContactSolver);
 				SDL_GL_SwapWindow(window);
 
 				//rendu à 60FPS
