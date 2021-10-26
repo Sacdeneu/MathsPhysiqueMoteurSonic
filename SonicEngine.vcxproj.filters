@@ -19,39 +19,18 @@
     <Filter Include="Fichiers d%27en-tête\imgui">
       <UniqueIdentifier>{0f756d68-1e10-4c2b-8115-ace3652c9d62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\rendering">
+      <UniqueIdentifier>{d41b4b24-0a96-4d12-b6cb-d45be04c0a63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\physics">
+      <UniqueIdentifier>{a4274850-9639-4d99-862d-a10035e3d4ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\renderer.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rendering\shader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\rendering\scene.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rendering\sphere.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\Particle.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\Vector3D.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rendering\camera.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rendering\EBO.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rendering\VAO.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rendering\VBO.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="include\imgui\imgui.cpp">
@@ -78,47 +57,71 @@
     <ClCompile Include="src\tests\testvector.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\particleGravityGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\forcesRegister.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\particleDampingGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\particleAnchoredSpringGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\particleSpringGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\ParticleContactGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\ParticleContact.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\particleContactSolver.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\AABB.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\Physics\Particle.cpp">
+      <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\ParticleCable.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\particleAnchoredSpringGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\ParticleContact.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\ParticleContactGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\particleContactSolver.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\particleDampingGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\particleGravityGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\ParticleLink.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\ParticleRod.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\particleBungeeGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\Physics\particleSpringGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\particleArchimedeGenerator.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\Physics\Vector3D.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\AABB.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\camera.cpp">
+      <Filter>Fichiers sources\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\EBO.cpp">
+      <Filter>Fichiers sources\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\renderer.cpp">
+      <Filter>Fichiers sources\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\shader.cpp">
+      <Filter>Fichiers sources\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\sphere.cpp">
+      <Filter>Fichiers sources\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\stb.cpp">
+      <Filter>Fichiers sources\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\VAO.cpp">
+      <Filter>Fichiers sources\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\VBO.cpp">
+      <Filter>Fichiers sources\rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -218,12 +221,6 @@
     <ClInclude Include="src\Physics\ParticleRod.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\particleBungeeGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\particleArchimedeGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\default.frag">
@@ -252,5 +249,10 @@
     <CopyFileToFolders Include="bin\SDL2.dll">
       <Filter>Fichiers de ressources</Filter>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\test.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

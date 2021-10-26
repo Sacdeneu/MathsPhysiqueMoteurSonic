@@ -27,6 +27,14 @@ std::vector<ParticleContact>* ParticleContactGenerator::UpdateContacts(Scene* sc
 		}
 	}
 
+	// on génère égalment des collisions pour chaque lien
+	for (size_t i = 0; i < particlesLinks.size(); i++)
+	{
+		ParticleContact* newContact = particlesLinks[i]->CheckCollision();
+		if (newContact != NULL) //si il y a eu de collision
+			collisions->push_back(*newContact);
+	}
+
 	return collisions;
 }
 
@@ -74,4 +82,19 @@ ParticleContact* ParticleContactGenerator::CheckCollision(Particle* a, AABB* b)
 	Vector3D normal = interpenetration == a->GetRadius() ? Vector3D(0, 1, 0) : Vector3D::Normalisation(a->GetPosition() - nearestPointInAABB);
 
 	return new ParticleContact(a, (Particle*)b, normal, interpenetration);
+}
+
+void ParticleContactGenerator::AddParticleLink(ParticleLink* p)
+{
+	particlesLinks.push_back(p);
+}
+
+void ParticleContactGenerator::RemoveAllParticleLink()
+{
+	for (int i = particlesLinks.size() - 1; i >= 0; i--)
+	{
+		auto p = particlesLinks[i];
+		particlesLinks.erase(std::remove(particlesLinks.begin(), particlesLinks.end(), particlesLinks[i]), particlesLinks.end());
+		delete p;
+	}
 }

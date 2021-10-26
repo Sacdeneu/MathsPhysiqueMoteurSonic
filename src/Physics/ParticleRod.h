@@ -8,5 +8,5 @@ class ParticleRod : public ParticleLink
 {
 public:
 	ParticleRod(Particle*A, Particle*B, float length);
-	void AddContacts(std::vector<ParticleContact>* listContact) override;
+	ParticleContact* CheckCollision() override;
 };

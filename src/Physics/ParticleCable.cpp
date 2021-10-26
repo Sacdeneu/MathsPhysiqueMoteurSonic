@@ -2,10 +2,9 @@
 
 ParticleCable::ParticleCable(Particle* A, Particle* B, float length) : ParticleLink(A, B, length)
 {
-
 }
 
-void ParticleCable::AddContacts(std::vector<ParticleContact>* listContacts)
+ParticleContact* ParticleCable::CheckCollision()
 {
 	//std::vector<ParticleContact>* res;
 	Vector3D vectorDistance = particles[0]->GetPosition() - particles[1]->GetPosition();
@@ -15,9 +14,9 @@ void ParticleCable::AddContacts(std::vector<ParticleContact>* listContacts)
 	// collision pour faire rapprocher les particules
 	if (distance > (length * length))
 	{
-		listContacts->push_back(ParticleContact(particles[0], particles[1], Vector3D::Normalisation(-vectorDistance), 0, 0));
-		listContacts->push_back(ParticleContact(particles[1], particles[0], Vector3D::Normalisation(vectorDistance), 0, 0));
+		return new ParticleContact(particles[0], particles[1], Vector3D::Normalisation(-vectorDistance), 0, 0);
 	}
-	//return res;
+
+	return NULL;
 
 }

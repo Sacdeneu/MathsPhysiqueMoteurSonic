@@ -14,7 +14,7 @@ public:
 	void AddParticle(Particle* p);
 	void RemoveParticle(Particle* p);
 	void Update(float deltaTime);
-	void AddCubeToMap(Vector3D position, Vector3D scale);
+	void AddCubeToMap(Vector3D position, Vector3D scale, int textureID);
 
 	std::vector<Particle*> gameObjects;
 	std::vector<AABB> map; //liste de cubes formant la map

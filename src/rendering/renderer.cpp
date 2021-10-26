@@ -1,7 +1,25 @@
 #include "renderer.h"
 #include "sphere.h"
+#include <stb_image.h>
 
 Sphere s(1.0f, 24, 24);
+
+void LoadTexture(const char* filename, GLuint* texture)
+{
+	int textureWidth, textureHeight, channelCount;
+	unsigned char* bytes = stbi_load(filename, &textureWidth, &textureHeight, &channelCount, 0);
+	glGenTextures(1, texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, *texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureWidth, textureHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, bytes);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	stbi_image_free(bytes);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
 
 //constructeur
 Renderer::Renderer(SDL_Window* targetWindow)
@@ -24,6 +42,7 @@ Renderer::Renderer(SDL_Window* targetWindow)
 
 	//défini le set fonctions opengl à utiliser
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
 	ImGui_ImplSDL2_InitForOpenGL(targetWindow, context);
 	ImGui_ImplOpenGL3_Init("#version 330");
@@ -32,7 +51,8 @@ Renderer::Renderer(SDL_Window* targetWindow)
     printf("Version OpenGL: %s\nGPU: %s\nVersion GLEW: %s\n", glGetString(GL_VERSION), glGetString(GL_RENDERER), glewGetString(GLEW_VERSION));
 
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glClearColor(0.172f, 0.184f, 0.2f, 0.0f);
+	//glClearColor(0.172f, 0.184f, 0.2f, 0.0f);
+	glClearColor(0.30f, 0.74f, 1, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 	
 	//génération des shaders
@@ -116,6 +136,9 @@ Renderer::Renderer(SDL_Window* targetWindow)
 	cubeVAO.Unbind();
 	cubeVBO.Unbind();
 	cubeEBO.Unbind();
+
+	LoadTexture("resources/grass.png", &grassTexture);
+	LoadTexture("resources/dirt.png", &dirtTexture);
 }
 
 float t = 0;
@@ -156,7 +179,8 @@ void Renderer::Update(Scene* scene)
 	//affiche la map
 	glUseProgram(mapShader.program);
 	glUniform3f(glGetUniformLocation(mapShader.program, "lightDir"), -0.8f, -1.0f, 0.3f);
-	glUniform3f(glGetUniformLocation(mapShader.program, "viewPos"), viewPos.x, viewPos.y, viewPos.z);
+	glUniform1i(glGetUniformLocation(mapShader.program, "mainTex"), 0);
+	
 	camera.SetMatrix(60, 0.1f, 500.0f, mapShader, "cameraMatrix");
 	cubeVAO.Bind();
 	for (int i = 0; i < scene->map.size(); i++)
@@ -170,6 +194,8 @@ void Renderer::Update(Scene* scene)
 
 		int modelLoc = glGetUniformLocation(mapShader.program, "model");
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		glBindTexture(GL_TEXTURE_2D, scene->map[i].GetTextureID() != 0 ? grassTexture : dirtTexture);
 
 		glDrawElements(GL_TRIANGLES, cubeIndices.size(), GL_UNSIGNED_INT, 0);
 	}

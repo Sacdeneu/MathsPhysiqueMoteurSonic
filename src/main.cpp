@@ -9,8 +9,6 @@
 #include "Physics/particleDampingGenerator.h"
 #include "Physics/particleAnchoredSpringGenerator.h"
 #include "Physics/particleSpringGenerator.h"
-#include "Physics/particleBungeeGenerator.h"
-#include "Physics/particleArchimedeGenerator.h"
 
 #include "Physics/ParticleContactSolver.h"
 #include "Physics/ParticleCable.h"
@@ -61,29 +59,6 @@ void CreateSpring(Scene* scene)
 	forcesRegister.AddEntry(p2, new ParticleSpringGenerator(p1));
 }
 
-void CreateBungee(Scene* scene)
-{
-	// Création des particles
-	Particle* p1 = new Particle(Vector3D(-5, 5, 0), particleMass);
-	scene->AddParticle(p1);
-	Particle* p2 = new Particle(Vector3D(5, 5, 0), particleMass * 2);
-	scene->AddParticle(p2);
-	// Les seules forces sont la force de l'elastique et le damping
-	forcesRegister.AddEntry(p1, new ParticleDampingGenerator());
-	forcesRegister.AddEntry(p1, new ParticleBungeeGenerator(p2));
-	forcesRegister.AddEntry(p2, new ParticleDampingGenerator());
-	forcesRegister.AddEntry(p2, new ParticleBungeeGenerator(p1));
-}
-
-void CreateArchimede(Scene* scene)
-{
-	// Création des particles
-	Particle* p = new Particle(Vector3D(10, 10, 0), particleMass);
-	scene->AddParticle(p);;
-	forcesRegister.AddEntry(p, new ParticleGravityGenerator());
-	forcesRegister.AddEntry(p, new ParticleArchimedeGenerator());
-}
-
 void CreateRod(Scene* scene, ParticleContactSolver* contactSolver)
 {
 	// Si les id sont négatifs on créer les deux particles
@@ -101,7 +76,7 @@ void CreateRod(Scene* scene, ParticleContactSolver* contactSolver)
 
 	ParticleRod* cable = new ParticleRod(Scene::mainScene->gameObjects[particleId1],
 		Scene::mainScene->gameObjects[particleId2], lengthParticleLink);
-	contactSolver->AddParticleLink(cable);
+	contactSolver->generator.AddParticleLink(cable);
 }
 
 
@@ -112,8 +87,8 @@ void CreateCable(Scene* scene, ParticleContactSolver* contactSolver)
 	{
 		particleId1 = Scene::mainScene->gameObjects.size();
 		particleId2 = particleId1 + 1;
-		CreateParticle(scene, rand() % 10 - 5, rand() % 10 - 5);
-		CreateParticle(scene, rand() % 10 - 5, rand() % 10 - 5);
+		CreateParticle(scene, 0, rand() % 10 - 5);
+		CreateParticle(scene, 5 + rand() % 2, rand() % 10 - 5);
 	}
 
 	if (particleId1 >= Scene::mainScene->gameObjects.size() || particleId2 >= Scene::mainScene->gameObjects.size())
@@ -121,17 +96,16 @@ void CreateCable(Scene* scene, ParticleContactSolver* contactSolver)
 
 	ParticleCable* cable = new ParticleCable(Scene::mainScene->gameObjects[particleId1],
 		Scene::mainScene->gameObjects[particleId2], lengthParticleLink);
-	contactSolver->AddParticleLink(cable);
+	contactSolver->generator.AddParticleLink(cable);
 }
 
 void ResetScene(Scene* scene, ParticleContactSolver* contactSolver)
 {
-	contactSolver->RemoveAllParticleLink();
+	contactSolver->generator.RemoveAllParticleLink();
 	for (int i = Scene::mainScene->gameObjects.size() - 1; i >= 0; i--)
 	{
 		Scene::mainScene->RemoveParticle(Scene::mainScene->gameObjects[i]);
 	}
-
 }
 
 bool mouseButtonDown = false;
@@ -160,14 +134,6 @@ int HandleInputs(Renderer* renderer)
 			else if (event.key.keysym.sym == SDLK_r)
 			{
 				CreateSpring(Scene::mainScene);
-			}
-			else if (event.key.keysym.sym == SDLK_t)
-			{
-				CreateBungee(Scene::mainScene);
-			}
-			else if (event.key.keysym.sym == SDLK_y)
-			{
-				CreateArchimede(Scene::mainScene);
 			}
 			else
 				renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, true);

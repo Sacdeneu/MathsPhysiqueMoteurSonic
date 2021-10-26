@@ -17,7 +17,7 @@ void Camera::SetPosition(float x, float y, float z)
 void Camera::Update(float deltaTime)
 {
 	//position += glm::vec3(moveX * 5 * deltaTime, 0, -moveY * 5 * deltaTime);
-	position += (forward * (moveY * 5 * deltaTime)) + (right * (moveX * 5 * deltaTime));
+	position += (forward * (moveY * 10 * deltaTime)) + (right * (moveX * 10 * deltaTime));
 }
 
 void Camera::SetMatrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform)

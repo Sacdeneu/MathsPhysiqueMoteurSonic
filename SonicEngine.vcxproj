@@ -78,12 +78,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>.\include\SDL2;.\include\GL;.\include\glm;.\include\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>.\include\SDL2;.\include\GL;.\include\glm;.\include\imgui;.\include\stb;$(IncludePath)</IncludePath>
     <LibraryPath>.\lib\GL;.\lib\SDL2;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>.\include\SDL2;.\include\GL;.\include\glm;.\include\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>.\include\SDL2;.\include\GL;.\include\glm;.\include\imgui;.\include\stb;$(IncludePath)</IncludePath>
     <LibraryPath>.\lib\GL;.\lib\SDL2;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -175,6 +175,7 @@
     <ClCompile Include="src\rendering\scene.cpp" />
     <ClCompile Include="src\rendering\shader.cpp" />
     <ClCompile Include="src\rendering\sphere.cpp" />
+    <ClCompile Include="src\rendering\stb.cpp" />
     <ClCompile Include="src\rendering\VAO.cpp" />
     <ClCompile Include="src\rendering\VBO.cpp" />
     <ClCompile Include="src\tests\testvector.cpp" />
@@ -227,6 +228,12 @@
     <None Include="resources\grid.vert" />
     <None Include="resources\map.frag" />
     <None Include="resources\map.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\test.png">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </Image>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

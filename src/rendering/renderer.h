@@ -38,6 +38,7 @@ private:
 	std::vector<GLuint> gridIndices;
 	std::vector<GLfloat> cubeVertices;
 	std::vector<GLuint> cubeIndices;
+	GLuint grassTexture, dirtTexture;
 };
 
 #endif
