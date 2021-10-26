@@ -6,7 +6,6 @@ ParticleCable::ParticleCable(Particle* A, Particle* B, float length) : ParticleL
 
 ParticleContact* ParticleCable::CheckCollision()
 {
-	//std::vector<ParticleContact>* res;
 	Vector3D vectorDistance = particles[0]->GetPosition() - particles[1]->GetPosition();
 	float distance = Vector3D::NormSquare(vectorDistance);
 

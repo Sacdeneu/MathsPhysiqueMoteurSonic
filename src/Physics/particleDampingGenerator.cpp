@@ -3,6 +3,7 @@
 
 ParticleDampingGenerator::ParticleDampingGenerator()
 {
+	// Valeurs arbitraire qui rendent bien à l'écran
 	k1 = 0.1f;
 	k2 = 0.01f;
 }

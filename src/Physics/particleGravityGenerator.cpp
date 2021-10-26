@@ -10,5 +10,6 @@ ParticleGravityGenerator::ParticleGravityGenerator()
 
 void ParticleGravityGenerator::UpdateForce(Particle* particle, float deltaTime)
 {
+	// On applique simplement la gravité sur la particule en fonction de sa masse
 	particle->AddForce(gravity * particle->GetMass());
 }

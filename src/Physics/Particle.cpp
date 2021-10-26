@@ -11,7 +11,7 @@ Particle::Particle()
 
 	position = Vector3D(0, 0, 0);
 	velocity = Vector3D(0, 0, 0);
-	isBlob, isAABB = false;
+	isBlob, isAABB = false; // flag utilisé pour le blob
 	SetMass(1);
 }
 
@@ -21,7 +21,7 @@ Particle::Particle(Vector3D initialPos, float mass)
 
 	position = initialPos;
 	SetMass(mass);
-	isBlob, isAABB = false;
+	isBlob, isAABB = false; // flag utilisé pour le blob
 	velocity = Vector3D(0, 0, 0);
 }
 

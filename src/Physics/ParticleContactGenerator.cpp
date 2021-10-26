@@ -84,11 +84,14 @@ ParticleContact* ParticleContactGenerator::CheckCollision(Particle* a, AABB* b)
 	return new ParticleContact(a, (Particle*)b, normal, interpenetration);
 }
 
+
+// On enregistre le lien
 void ParticleContactGenerator::AddParticleLinks(ParticleLink* p)
 {
 	particlesLinks.push_back(p);
 }
 
+// On retire tout les liens (tige ou cable) associés à la particule donné
 void ParticleContactGenerator::RemoveAllLinksFromParticle(int particleID)
 {
 	for (int i = particlesLinks.size() - 1; i >= 0; i--)
@@ -102,6 +105,7 @@ void ParticleContactGenerator::RemoveAllLinksFromParticle(int particleID)
 	}
 }
 
+// On retire tout les liens enregistrés
 void ParticleContactGenerator::RemoveAllParticleLink()
 {
 	for (int i = particlesLinks.size() - 1; i >= 0; i--)
