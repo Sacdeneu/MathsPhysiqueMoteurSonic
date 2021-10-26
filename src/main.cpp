@@ -20,10 +20,17 @@ float randomZDirection = 0;// 2.5f;
 float particleLinkLength = 2;
 
 ForcesRegister forcesRegister;
+ParticleContactSolver particleContactSolver;
 
-Particle* CreateParticle(Scene* scene, Vector3D pos, Vector3D velocity = Vector3D(0, 0, 0))
+//############################
+//#                          #
+//#  CREATION DE PARTICULES  #
+//#                          #
+//############################
+
+Particle* CreateParticle(Scene* scene, Vector3D pos, Vector3D velocity = Vector3D(0, 0, 0), float massFactor = 1)
 {
-	Particle* p = new Particle(pos, particleMass);
+	Particle* p = new Particle(pos, particleMass * massFactor);
 	scene->AddParticle(p);
 	p->SetVelocity(velocity);
 
@@ -43,13 +50,13 @@ void CreateSpring(Scene* scene)
 
 	//création des forces
 	forcesRegister.AddEntry(p1, new ParticleDampingGenerator());
-	forcesRegister.AddEntry(p1, new ParticleSpringGenerator(p2));
+	forcesRegister.AddEntry(p1, new ParticleSpringGenerator(p2, particleLinkLength));
 	forcesRegister.AddEntry(p2, new ParticleDampingGenerator());
-	forcesRegister.AddEntry(p2, new ParticleSpringGenerator(p1));
+	forcesRegister.AddEntry(p2, new ParticleSpringGenerator(p1, particleLinkLength));
 }
 
 //crée deux particules reliées par une tige
-void CreateRod(Scene* scene, ParticleContactSolver* contactSolver)
+void CreateRod(Scene* scene)
 {
 	//création des particules
 	CreateParticle(scene, Vector3D(-particleLinkLength * 0.5f, 2, 0), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0));
@@ -61,11 +68,11 @@ void CreateRod(Scene* scene, ParticleContactSolver* contactSolver)
 
 	//...puis on crée le lien
 	ParticleRod* rod = new ParticleRod(first, second, particleLinkLength);
-	contactSolver->generator.AddParticleLink(rod);
+	particleContactSolver.generator.AddParticleLink(rod);
 }
 
 //crée deux particules reliées par un cable
-void CreateCable(Scene* scene, ParticleContactSolver* contactSolver)
+void CreateCable(Scene* scene)
 {
 	//création des particules
 	CreateParticle(scene, Vector3D(-particleLinkLength * 0.5f, 2, 0), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0));
@@ -77,11 +84,11 @@ void CreateCable(Scene* scene, ParticleContactSolver* contactSolver)
 
 	//...puis on crée le lien
 	ParticleCable* cable = new ParticleCable(first, second, particleLinkLength);
-	contactSolver->generator.AddParticleLink(cable);
+	particleContactSolver.generator.AddParticleLink(cable);
 }
 
 //créer un cube composé de 8 particules reliées par des tiges
-void CreateRodCube(Scene* scene, ParticleContactSolver* contactSolver)
+void CreateRodCube(Scene* scene)
 {
 	float halfLen = particleLinkLength * 0.5f;
 
@@ -101,15 +108,66 @@ void CreateRodCube(Scene* scene, ParticleContactSolver* contactSolver)
 		for (int j = i + 1; j < 8; j++)
 		{
 			float length = Vector3D::Norm(particles[i]->GetPosition() - particles[j]->GetPosition());
-			contactSolver->generator.AddParticleLink(new ParticleRod(particles[i], particles[j], length));
+			particleContactSolver.generator.AddParticleLink(new ParticleRod(particles[i], particles[j], length));
 		}
 	}
 }
 
-//supprime tout les éléments de la scène
-void ResetScene(Scene* scene, ParticleContactSolver* contactSolver)
+//##########
+//#        #
+//#  BLOB  #
+//#        #
+//##########
+
+float blobMoveX, blobMoveY = 0;
+float blobForce = 10;
+std::vector<Particle*> blobElements;
+
+void UpdateBlobInput(SDL_Keycode key, bool state)
 {
-	contactSolver->generator.RemoveAllParticleLink();
+	if (key == SDLK_UP) blobMoveY = state ? 1 : 0;
+	else if (key == SDLK_LEFT) blobMoveX = state ? -1 : 0;
+	else if (key == SDLK_DOWN) blobMoveY = state ? -1 : 0;
+	else if (key == SDLK_RIGHT) blobMoveX = state ? 1 : 0;
+}
+
+void UpdateBlobForce()
+{
+	for (int i = 0; i < blobElements.size(); i++)
+		blobElements[i]->AddForce(Vector3D(blobMoveX * blobForce, 0, -blobMoveY * blobForce));
+}
+
+void CreateBlob()
+{
+	for (int i = 0; i < 20; i++)
+	{
+		Particle* p = CreateParticle(Scene::mainScene, Vector3D(i % 5, 3, i / 5), Vector3D(0, 1, 0), (rand() % 150 + 50) / 200.0f);
+		blobElements.push_back(p);
+
+		for (int j = 0; j < blobElements.size(); j++)
+		{
+			if (i != j && rand() % 10 < 5) 
+			{
+				Particle* other = blobElements[j];
+				float length = Vector3D::Norm(blobElements[i]->GetPosition() - blobElements[j]->GetPosition());
+				forcesRegister.AddEntry(p, new ParticleSpringGenerator(other, length * 0.5f));
+				forcesRegister.AddEntry(other, new ParticleSpringGenerator(p, length * 0.5f));
+				particleContactSolver.generator.AddParticleLink(new ParticleCable(p, other, length));
+			}
+		}
+	}
+}
+
+//##########
+//#        #
+//#  MAIN  #
+//#        #
+//##########
+
+//supprime tout les éléments de la scène
+void ResetScene(Scene* scene)
+{
+	particleContactSolver.generator.RemoveAllParticleLink();
 	for (int i = Scene::mainScene->gameObjects.size() - 1; i >= 0; i--)
 	{
 		Scene::mainScene->RemoveParticle(Scene::mainScene->gameObjects[i]);
@@ -141,11 +199,15 @@ int HandleInputs(Renderer* renderer)
 				CreateParticle(Scene::mainScene, Vector3D(0, 1, 0), Vector3D(-10 + mouseX * 20, mouseY * 15, randZ));
 			}
 			else
+			{
 				renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, true);
+				UpdateBlobInput(event.key.keysym.sym, true);
+			}
 			break;
 
 		case SDL_KEYUP:
 			renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, false);
+			UpdateBlobInput(event.key.keysym.sym, false);
 			break;
 
 		case SDL_MOUSEMOTION:
@@ -171,7 +233,7 @@ int HandleInputs(Renderer* renderer)
 }
 
 //création de la fenetre graphique
-void MakeImGuiWindow(float physicsUpdateTime, ParticleContactSolver* solver)
+void MakeImGuiWindow(float physicsUpdateTime)
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
@@ -194,22 +256,25 @@ void MakeImGuiWindow(float physicsUpdateTime, ParticleContactSolver* solver)
 	ImGui::SliderFloat("Taille du lien", &particleLinkLength, 0, 5, "%.1f");
 
 	if (ImGui::Button("Creer tige", ImVec2(148, 20)))
-		CreateRod(Scene::mainScene, solver);
+		CreateRod(Scene::mainScene);
 	ImGui::SameLine(160);
 	if (ImGui::Button("Creer cable", ImVec2(148, 20)))
-		CreateCable(Scene::mainScene, solver);
+		CreateCable(Scene::mainScene);
 
 	if (ImGui::Button("Creer ressort", ImVec2(148, 20)))
 		CreateSpring(Scene::mainScene);
 	ImGui::SameLine(160);
 	if (ImGui::Button("Creer cube de tiges", ImVec2(148, 20)))
-		CreateRodCube(Scene::mainScene, solver);
+		CreateRodCube(Scene::mainScene);
+
+	if (ImGui::Button("Creer blob", ImVec2(300, 20)))
+		CreateBlob();
 
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 	ImGui::PushItemWidth(150);
 
 	if (ImGui::Button("Reset Scene", ImVec2(300, 20)))
-		ResetScene(Scene::mainScene, solver);
+		ResetScene(Scene::mainScene);
 
 	ImGui::End();
 	ImGui::Render();
@@ -241,8 +306,6 @@ int main( int argc, char* args[])
 			Renderer* renderer = new Renderer(window);
 			Scene::mainScene = new Scene(&forcesRegister);
 
-			ParticleContactSolver* particleContactSolver = new ParticleContactSolver();
-
 			Uint64 lastUpdate = SDL_GetPerformanceCounter();
 
 			//boucle de jeu
@@ -259,16 +322,17 @@ int main( int argc, char* args[])
 				//mise à jour de la physique et de la logique
 				forcesRegister.Update(deltaTime);
 				Scene::mainScene->Update(deltaTime);
+				UpdateBlobForce();
 				
 				//test collisions
-				particleContactSolver->UpdateCollisions(Scene::mainScene, 4);
+				particleContactSolver.UpdateCollisions(Scene::mainScene, 4);
 				float physicsUpdateTime = ((SDL_GetPerformanceCounter() - lastUpdate) / (float)SDL_GetPerformanceFrequency()) * 1000;
 
 				renderer->camera.Update(deltaTime);
 
 				//mise à jour de l'affichage
 				renderer->Update(Scene::mainScene);
-				MakeImGuiWindow(physicsUpdateTime, particleContactSolver);
+				MakeImGuiWindow(physicsUpdateTime);
 				SDL_GL_SwapWindow(window);
 
 				//rendu à 60FPS

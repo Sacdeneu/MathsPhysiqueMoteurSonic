@@ -7,7 +7,7 @@ class ParticleSpringGenerator : public ParticleForceGenerator
 {
 public:
 	//CONSTRUCTEUR
-	ParticleSpringGenerator(Particle* other);
+	ParticleSpringGenerator(Particle* other, float length);
 
 	/// <summary>
 	/// Mise à jour des forces

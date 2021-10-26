@@ -1,11 +1,11 @@
 #include "particleSpringGenerator.h"
 #include "Vector3D.h"
 
-ParticleSpringGenerator::ParticleSpringGenerator(Particle* other)
+ParticleSpringGenerator::ParticleSpringGenerator(Particle* other, float length)
 {
 	this->other = other;
 	k = 10.0f;
-	l0 = 2;
+	l0 = length;
 }
 
 void ParticleSpringGenerator::UpdateForce(Particle* particle, float deltaTime)
