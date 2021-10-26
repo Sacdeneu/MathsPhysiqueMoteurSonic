@@ -10,6 +10,11 @@ class Vector3D
 		//VARIABLES
 
 		/// <summary>
+		/// Variable d'optimisation : peut-on modifier la norme ?
+		/// </summary>
+		bool dirty;
+
+		/// <summary>
 		/// Coordonnée sur l'axe x du vecteur
 		/// </summary>
 		float x;
@@ -118,5 +123,11 @@ class Vector3D
 		/// <param name="vector2">Second vecteur du produit vectoriel</param>
 		/// <returns>Vecteur résultat du produit vectoriel</returns>
 		static Vector3D CrossProduct(Vector3D, Vector3D);
+
+	private:
+		/// <summary>
+		/// Norme du vecteur
+		/// </summary>
+		float norm;
 };
 

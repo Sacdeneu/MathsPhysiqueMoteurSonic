@@ -35,6 +35,7 @@ Vector3D::Vector3D()
 	this->x = 0;
 	this->y = 0;
 	this->z = 0;
+	this->dirty = true;
 }
 
 Vector3D::Vector3D(float x, float y, float z)
@@ -42,14 +43,18 @@ Vector3D::Vector3D(float x, float y, float z)
 	this->x= x;
 	this->y = y;
 	this->z = z;
+	this->dirty = true;
 }
 
 // FONCTIONS
 
 float Vector3D::Norm(Vector3D vector)
 {
-	float norm = sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
-	return norm;
+	if (vector.dirty) {
+		vector.norm = sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+		vector.dirty = false;
+	}
+	return vector.norm;
 }
 
 float Vector3D::NormSquare(Vector3D vector)
