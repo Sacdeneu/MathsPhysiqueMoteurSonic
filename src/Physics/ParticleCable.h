@@ -8,5 +8,5 @@ class ParticleCable : public ParticleLink
 {
 public:
 	ParticleCable(Particle* A, Particle* B, float length);
-	void AddContacts(std::vector<ParticleContact>* listContacts) override;
+	ParticleContact* CheckCollision() override;
 };

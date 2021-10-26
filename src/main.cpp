@@ -76,7 +76,7 @@ void CreateRod(Scene* scene, ParticleContactSolver* contactSolver)
 
 	ParticleRod* cable = new ParticleRod(Scene::mainScene->gameObjects[particleId1],
 		Scene::mainScene->gameObjects[particleId2], lengthParticleLink);
-	contactSolver->AddParticleLink(cable);
+	contactSolver->generator.AddParticleLink(cable);
 }
 
 
@@ -87,8 +87,8 @@ void CreateCable(Scene* scene, ParticleContactSolver* contactSolver)
 	{
 		particleId1 = Scene::mainScene->gameObjects.size();
 		particleId2 = particleId1 + 1;
-		CreateParticle(scene, rand() % 10 - 5, rand() % 10 - 5);
-		CreateParticle(scene, rand() % 10 - 5, rand() % 10 - 5);
+		CreateParticle(scene, 0, rand() % 10 - 5);
+		CreateParticle(scene, 5 + rand() % 2, rand() % 10 - 5);
 	}
 
 	if (particleId1 >= Scene::mainScene->gameObjects.size() || particleId2 >= Scene::mainScene->gameObjects.size())
@@ -96,17 +96,16 @@ void CreateCable(Scene* scene, ParticleContactSolver* contactSolver)
 
 	ParticleCable* cable = new ParticleCable(Scene::mainScene->gameObjects[particleId1],
 		Scene::mainScene->gameObjects[particleId2], lengthParticleLink);
-	contactSolver->AddParticleLink(cable);
+	contactSolver->generator.AddParticleLink(cable);
 }
 
 void ResetScene(Scene* scene, ParticleContactSolver* contactSolver)
 {
-	contactSolver->RemoveAllParticleLink();
+	contactSolver->generator.RemoveAllParticleLink();
 	for (int i = Scene::mainScene->gameObjects.size() - 1; i >= 0; i--)
 	{
 		Scene::mainScene->RemoveParticle(Scene::mainScene->gameObjects[i]);
 	}
-
 }
 
 bool mouseButtonDown = false;
