@@ -5,6 +5,7 @@
 
 void ParticleContactSolver::UpdateCollisions(Scene* scene, int iterations)
 {
+	// On itére l'algorithme plusieurs fois pour plus de précision
 	for (int i = 0; i < iterations; i++)
 	{
 		std::vector<ParticleContact>* contacts = generator.UpdateContacts(scene);
@@ -27,6 +28,7 @@ void ParticleContactSolver::UpdateCollisions(Scene* scene, int iterations)
 		if (contacts->size() == 0)
 			return;
 
+		// On résout tout les contacts
 		for (int j = 0; j < contacts->size(); j++)
 		{
 			contacts->at(j).Resolve();

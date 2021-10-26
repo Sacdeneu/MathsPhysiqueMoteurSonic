@@ -6,7 +6,7 @@ ParticleRod::ParticleRod(Particle* A, Particle* B, float length) : ParticleLink(
 
 ParticleContact* ParticleRod::CheckCollision()
 {
-	//std::vector<ParticleContact>* res = new std::vector<ParticleContact>();
+	// Calcul de la distance entre les 2 particules
 	Vector3D vectorDistance = particles[0]->GetPosition() - particles[1]->GetPosition();
 	float distance = Vector3D::NormSquare(vectorDistance);
 
