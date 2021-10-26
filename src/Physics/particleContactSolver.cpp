@@ -8,9 +8,13 @@ void ParticleContactSolver::UpdateCollisions(Scene* scene, int iterations)
 	for (int i = 0; i < iterations; i++)
 	{
 		std::vector<ParticleContact>* contacts = generator.UpdateContacts(scene);
+
 #ifdef DEBUG_MODE
 		std::cout << "Contacts : " << contacts->size() << std::endl;
 #endif
+
+		if (contacts->size() == 0)
+			return;
 
 		// On regarde si les liens de particules génèrent des collisions supplémentaires
 		for (size_t i = 0; i < particlesLink.size(); i++)
