@@ -9,6 +9,16 @@ void ParticleContactSolver::UpdateCollisions(Scene* scene, int iterations)
 	{
 		std::vector<ParticleContact>* contacts = generator.UpdateContacts(scene);
 
+		//génération de la liste publique de contacts (utilisé pour le blob)
+		if (i == 0)
+		{
+			contactsLastFrame.clear();
+			for (int j = 0; j < contacts->size(); j++)
+			{
+				contactsLastFrame.push_back(contacts->at(j));
+			}
+		}
+
 #ifdef DEBUG_MODE
 		std::cout << "Contacts : " << contacts->size() << std::endl;
 #endif

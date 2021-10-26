@@ -11,7 +11,7 @@ Particle::Particle()
 
 	position = Vector3D(0, 0, 0);
 	velocity = Vector3D(0, 0, 0);
-	
+	isBlob, isAABB = false;
 	SetMass(1);
 }
 
@@ -21,7 +21,7 @@ Particle::Particle(Vector3D initialPos, float mass)
 
 	position = initialPos;
 	SetMass(mass);
-
+	isBlob, isAABB = false;
 	velocity = Vector3D(0, 0, 0);
 }
 

@@ -14,6 +14,8 @@ public:
 
 	inline Vector3D GetNormal() { return normal; }
 	inline float GetInterpenetration() { return interpenetration; }
+	inline Particle* GetParticleA() { return particles[0]; }
+	inline Particle* GetParticleB() { return particles[1]; }
 
 private:
 	Particle* particles[2];

@@ -13,4 +13,6 @@ public:
 
 	void UpdateCollisions(Scene* scene, int iterations);
 	ParticleContactGenerator generator;
+
+	std::vector<ParticleContact> contactsLastFrame;
 };

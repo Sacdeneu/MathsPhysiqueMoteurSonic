@@ -32,5 +32,7 @@ protected:
 public:
 	int id;
 	Vector3D totalForce;
+	bool isBlob;
+	bool isAABB;
 };
 

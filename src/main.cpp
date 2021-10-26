@@ -131,10 +131,36 @@ void UpdateBlobInput(SDL_Keycode key, bool state)
 	else if (key == SDLK_RIGHT) blobMoveX = state ? 1 : 0;
 }
 
+void AttachNewBlobElement(Particle* p)
+{
+	p->isBlob = true;
+	for (int j = 0; j < blobElements.size(); j++)
+	{
+		Particle* other = blobElements[j];
+		if (other != p && rand() % 10 < 5)
+		{
+			Particle* other = blobElements[j];
+			float length = Vector3D::Norm(p->GetPosition() - blobElements[j]->GetPosition());
+			forcesRegister.AddEntry(p, new ParticleSpringGenerator(other, length * 0.5f));
+			forcesRegister.AddEntry(other, new ParticleSpringGenerator(p, length * 0.5f));
+			particleContactSolver.generator.AddParticleLink(new ParticleCable(p, other, length * 2));
+		}
+	}
+}
+
 void UpdateBlobForce()
 {
 	for (int i = 0; i < blobElements.size(); i++)
 		blobElements[i]->AddForce(Vector3D(blobMoveX * blobForce, 0, -blobMoveY * blobForce));
+
+	for (int i = 0; i < particleContactSolver.contactsLastFrame.size(); i++)
+	{
+		ParticleContact* contact = &particleContactSolver.contactsLastFrame.at(i);
+		if (contact->GetParticleA()->isBlob != contact->GetParticleB()->isBlob && !contact->GetParticleB()->isAABB)
+		{
+			AttachNewBlobElement(contact->GetParticleA()->isBlob ? contact->GetParticleB() : contact->GetParticleA());
+		}
+	}
 }
 
 void CreateBlob()
@@ -143,18 +169,8 @@ void CreateBlob()
 	{
 		Particle* p = CreateParticle(Scene::mainScene, Vector3D(i % 5, 3, i / 5), Vector3D(0, 1, 0), (rand() % 150 + 50) / 200.0f);
 		blobElements.push_back(p);
-
-		for (int j = 0; j < blobElements.size(); j++)
-		{
-			if (i != j && rand() % 10 < 5) 
-			{
-				Particle* other = blobElements[j];
-				float length = Vector3D::Norm(blobElements[i]->GetPosition() - blobElements[j]->GetPosition());
-				forcesRegister.AddEntry(p, new ParticleSpringGenerator(other, length * 0.5f));
-				forcesRegister.AddEntry(other, new ParticleSpringGenerator(p, length * 0.5f));
-				particleContactSolver.generator.AddParticleLink(new ParticleCable(p, other, length));
-			}
-		}
+		
+		AttachNewBlobElement(p);
 	}
 }
 
@@ -186,6 +202,7 @@ void CreateSnake(Scene* scene)
 void ResetScene(Scene* scene)
 {
 	particleContactSolver.generator.RemoveAllParticleLink();
+	blobElements.clear();
 	for (int i = Scene::mainScene->gameObjects.size() - 1; i >= 0; i--)
 	{
 		Scene::mainScene->RemoveParticle(Scene::mainScene->gameObjects[i]);
