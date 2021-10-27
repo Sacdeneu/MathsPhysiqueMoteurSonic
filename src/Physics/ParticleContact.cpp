@@ -21,7 +21,7 @@ void ParticleContact::Resolve()
 	// On calcule la vitesse d'approche des deux objets
 	float totalMass = particles[0]->GetInvMass() + particles[1]->GetInvMass();
 	float separationVelocity = Vector3D::ScalarProduct(particles[0]->GetVelocity() - particles[1]->GetVelocity(), this->normal);
-	// Si la vitesse d'approche est inférieur à zéro cela veut dire que les particules s'éloignent entres elles 
+	// Si la vitesse d'approche est inférieure à zéro cela veut dire que les particules s'éloignent entre elles, 
 	// donc on a déjà le comportement souhaité
 	if (separationVelocity > 0) 
 		return;

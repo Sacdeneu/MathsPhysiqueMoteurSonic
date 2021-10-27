@@ -5,12 +5,12 @@
 
 void ParticleContactSolver::UpdateCollisions(Scene* scene, int iterations)
 {
-	// On itére l'algorithme plusieurs fois pour plus de précision
+	// On itère l'algorithme plusieurs fois pour plus de précisions
 	for (int i = 0; i < iterations; i++)
 	{
 		std::vector<ParticleContact>* contacts = generator.UpdateContacts(scene);
 
-		//génération de la liste publique de contacts (utilisé pour le blob)
+		//génération de la liste publique de contacts (utilisée pour le blob)
 		if (i == 0)
 		{
 			contactsLastFrame.clear();
@@ -24,11 +24,11 @@ void ParticleContactSolver::UpdateCollisions(Scene* scene, int iterations)
 		std::cout << "Contacts : " << contacts->size() << std::endl;
 #endif
 
-		//si il n'y a pas de contacts, on arrête d'itérer
+		//S'il n'y a pas de contacts, on arrête d'itérer
 		if (contacts->size() == 0)
 			return;
 
-		// On résout tout les contacts
+		// On résout tous les contacts
 		for (int j = 0; j < contacts->size(); j++)
 		{
 			contacts->at(j).Resolve();

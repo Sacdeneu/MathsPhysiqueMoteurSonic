@@ -30,6 +30,9 @@ ParticleContactSolver particleContactSolver;
 //#                          #
 //############################
 
+
+// Création d'une particule selon les paramètres gérés par la fenêtre ImGUI.
+// La particule créée est soumise à la gravité et au damping.
 Particle* CreateParticle(Scene* scene, Vector3D pos, Vector3D velocity = Vector3D(0, 0, 0), float massFactor = 1)
 {
 	Particle* p = new Particle(pos, particleMass * massFactor);
@@ -42,6 +45,9 @@ Particle* CreateParticle(Scene* scene, Vector3D pos, Vector3D velocity = Vector3
 	return p;
 }
 
+
+// Création de deux particules liées par un ressort selon les paramètres gérés par la fenêtre ImGUI.
+// Les deux particule créées sont soumises aux forces générées par le ressort et au damping
 void CreateSpring(Scene* scene)
 {
 	//création des particles
@@ -57,13 +63,17 @@ void CreateSpring(Scene* scene)
 	forcesRegister.AddEntry(p2, new ParticleSpringGenerator(p1, particleLinkLength));
 }
 
+// Création d'une particule liée par un ressort.
+// Le ressort est à une position fixe.
 void CreateAnchoredSpring(Scene* scene)
 {
-	//création des particles
+	//création des particules
 	Particle* p = CreateParticle(scene, Vector3D(0, 2, 0), Vector3D(10, 0, randomZDirection));
 	forcesRegister.AddEntry(p, new ParticleAnchoredSpringGenerator(Vector3D(0, 5, 0), particleLinkLength));
 }
 
+// Création de deux particules reliées par un élastique de bungee.
+// Les deux particule créées sont soumises aux forces générées par l'élastique de bungee et au damping
 void CreateBungee(Scene* scene)
 {
 	//création des particles
@@ -111,7 +121,7 @@ void CreateCable(Scene* scene)
 	particleContactSolver.generator.AddParticleLinks(cable);
 }
 
-//créer un cube composé de 8 particules reliées par des tiges
+//création d'un cube composé de 8 particules reliées par des tiges
 void CreateRodCube(Scene* scene)
 {
 	float halfLen = particleLinkLength * 0.5f;
@@ -127,6 +137,7 @@ void CreateRodCube(Scene* scene)
 	particles.push_back(CreateParticle(scene, Vector3D(-halfLen, -halfLen + 2, halfLen), Vector3D(0, 0, 0))); //côté arrière bas-gauche
 	particles.push_back(CreateParticle(scene, Vector3D(halfLen, -halfLen + 2, halfLen), Vector3D(0, 0, 0))); //côté arrière bas-droit
 
+	// création des liens
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = i + 1; j < 8; j++)
@@ -137,9 +148,10 @@ void CreateRodCube(Scene* scene)
 	}
 }
 
+// Création d'une particule soumise aux forces de flottaison (Archimède)
 void CreateArchimede(Scene* scene)
 {
-	//création des particles
+	//création des particules
 	Particle* p = CreateParticle(scene, Vector3D(20, 10, 0), Vector3D(0, 0, 0));
 	forcesRegister.AddEntry(p, new ParticleArchimedeGenerator());
 }
@@ -154,6 +166,7 @@ float blobMoveX, blobMoveY = 0;
 float blobForce = 4;
 std::vector<Particle*> blobElements;
 
+// Update les inputs du joueur pour déplacer le blob.
 void UpdateBlobInput(SDL_Keycode key, bool state)
 {
 	if (key == SDLK_UP) blobMoveY = state ? 1 : 0;
@@ -162,14 +175,20 @@ void UpdateBlobInput(SDL_Keycode key, bool state)
 	else if (key == SDLK_RIGHT) blobMoveX = state ? 1 : 0;
 }
 
+// Attache une nouvelle particule au Blob
 void AttachNewBlobElement(Particle* p)
 {
+	// Set le flag pour bien dire que la particule est une particule de blob
 	p->isBlob = true;
+
+	// On parcourt les éléments du blob pour créer les liaisons
 	for (int j = 0; j < blobElements.size(); j++)
 	{
 		Particle* other = blobElements[j];
-		if (other != p && rand() % 10 < 4)
+		// On applique une liaison de manière aléatoire pour ne pas surcharger le blob de lien dans tous les sens
+		if (other != p && rand() % 10 < 4) 
 		{
+			// On crée le câble et le ressort entre les deux particules.
 			Particle* other = blobElements[j];
 			float length = Vector3D::Norm(p->GetPosition() - blobElements[j]->GetPosition());
 			forcesRegister.AddEntry(p, new ParticleSpringGenerator(other, length * 0.5f));
@@ -196,32 +215,46 @@ void SliceBlob()
 	*/
 }
 
+// Update la position du blob et on check s'il peut absorber des nouvelles particules.
 void UpdateBlobForce()
 {
+	// Applique le déplacement du blob (sur toutes les particules constituant le blob pour créer moins de problèmes)
 	for (int i = 0; i < blobElements.size(); i++)
 		blobElements[i]->AddForce(Vector3D(blobMoveX * blobForce, 0, -blobMoveY * blobForce));
 
+
+	// On parcourt la liste des contacts du particleContactSolver pour déterminer 
+	// qui est entré en contact avec le blob.
 	for (int i = 0; i < particleContactSolver.contactsLastFrame.size(); i++)
 	{
 		ParticleContact* contact = &particleContactSolver.contactsLastFrame.at(i);
+		// Si le contact est entre une particule blob et une particule non blob...
 		if (contact->GetParticleA()->isBlob != contact->GetParticleB()->isBlob && !contact->GetParticleB()->isAABB)
 		{
+			// ...on attache la particule au blob.
 			AttachNewBlobElement(contact->GetParticleA()->isBlob ? contact->GetParticleB() : contact->GetParticleA());
 		}
 	}
 }
 
+
+
+// Création d'un blob
 void CreateBlob()
 {
 	for (int i = 0; i < 20; i++)
 	{
+		// crée une particule et l'ajoute à une liste représentant tous les éléments du blob
+		// les particules spawn en grille.
 		Particle* p = CreateParticle(Scene::mainScene, Vector3D(i % 5, 3, i / 5), Vector3D(0, 1, 0), (rand() % 150 + 50) / 200.0f);
 		blobElements.push_back(p);
 		
+		// Attache la particule aux éléments de la liste du blob.
 		AttachNewBlobElement(p);
 	}
 }
 
+// Création d'un serpent
 void CreateSnake(Scene* scene)
 {
 	//création des particules
@@ -230,6 +263,7 @@ void CreateSnake(Scene* scene)
 	float size = cbrt(particleMass) * 0.8f;
 	float spawnX = -6;
 
+	// Fait apparaître les particules en ligne droite et les attaches via une tige
 	for (int i = 0; i < nbParticle; i++)
 	{
 		spawnX += size;
@@ -246,7 +280,7 @@ void CreateSnake(Scene* scene)
 //#        #
 //##########
 
-//supprime tout les éléments de la scène
+//supprime tous les éléments de la scène
 void ResetScene(Scene* scene)
 {
 	particleContactSolver.generator.RemoveAllParticleLink();
@@ -258,6 +292,7 @@ void ResetScene(Scene* scene)
 }
 
 bool mouseButtonDown = false;
+// Gère les inputs pour déplacer la caméra et faire spawn des objets.
 int HandleInputs(Renderer* renderer)
 {
 	SDL_Event event;
@@ -267,12 +302,12 @@ int HandleInputs(Renderer* renderer)
 
 		switch (event.type)
 		{
-		case SDL_QUIT: //ferme le jeu quand on ferme la fenetre
+		case SDL_QUIT: //ferme le jeu quand on ferme la fenêtre
 			runGame = false;
 			break;
 
 		case SDL_KEYDOWN:
-			if (event.key.keysym.sym == SDLK_SPACE)
+			if (event.key.keysym.sym == SDLK_SPACE) // Fait spawn une particule en fonction de la position de la souris
 			{
 				int pixelMouseX, pixelMouseY;
 				SDL_GetMouseState(&pixelMouseX, &pixelMouseY);
@@ -281,31 +316,32 @@ int HandleInputs(Renderer* renderer)
 				float randZ = (-100 + rand() % 200) * randomZDirection * 0.01f;
 				CreateParticle(Scene::mainScene, Vector3D(0, 1, 0), Vector3D(-10 + mouseX * 20, mouseY * 15, randZ));
 			}
-			else if (event.key.keysym.sym == 'r')
+			else if (event.key.keysym.sym == 'r') // Découpe le blob
 				SliceBlob();
 			else
 			{
+				// Update les déplacements caméra et blob
 				renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, true);
 				UpdateBlobInput(event.key.keysym.sym, true);
 			}
 			break;
 
-		case SDL_KEYUP:
+		case SDL_KEYUP: // Update les déplacements caméra et blob pour qu'ils s'arrêtent
 			renderer->camera.UpdateKeyboardInput(event.key.keysym.sym, false);
 			UpdateBlobInput(event.key.keysym.sym, false);
 			break;
 
-		case SDL_MOUSEMOTION:
+		case SDL_MOUSEMOTION: // Rotate la caméra si le clic souris est maintenu.
 			if(mouseButtonDown)
 				renderer->camera.UpdateMouseInput(event.motion.xrel, event.motion.yrel);
 			break;
 
-		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONDOWN: // clic souris maintenu
 			if (event.button.button == SDL_BUTTON_RIGHT)
 				mouseButtonDown = true;
 			break;
 
-		case SDL_MOUSEBUTTONUP:
+		case SDL_MOUSEBUTTONUP: // clic souris relaché
 			if (event.button.button == SDL_BUTTON_RIGHT)
 				mouseButtonDown = false;
 			break;
@@ -318,6 +354,7 @@ int HandleInputs(Renderer* renderer)
 }
 
 //création de la fenetre graphique
+// contient principalement des fonctions debug / tests
 void MakeImGuiWindow(float physicsUpdateTime)
 {
 	ImGui_ImplOpenGL3_NewFrame();
@@ -403,6 +440,7 @@ int main( int argc, char* args[])
 			ImGuiIO& io = ImGui::GetIO(); (void)io;
 			ImGui::StyleColorsDark();
 
+			// initialisation du renderer et de la scène
 			Renderer* renderer = new Renderer(window);
 			Scene::mainScene = new Scene(&forcesRegister);
 

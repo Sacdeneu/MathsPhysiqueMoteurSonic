@@ -14,18 +14,20 @@ ParticleArchimedeGenerator::ParticleArchimedeGenerator()
 
 void ParticleArchimedeGenerator::UpdateForce(Particle* particle, float deltaTime)
 {
+	// On calcule le volume de notre particule
 	float radius = cbrt(particle->GetMass()) * 0.5f;
 	volumeObj = (4 * 3.1415 * pow(radius, 3))/3;
 
+	// On calcule la profondeur max de l'eau
 	depthMax = waterHeight -(2 * radius);
 
-	if (particle->GetPosition().y >= waterHeight + depthMax) {
+	if (particle->GetPosition().y >= waterHeight + depthMax) { // Si l'objet est hors de l'eau, on applique aucune force
 		particle->AddForce(Vector3D(0, 0, 0));
 	}
-	else if (particle->GetPosition().y <= depthMax - waterHeight) {
+	else if (particle->GetPosition().y <= depthMax - waterHeight) { // Si elle est complètement dans l'eau, on applique une force constante par à rapport à son volume
 		particle->AddForce(gravity * volumeObj * density);
 	}
-	else {
+	else { // Sinon on applique une force proportionnelle à son ratio de submersion.
 		float submersiveRation = abs(particle->GetPosition().y - waterHeight - depthMax);
 		particle->AddForce(gravity * volumeObj * density * submersiveRation);
 	}
