@@ -1,6 +1,6 @@
 #include "AABB.h"
 #include "Math.h"
-#include "Vector3D.h"
+#include "../math/Vector3D.h"
 #include "../rendering/scene.h"
 
 AABB::AABB() : Particle()

@@ -1,5 +1,4 @@
 #include "particleSpringGenerator.h"
-#include "Vector3D.h"
 
 ParticleSpringGenerator::ParticleSpringGenerator(Particle* other, float length)
 {

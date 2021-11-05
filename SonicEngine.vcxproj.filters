@@ -25,6 +25,9 @@
     <Filter Include="Fichiers sources\physics">
       <UniqueIdentifier>{a4274850-9639-4d99-862d-a10035e3d4ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\math">
+      <UniqueIdentifier>{932a29a1-ba0a-4f89-8130-ba93dabc79ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -53,9 +56,6 @@
     </ClCompile>
     <ClCompile Include="include\imgui\imgui_widgets.cpp">
       <Filter>Fichiers sources\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\tests\testvector.cpp">
-      <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\forcesRegister.cpp">
       <Filter>Fichiers sources\physics</Filter>
@@ -93,9 +93,6 @@
     <ClCompile Include="src\Physics\particleSpringGenerator.cpp">
       <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\Vector3D.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\AABB.cpp">
       <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
@@ -122,6 +119,21 @@
     </ClCompile>
     <ClCompile Include="src\rendering\VBO.cpp">
       <Filter>Fichiers sources\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\particleArchimedeGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\particleBungeeGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\testvector.cpp">
+      <Filter>Fichiers sources\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\Matrix4.cpp">
+      <Filter>Fichiers sources\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\math\Vector3D.cpp">
+      <Filter>Fichiers sources\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +194,6 @@
     <ClInclude Include="src\rendering\VBO.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\Vector3D.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\particleGravityGenerator.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -219,6 +228,18 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\ParticleRod.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\particleArchimedeGenerator.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\particleBungeeGenerator.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\Matrix4.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\Vector3D.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

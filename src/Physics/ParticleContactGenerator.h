@@ -1,5 +1,4 @@
 #pragma once
-#include "Vector3D.h"
 #include "Particle.h"
 #include "ParticleContact.h"
 #include "../rendering/scene.h"

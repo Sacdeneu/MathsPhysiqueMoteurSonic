@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector3D.h"
+#include "../math/Vector3D.h"
 
 class Particle
 {

@@ -3,7 +3,7 @@
 #include <stdlib.h> 
 #include "rendering/renderer.h"
 #include "rendering/scene.h"
-#include "Physics/Vector3D.h"
+#include "math/Vector3D.h"
 #include "Physics/forcesRegister.h"
 #include "Physics/particleGravityGenerator.h"
 #include "Physics/particleDampingGenerator.h"
@@ -15,6 +15,8 @@
 #include "Physics/ParticleContactSolver.h"
 #include "Physics/ParticleCable.h"
 #include "Physics/ParticleRod.h"
+
+#include "math/Matrix4.h"
 
 bool runGame = true;
 float particleMass = 1;
@@ -420,6 +422,17 @@ void MakeImGuiWindow(float physicsUpdateTime)
 
 int main( int argc, char* args[])
 {
+	Matrix4 testMat1;
+	Matrix4 testMat2;
+	std::cout << "Matrice test :\n" << testMat1 << std::endl;
+	testMat2.SetValue(3.1415f, 2, 2);
+	testMat2 = testMat1 + testMat2;
+	std::cout << "Matrice test :\n" << testMat2 << std::endl;
+	testMat2 = testMat1 * testMat2;
+	std::cout << "Matrice test :\n" << testMat2 << std::endl;
+	testMat2 = testMat2 * testMat2;
+	std::cout << "Matrice test :\n" << testMat2 << std::endl;
+
 	//initialisation
 	SDL_Window* window = NULL;
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)

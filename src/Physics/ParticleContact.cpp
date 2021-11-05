@@ -1,7 +1,5 @@
 #include "ParticleContact.h"
 
-
-
 ParticleContact::ParticleContact()
 {
 }
@@ -36,7 +34,7 @@ void ParticleContact::Resolve()
 	particles[0]->SetVelocity(particles[0]->GetVelocity() + impulsion * particles[0]->GetInvMass());
 	particles[1]->SetVelocity(particles[1]->GetVelocity() - impulsion * particles[1]->GetInvMass());
 		
-	// On résout également l'interpénétration en touchant directement aux positions des particules.
+	// On résout également l'interpénétration en modifiant les positions des particules
 	Vector3D correction = this->normal * (this->interpenetration / (particles[0]->GetInvMass() + particles[1]->GetInvMass()));
 	particles[0]->SetPosition(particles[0]->GetPosition() + correction * particles[0]->GetInvMass());
 	particles[1]->SetPosition(particles[1]->GetPosition() - correction * particles[1]->GetInvMass());

@@ -1,4 +1,3 @@
-#include "Vector3D.h"
 #include "particleGravityGenerator.h"
 
 #define GRAVITY -9.81f

@@ -1,5 +1,4 @@
 #include "particleDampingGenerator.h"
-#include "Vector3D.h"
 
 ParticleDampingGenerator::ParticleDampingGenerator()
 {

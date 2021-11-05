@@ -1,6 +1,5 @@
 #include "Particle.h"
 #include "Math.h"
-#include "Vector3D.h"
 #include "../rendering/scene.h"
 
 int particleCounter = 0;

@@ -1,5 +1,4 @@
 #include "particleBungeeGenerator.h"
-#include "Vector3D.h"
 
 ParticleBungeeGenerator::ParticleBungeeGenerator(Particle* other, float length)
 {

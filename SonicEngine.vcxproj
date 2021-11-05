@@ -153,6 +153,8 @@
     <ClCompile Include="include\imgui\imgui_tables.cpp" />
     <ClCompile Include="include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\math\Matrix4.cpp" />
+    <ClCompile Include="src\math\Vector3D.cpp" />
     <ClCompile Include="src\Physics\AABB.cpp" />
     <ClCompile Include="src\Physics\forcesRegister.cpp" />
     <ClCompile Include="src\Physics\Particle.cpp" />
@@ -168,7 +170,6 @@
     <ClCompile Include="src\Physics\ParticleLink.cpp" />
     <ClCompile Include="src\Physics\ParticleRod.cpp" />
     <ClCompile Include="src\Physics\particleSpringGenerator.cpp" />
-    <ClCompile Include="src\Physics\Vector3D.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
     <ClCompile Include="src\rendering\EBO.cpp" />
     <ClCompile Include="src\rendering\renderer.cpp" />
@@ -190,6 +191,8 @@
     <ClInclude Include="include\imgui\imstb_rectpack.h" />
     <ClInclude Include="include\imgui\imstb_textedit.h" />
     <ClInclude Include="include\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\math\Matrix4.h" />
+    <ClInclude Include="src\math\Vector3D.h" />
     <ClInclude Include="src\Physics\AABB.h" />
     <ClInclude Include="src\Physics\forcesRegister.h" />
     <ClInclude Include="src\Physics\Particle.h" />
@@ -205,7 +208,6 @@
     <ClInclude Include="src\Physics\ParticleLink.h" />
     <ClInclude Include="src\Physics\ParticleRod.h" />
     <ClInclude Include="src\Physics\particleSpringGenerator.h" />
-    <ClInclude Include="src\Physics\Vector3D.h" />
     <ClInclude Include="src\rendering\camera.h" />
     <ClInclude Include="src\rendering\EBO.h" />
     <ClInclude Include="src\rendering\renderer.h" />

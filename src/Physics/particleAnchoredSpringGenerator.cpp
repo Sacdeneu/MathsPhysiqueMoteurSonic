@@ -1,5 +1,4 @@
 #include "particleAnchoredSpringGenerator.h"
-#include "Vector3D.h"
 
 ParticleAnchoredSpringGenerator::ParticleAnchoredSpringGenerator(Vector3D pos, float length)
 {

@@ -1,5 +1,4 @@
 #pragma once
-#include "Vector3D.h"
 #include "Particle.h"
 #include <vector>
 #define c 0.4f

@@ -1,7 +1,7 @@
 #pragma once
 #include "ParticleLink.h"
 #include "ParticleContact.h"
-#include "Vector3D.h"
+#include "../math/Vector3D.h"
 #include <vector>
 
 class ParticleCable : public ParticleLink
