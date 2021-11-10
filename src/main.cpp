@@ -17,6 +17,7 @@
 #include "Physics/ParticleRod.h"
 
 #include "math/Matrix4.h"
+#include "math/Matrix3.h"
 
 bool runGame = true;
 float particleMass = 1;
@@ -432,6 +433,12 @@ int main( int argc, char* args[])
 	std::cout << "Matrice test :\n" << testMat2 << std::endl;
 	testMat2 = testMat2 * testMat2;
 	std::cout << "Matrice test :\n" << testMat2 << std::endl;
+
+	Matrix3 testMat3;
+	Matrix3 testMat4;
+	testMat3.SetValue(3.1415f, 1, 2); testMat3.SetValue(10, 2, 0);
+	testMat4 = testMat3.pow(5);
+	std::cout << "Matrice test :\n" << testMat4 << std::endl;
 
 	//initialisation
 	SDL_Window* window = NULL;

@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-using namespace std;
+#include "Vector3D.h"
 
 class Matrix3
 {
@@ -9,6 +9,8 @@ public:
 
 	Matrix3 operator+(const Matrix3&);
 	Matrix3 operator*(const Matrix3&);
+	Vector3D operator*(const Vector3D&);
+	Matrix3 pow(const int exponent);
 
 	void SetValue(float val, int col, int row);
 

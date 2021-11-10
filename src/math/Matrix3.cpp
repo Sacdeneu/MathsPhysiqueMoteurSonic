@@ -44,6 +44,26 @@ Matrix3 Matrix3::operator*(const Matrix3& other)
 	res.m[6] = m[6] * other.m[0] + m[7] * other.m[3] + m[8] * other.m[6];
 	res.m[7] = m[6] * other.m[1] + m[7] * other.m[4] + m[8] * other.m[7];
 	res.m[8] = m[6] * other.m[2] + m[7] * other.m[5] + m[8] * other.m[8];
+
+	return res;
+}
+
+Vector3D Matrix3::operator*(const Vector3D& other)
+{
+	Vector3D res;
+	res.x = m[0] * other.x + m[1] * other.y + m[2] * other.z;
+	res.y = m[3] * other.x + m[4] * other.y + m[5] * other.z;
+	res.z = m[6] * other.x + m[7] * other.y + m[8] * other.z;
+	return res;
+}
+
+Matrix3 Matrix3::pow(const int exponent)
+{
+	Matrix3 res;
+	for (int i = 0; i < exponent; i++)
+	{
+		res = res * (const Matrix3&)*this;
+	}
 	return res;
 }
 
