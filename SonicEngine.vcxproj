@@ -155,6 +155,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\Matrix3.cpp" />
     <ClCompile Include="src\math\Matrix4.cpp" />
+    <ClCompile Include="src\math\Quaternion.cpp" />
     <ClCompile Include="src\math\Vector3D.cpp" />
     <ClCompile Include="src\Physics\AABB.cpp" />
     <ClCompile Include="src\Physics\forcesRegister.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="src\math\Matrix3.h" />
     <ClInclude Include="src\math\Matrix4.h" />
+    <ClInclude Include="src\math\Quaternion.h" />
     <ClInclude Include="src\math\Vector3D.h" />
     <ClInclude Include="src\Physics\AABB.h" />
     <ClInclude Include="src\Physics\forcesRegister.h" />

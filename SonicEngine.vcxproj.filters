@@ -138,6 +138,9 @@
     <ClCompile Include="src\math\Matrix3.cpp">
       <Filter>Fichiers sources\math</Filter>
     </ClCompile>
+    <ClCompile Include="src\math\Quaternion.cpp">
+      <Filter>Fichiers sources\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Particle.h">
@@ -246,6 +249,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\math\Matrix3.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\Quaternion.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

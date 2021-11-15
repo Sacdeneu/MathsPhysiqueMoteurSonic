@@ -19,6 +19,8 @@
 #include "math/Matrix4.h"
 #include "math/Matrix3.h"
 
+#include "math/Quaternion.h"
+
 bool runGame = true;
 float particleMass = 1;
 float randomZDirection = 0;// 2.5f;
@@ -463,6 +465,19 @@ int main( int argc, char* args[])
 	Matrix3 testMat7;
 	testMat7 = testMat6.Inverse(det1);
 	std::cout << "Inverse :\n" << testMat7 << std::endl;
+
+
+	// Test Quaternion
+
+	Quaternion q(1, 0, 0, 0);
+	Quaternion q2(0, 0, 0, 1);
+	q.Normalize();
+	q2.Normalize();
+	std::cout << q << std::endl;
+	std::cout << q2 << std::endl;
+
+	Quaternion q3 = q * q2;
+	std::cout << q3 << std::endl;
 
 	//initialisation
 	SDL_Window* window = NULL;
