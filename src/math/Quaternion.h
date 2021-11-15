@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "Vector3D.h"
 
 class Quaternion
 {
@@ -12,6 +13,7 @@ public:
 	Quaternion operator+(const Quaternion&);
 	Quaternion operator-(const Quaternion&);
 	Quaternion operator*(const Quaternion&);
+	Vector3D operator*(const Vector3D&);
 	float& operator[](size_t index);
 	const float& operator[](size_t index) const;
 

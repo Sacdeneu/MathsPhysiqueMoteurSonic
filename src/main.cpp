@@ -468,6 +468,7 @@ int main( int argc, char* args[])
 
 
 	// Test Quaternion
+	#pragma region TestQuaternion
 
 	Quaternion q(1, 0, 0, 0);
 	Quaternion q2(0, 0, 0, 1);
@@ -478,6 +479,19 @@ int main( int argc, char* args[])
 
 	Quaternion q3 = q * q2;
 	std::cout << q3 << std::endl;
+
+	Vector3D v(5, 2, 3);
+	Quaternion q4(0, 1, 0, 1);
+	q4.Normalize();
+	std::cout << (q4 * v) << std::endl;
+
+	Quaternion q5(1, 0, 1, 0);
+	q5.Normalize();
+	std::cout << (q5 * v) << std::endl;
+	#pragma endregion
+
+
+
 
 	//initialisation
 	SDL_Window* window = NULL;

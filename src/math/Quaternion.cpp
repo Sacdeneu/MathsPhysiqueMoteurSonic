@@ -43,6 +43,16 @@ Quaternion Quaternion::operator*(const Quaternion& b)
     return Quaternion(newX, newY, newZ, newW);
 }
 
+
+Vector3D Quaternion::operator*(const Vector3D& v)
+{
+    // On convertit le quaternion en matrix et on la multiplie à v
+    float vectorX = (1.0f - 2 * (y*y + z*z)) * v.x +    2 * (x*y - z*w) * v.y +             2 * (x*z + w*y) * v.z;
+    float vectorY = 2 * (x*y + z*w) * v.x +             (1.0f - 2 * (x*x + z*z)) * v.y +    2 * (y*z - w*x) * v.z;
+    float vectorZ = 2 * (x*z - w*y) * v.x +             2 * (y*z + w*x) * v.y +             (1.0f - 2 * (x*x + y*y)) * v.z;
+    return Vector3D(vectorX, vectorY, vectorZ);
+}
+
 float& Quaternion::operator[](size_t index)
 {
     switch (index) 
@@ -91,6 +101,7 @@ Quaternion Quaternion::Normalize(Quaternion q)
 
 void Quaternion::RotateByVector()
 {
+
 }
 
 void Quaternion::UpdateAngularVelocity(Quaternion angularVelocity, float deltaTime)
