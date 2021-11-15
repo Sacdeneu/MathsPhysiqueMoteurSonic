@@ -11,6 +11,9 @@ public:
 	Matrix3 operator*(const Matrix3&);
 	Vector3D operator*(const Vector3D&);
 	Matrix3 pow(const int exponent);
+	Matrix3 Transpose();
+	float Determinant();
+	Matrix3 Inverse(float det);
 
 	void SetValue(float val, int col, int row);
 

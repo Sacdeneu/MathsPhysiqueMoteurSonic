@@ -440,6 +440,30 @@ int main( int argc, char* args[])
 	testMat4 = testMat3.pow(5);
 	std::cout << "Matrice test :\n" << testMat4 << std::endl;
 
+	Matrix3 testMat5;
+	testMat5 = testMat4.Transpose();
+	std::cout << "Matrice transpose :\n" << testMat5 << std::endl;
+
+	Matrix3 testMat6;
+	testMat6.SetValue(2, 0, 0);
+	testMat6.SetValue(2, 0, 1);
+	testMat6.SetValue(3, 0, 2);
+	testMat6.SetValue(4, 1, 0);
+	testMat6.SetValue(5, 1, 1);
+	testMat6.SetValue(6, 1, 2);
+	testMat6.SetValue(7, 2, 0);
+	testMat6.SetValue(8, 2, 1);
+	testMat6.SetValue(9, 2, 2);
+	std::cout << "Matrice test6 :\n" << testMat6 << std::endl;
+
+	float det1;
+	det1 = testMat6.Determinant();
+	std::cout << "Determinant :\n" << det1 << std::endl;
+
+	Matrix3 testMat7;
+	testMat7 = testMat6.Inverse(det1);
+	std::cout << "Inverse :\n" << testMat7 << std::endl;
+
 	//initialisation
 	SDL_Window* window = NULL;
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)

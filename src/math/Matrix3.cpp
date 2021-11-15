@@ -67,6 +67,50 @@ Matrix3 Matrix3::pow(const int exponent)
 	return res;
 }
 
+Matrix3 Matrix3::Transpose() 
+{
+	Matrix3 res;
+	res.m[0] = m[0];
+	res.m[1] = m[3];
+	res.m[2] = m[6];
+
+	res.m[3] = m[1];
+	res.m[4] = m[4];
+	res.m[5] = m[7];
+
+	res.m[6] = m[2];
+	res.m[7] = m[5];
+	res.m[8] = m[8];
+	return res;
+}
+
+float Matrix3::Determinant()
+{
+	float det;
+	det = m[0] * (m[4] * m[8] - m[7] * m[5]) - m[3] * (m[1] * m[8] - m[7] * m[2]) + m[6] * (m[1] * m[5] - m[4] * m[2]);
+	return det;
+}
+
+Matrix3 Matrix3::Inverse(float det)
+{
+	Matrix3 res;
+	float invDet = 1.0 / det;
+
+	res.m[0] = (m[8] * m[4] - m[5] * m[7]) * invDet;
+	res.m[1] = -(m[8] * m[1] - m[2] * m[7]) * invDet;
+	res.m[2] = (m[5] * m[1] - m[2] * m[4]) * invDet;
+
+	res.m[3] = -(m[8] * m[3] - m[5] * m[6]) * invDet;
+	res.m[4] = (m[8] * m[0] - m[2] * m[6]) * invDet;
+	res.m[5] = -(m[5] * m[0] - m[2] * m[3]) * invDet;
+
+	res.m[6] = (m[7] * m[3] - m[4] * m[6]) * invDet;
+	res.m[7] = -(m[7] * m[0] - m[1] * m[6]) * invDet;
+	res.m[8] = (m[4] * m[0] - m[1] * m[3]) * invDet;
+
+	return res;
+}
+
 std::ostream& operator<<(std::ostream& os, Matrix3 mat)
 {
 	char buffer[255];
