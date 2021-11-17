@@ -490,6 +490,12 @@ int main( int argc, char* args[])
 	std::cout << (q5 * v) << std::endl;
 	#pragma endregion
 
+	Vector3D vTRS(5, 2, 3);
+	Quaternion qTRS(1, 0, 1, 0);
+	qTRS.Normalize();
+	Matrix4 matTRS(vTRS, qTRS);
+
+	std::cout << matTRS << std::endl;
 
 
 

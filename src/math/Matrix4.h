@@ -1,11 +1,14 @@
 #pragma once
 #include <iostream>
+#include "Vector3D.h"
+#include "Quaternion.h"
 using namespace std;
 
 class Matrix4
 {
 	public:
 		Matrix4();
+		Matrix4(Vector3D pos, Quaternion r, Vector3D scale = Vector3D(1, 1, 1));
 
 		Matrix4 operator+(const Matrix4&);
 		Matrix4 operator*(const Matrix4&);
