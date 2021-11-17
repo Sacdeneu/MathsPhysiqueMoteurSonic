@@ -1,9 +1,9 @@
-#ifndef PARTICLEDAMPINGGENERATOR_H
-#define PARTICLEDAMPINGGENERATOR_H
+#ifndef rigidbodyDAMPINGGENERATOR_H
+#define rigidbodyDAMPINGGENERATOR_H
 
-#include "particleForceGenerator.h"
+#include "rigidbodyForceGenerator.h"
 
-class ParticleDampingGenerator : public ParticleForceGenerator
+class RigidbodyDampingGenerator : public RigidbodyForceGenerator
 {
 public:
 	//CONSTRUCTEUR
@@ -11,14 +11,14 @@ public:
 	/// <summary>
 	/// Initialise un générateur de damping avec k1=0.1 et k2=0.01 (valeurs choisies arbitrairement après tests)
 	/// </summary>
-	ParticleDampingGenerator();
+	RigidbodyDampingGenerator();
 
 	/// <summary>
 	/// Mise à jour des forces
 	/// </summary>
-	/// <param name="particle">Particule affectée</param>
+	/// <param name="rigidbody">Particule affectée</param>
 	/// <param name="deltaTime">Temps</param>
-	void UpdateForce(Particle* particle, float deltaTime);
+	void UpdateForce(Rigidbody* rigidbody, float deltaTime);
 
 private:
 	/// <summary>

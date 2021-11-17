@@ -60,39 +60,6 @@
     <ClCompile Include="src\Physics\forcesRegister.cpp">
       <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\Particle.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\ParticleCable.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\particleAnchoredSpringGenerator.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\ParticleContact.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\ParticleContactGenerator.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\particleContactSolver.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\particleDampingGenerator.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\particleGravityGenerator.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\ParticleLink.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\ParticleRod.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\particleSpringGenerator.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\AABB.cpp">
       <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
@@ -120,12 +87,6 @@
     <ClCompile Include="src\rendering\VBO.cpp">
       <Filter>Fichiers sources\rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\particleArchimedeGenerator.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\particleBungeeGenerator.cpp">
-      <Filter>Fichiers sources\physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\tests\testvector.cpp">
       <Filter>Fichiers sources\math</Filter>
     </ClCompile>
@@ -141,11 +102,47 @@
     <ClCompile Include="src\math\Quaternion.cpp">
       <Filter>Fichiers sources\math</Filter>
     </ClCompile>
+    <ClCompile Include="src\physics\rigidbody.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodyAnchoredSpringGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodyArchimedeGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodyBungeeGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodyCable.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodyContact.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodyContactGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodyContactSolver.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodyDampingGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodyGravityGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodyLink.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodyRod.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\rigidbodySpringGenerator.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Physics\Particle.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\Particle.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
@@ -200,46 +197,10 @@
     <ClInclude Include="src\rendering\VBO.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\particleGravityGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\forcesRegister.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\particleDampingGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\particleAnchoredSpringGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\particleSpringGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\ParticleContact.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\particleContactSolver.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\ParticleContactGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\AABB.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\ParticleCable.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\ParticleLink.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\ParticleRod.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\particleArchimedeGenerator.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\particleBungeeGenerator.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\math\Matrix4.h">
@@ -252,6 +213,48 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\math\Quaternion.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbody.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyAnchoredSpringGenerator.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyArchimedeGenerator.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyBungeeGenerator.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyCable.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyContact.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyContactGenerator.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyContactSolver.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyDampingGenerator.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyForceGenerator.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyGravityGenerator.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyLink.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodyRod.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\rigidbodySpringGenerator.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

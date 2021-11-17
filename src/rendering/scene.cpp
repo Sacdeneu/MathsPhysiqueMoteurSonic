@@ -45,7 +45,7 @@ int Scene::GetObjectsCount()
 	return gameObjects.size();
 }
 
-void Scene::AddParticle(Particle* p)
+void Scene::Addrigidbody(Rigidbody* p)
 {
 	gameObjects.push_back(p);
 }
@@ -58,9 +58,9 @@ void Scene::Update(float dt)
 	}
 }
 
-void Scene::RemoveParticle(Particle* p)
+void Scene::Removerigidbody(Rigidbody* p)
 {
-	forcesRegister->DeleteParticle(p);
+	forcesRegister->Deleterigidbody(p);
 	gameObjects.erase(std::remove(gameObjects.begin(), gameObjects.end(), p), gameObjects.end());
 	delete p;
 }

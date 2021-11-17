@@ -1,16 +1,16 @@
 #pragma once
-#include "Particle.h"
-#include "ParticleContactGenerator.h"
+#include "rigidbody.h"
+#include "rigidbodyContactGenerator.h"
 #include "../rendering/scene.h"
 #include <vector>
 
-class ParticleContactSolver
+class RigidbodyContactSolver
 {
 public:
 	//CONSTRUCTEURS
 
-	ParticleContactSolver() = default;
-	~ParticleContactSolver() = default;
+	RigidbodyContactSolver() = default;
+	~RigidbodyContactSolver() = default;
 
 	//FONCTIONS
 
@@ -26,10 +26,10 @@ public:
 	/// <summary>
 	/// Générateurs de contacts entre particules
 	/// </summary>
-	ParticleContactGenerator generator;
+	RigidbodyContactGenerator generator;
 
 	/// <summary>
 	/// Liste de contacts lors de la dernière frame 
 	/// </summary>
-	std::vector<ParticleContact> contactsLastFrame;
+	std::vector<RigidbodyContact> contactsLastFrame;
 };

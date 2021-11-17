@@ -1,7 +1,7 @@
 #pragma once
-#include "Particle.h"
+#include "rigidbody.h"
 
-class AABB : Particle
+class AABB : Rigidbody
 {
 public:
 	//CONSTRUCTEURS

@@ -1,7 +1,7 @@
 #ifndef FORCESREGISTER_H
 #define FORCESREGISTER_H
 
-#include "particleForceGenerator.h"
+#include "rigidbodyForceGenerator.h"
 #include <vector>
 
 struct ForceEntry
@@ -9,12 +9,12 @@ struct ForceEntry
 	/// <summary>
 	/// Particule à entrer dans le registre
 	/// </summary>
-	Particle* particle;
+	Rigidbody* rigidbody;
 
 	/// <summary>
 	/// Générateur de force appliquant une force à la particule
 	/// </summary>
-	ParticleForceGenerator* generator;
+	RigidbodyForceGenerator* generator;
 };
 
 class ForcesRegister
@@ -32,15 +32,15 @@ public:
 	/// <summary>
 	/// Ajoute une force au registre des forces pour une particule
 	/// </summary>
-	/// <param name="particle">Particule sur laquelle appliquer la force</param>
+	/// <param name="rigidbody">Particule sur laquelle appliquer la force</param>
 	/// <param name="generator">Générateur de force a appliquer</param>
-	void AddEntry(Particle* particle, ParticleForceGenerator* generator);
+	void AddEntry(Rigidbody* rigidbody, RigidbodyForceGenerator* generator);
 	
 	/// <summary>
 	/// Supprime les entrées liées à une particule
 	/// </summary>
 	/// <param name="p">Particule dont les entrées doivent être supprimées</param>
-	void DeleteParticle(Particle* p);
+	void Deleterigidbody(Rigidbody* p);
 	
 	/// <summary>
 	/// Fonction d'application des forces

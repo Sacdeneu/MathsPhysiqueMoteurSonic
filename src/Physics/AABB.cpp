@@ -3,13 +3,13 @@
 #include "../math/Vector3D.h"
 #include "../rendering/scene.h"
 
-AABB::AABB() : Particle()
+AABB::AABB() : Rigidbody()
 {
 	invMass = 0;
 	isAABB = true;
 }
 
-AABB::AABB(Vector3D position, Vector3D scale, int textureID) : Particle()
+AABB::AABB(Vector3D position, Vector3D scale, int textureID) : Rigidbody()
 {
 	invMass = 0;
 	isAABB = true;
