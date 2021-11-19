@@ -58,7 +58,7 @@ void Scene::Update(float dt)
 	}
 }
 
-void Scene::Removerigidbody(Rigidbody* p)
+void Scene::RemoveRigidbody(Rigidbody* p)
 {
 	forcesRegister->Deleterigidbody(p);
 	gameObjects.erase(std::remove(gameObjects.begin(), gameObjects.end(), p), gameObjects.end());

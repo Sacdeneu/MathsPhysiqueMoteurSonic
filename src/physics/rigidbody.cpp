@@ -55,7 +55,7 @@ void Rigidbody::SetVelocity(Vector3D newVelocity)
 void Rigidbody::CalculDerivedData()
 {
 	// Update matrice transform
-	transformMatrix.UpdateTRS(position, orientation);
+	transformMatrix.UpdateTRS(position, orientation, Vector3D(radius, radius, radius));
 
 	//inertiaTensor = matrixTransform
 }
@@ -75,5 +75,5 @@ void Rigidbody::Update(float dt)
 	CalculDerivedData();
 
 	if (position.y < -100)
-		Scene::mainScene->Removerigidbody(this);
+		Scene::mainScene->RemoveRigidbody(this);
 }

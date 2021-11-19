@@ -12,7 +12,7 @@ public:
 	Scene(ForcesRegister* forcesRegister);
 	int GetObjectsCount();
 	void Addrigidbody(Rigidbody* p);
-	void Removerigidbody(Rigidbody* p);
+	void RemoveRigidbody(Rigidbody* p);
 	void Update(float deltaTime);
 	void AddCubeToMap(Vector3D position, Vector3D scale, int textureID);
 

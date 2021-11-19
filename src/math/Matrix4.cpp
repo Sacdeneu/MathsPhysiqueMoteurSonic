@@ -30,9 +30,9 @@ Matrix4::Matrix4(Vector3D pos, Quaternion r, Vector3D scale)
 {
 	UpdateTRS(pos, r, scale);
 
-	m[12] = 0;
-	m[13] = 0;
-	m[14] = 0;
+	m[3] = 0;
+	m[7] = 0;
+	m[11] = 0;
 	m[15] = 1;
 }
 
@@ -43,20 +43,20 @@ void Matrix4::SetValue(float val, int col, int row)
 
 void Matrix4::UpdateTRS(Vector3D pos, Quaternion r, Vector3D scale)
 {
-	m[0] = 1 - 2 * (r.y * r.y + r.z * r.z) * scale.x;
-	m[1] = 2 * (r.x * r.y + r.z * r.w);
-	m[2] = 2 * (r.x * r.z - r.y * r.w);
-	m[3] = pos.x;
+	m[0] = (1 - 2 * (r.y * r.y + r.z * r.z)) * scale.x;
+	m[4] = (2 * (r.x * r.y + r.z * r.w)) * scale.x;
+	m[8] = (2 * (r.x * r.z - r.y * r.w)) * scale.x;
+	m[12] = pos.x;
 
-	m[4] = 2 * (r.x * r.y - r.z * r.w);
-	m[5] = 1 - 2 * (r.x * r.x + r.z * r.z) * scale.y;
-	m[6] = 2 * (r.y * r.z + r.x * r.w);
-	m[7] = pos.y;
+	m[1] = (2 * (r.x * r.y - r.z * r.w)) * scale.y;
+	m[5] = (1 - 2 * (r.x * r.x + r.z * r.z)) * scale.y;
+	m[9] = (2 * (r.y * r.z + r.x * r.w)) * scale.y;
+	m[13] = pos.y;
 
-	m[8] = 2 * (r.x * r.z + r.y * r.w);
-	m[9] = 2 * (r.y * r.z - r.x * r.w);
-	m[10] = 1 - 2 * (r.x * r.x + r.y * r.y) * scale.z;
-	m[11] = pos.z;
+	m[2] = (2 * (r.x * r.z + r.y * r.w)) * scale.z;
+	m[6] = (2 * (r.y * r.z - r.x * r.w)) * scale.z;
+	m[10] = (1 - 2 * (r.x * r.x + r.y * r.y)) * scale.z;
+	m[14] = pos.z;
 }
 
 Matrix4 Matrix4::operator+(const Matrix4& other)
@@ -92,6 +92,12 @@ Matrix4 Matrix4::operator*(const Matrix4& other)
 	res.m[15] = m[12] * other.m[3] + m[13] * other.m[7] + m[14] * other.m[11] + m[15] * other.m[15];
 
 	return res;
+}
+
+const GLfloat* Matrix4::GetGLMatrix()
+{
+	std::cout << (Matrix4)*this;
+	return (GLfloat*)&m;
 }
 
 std::ostream& operator<<(std::ostream& os, Matrix4 mat)

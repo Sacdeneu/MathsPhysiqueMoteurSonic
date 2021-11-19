@@ -157,24 +157,19 @@ void Renderer::Update(Scene* scene)
 	glUniform3f(glGetUniformLocation(defaultShader.program, "viewPos"), viewPos.x, viewPos.y, viewPos.z);
 
 	//affiche les particules
-	sphereVAO.Bind();
+	//sphereVAO.Bind();
+	cubeVAO.Bind();
 	for (int i = 0; i < scene->GetObjectsCount(); i++)
 	{
-		glm::mat4 model = glm::mat4(1.0f);
-
-		Vector3D pos = scene->gameObjects[i]->GetPosition();
-		model = glm::translate(model, glm::vec3(pos.x, pos.y, pos.z));
-		//model = glm::rotate(model, glm::radians(t * (i+1) * 50), glm::vec3(0, 1.0f, 0));
-
-		float radius = scene->gameObjects[i]->GetRadius();
-		model = glm::scale(model, glm::vec3(radius, radius, radius));
-
 		int modelLoc = glGetUniformLocation(defaultShader.program, "model");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, scene->gameObjects[i]->transformMatrix.GetGLMatrix());
 
 		glDrawElements(GL_TRIANGLES, s.indices.size(), GL_UNSIGNED_INT, 0);
 	}
-	sphereVAO.Unbind();
+	//sphereVAO.Unbind();
+
+	if(scene->GetObjectsCount() > 0)
+	std::cout << scene->gameObjects[0]->transformMatrix.GetGLMatrix() << std::endl;
 
 	//affiche la map
 	glUseProgram(mapShader.program);
@@ -182,7 +177,7 @@ void Renderer::Update(Scene* scene)
 	glUniform1i(glGetUniformLocation(mapShader.program, "mainTex"), 0);
 	
 	camera.SetMatrix(60, 0.1f, 500.0f, mapShader, "cameraMatrix");
-	cubeVAO.Bind();
+	//cubeVAO.Bind();
 	for (int i = 0; i < scene->map.size(); i++)
 	{
 		glm::mat4 model = glm::mat4(1.0f);

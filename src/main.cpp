@@ -292,7 +292,7 @@ void ResetScene(Scene* scene)
 	blobElements.clear();
 	for (int i = Scene::mainScene->gameObjects.size() - 1; i >= 0; i--)
 	{
-		Scene::mainScene->Removerigidbody(Scene::mainScene->gameObjects[i]);
+		Scene::mainScene->RemoveRigidbody(Scene::mainScene->gameObjects[i]);
 	}
 }
 
