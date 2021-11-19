@@ -111,6 +111,21 @@ Matrix3 Matrix3::Inverse(float det)
 	return res;
 }
 
+Matrix3 Matrix3::QuaternionToMatrix(Quaternion r) 
+{
+	m[0] = 1 - 2 * (r.y * r.y + r.z * r.z);
+	m[1] = 2 * (r.x * r.y + r.z * r.w);
+	m[2] = 2 * (r.x * r.z - r.y * r.w);
+
+	m[3] = 2 * (r.x * r.y - r.z * r.w);
+	m[4] = 1 - 2 * (r.x * r.x + r.z * r.z);
+	m[5] = 2 * (r.y * r.z + r.x * r.w);
+
+	m[6] = 2 * (r.x * r.z + r.y * r.w);
+	m[7] = 2 * (r.y * r.z - r.x * r.w);
+	m[8] = 1 - 2 * (r.x * r.x + r.y * r.y);
+}
+
 std::ostream& operator<<(std::ostream& os, Matrix3 mat)
 {
 	char buffer[255];

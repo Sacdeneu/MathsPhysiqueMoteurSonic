@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Vector3D.h"
+#include "Quaternion.h"
 
 class Matrix3
 {
@@ -14,6 +15,8 @@ public:
 	Matrix3 Transpose();
 	float Determinant();
 	Matrix3 Inverse(float det);
+
+	Matrix3 QuaternionToMatrix(Quaternion r);
 
 	void SetValue(float val, int col, int row);
 

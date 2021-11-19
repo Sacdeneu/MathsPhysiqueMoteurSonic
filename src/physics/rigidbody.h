@@ -36,6 +36,8 @@ public:
 	/// <param name="newVelocity">Nouvelle vélocité</param>
 	void SetVelocity(Vector3D newVelocity);
 
+	void AddForceAtPoint(Vector3D force, Vector3D point);
+	void AddForceAtBodyPoint(Vector3D force, Vector3D point);
 	void CalculDerivedData();
 
 	/// <summary>
@@ -68,8 +70,8 @@ protected:
 	Vector3D velocity;
 
 	Quaternion orientation;
-	Vector3D angularVelocity;
-	Matrix3 inertiaTensor;
+	Vector3D totalTorque;
+	Matrix3 inverseInertiaTensor;
 
 	/// <summary>
 	/// Rayon de la particule
