@@ -168,8 +168,8 @@ void Renderer::Update(Scene* scene)
 	}
 	//sphereVAO.Unbind();
 
-	if(scene->GetObjectsCount() > 0)
-	std::cout << scene->gameObjects[0]->transformMatrix.GetGLMatrix() << std::endl;
+	//if(scene->GetObjectsCount() > 0)
+	//std::cout << scene->gameObjects[0]->transformMatrix.GetGLMatrix() << std::endl;
 
 	//affiche la map
 	glUseProgram(mapShader.program);

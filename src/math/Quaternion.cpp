@@ -94,7 +94,10 @@ void Quaternion::Normalize()
 Quaternion Quaternion::Normalize(Quaternion q)
 {
     float norm = sqrt(q.x*q.x + q.y*q.y + q.z*q.z + q.w*q.w);
-    if (norm <= 0)
+    std::cout << '\n';
+    std::cout << norm;
+    std::cout << '\n';
+    if (norm <= 0.01f)
         return Quaternion();
     return Quaternion(q.x / norm, q.y / norm, q.z / norm, q.w / norm);
 }
@@ -106,8 +109,7 @@ void Quaternion::RotateByVector()
 
 void Quaternion::UpdateAngularVelocity(Quaternion angularVelocity, float deltaTime)
 {
-    Quaternion rotation = *this;
-    rotation = rotation + angularVelocity * rotation * 0.5f * deltaTime;
+    *this = *this + angularVelocity * *this * 0.5f * deltaTime;
 }
 
 

@@ -93,8 +93,12 @@ float Matrix3::Determinant()
 
 Matrix3 Matrix3::Inverse(float det)
 {
+	if (det == 0) {
+		std::cout << "ALLO";
+	}
 	Matrix3 res;
 	float invDet = 1.0 / det;
+
 
 	res.m[0] = (m[8] * m[4] - m[5] * m[7]) * invDet;
 	res.m[1] = -(m[8] * m[1] - m[2] * m[7]) * invDet;
@@ -113,6 +117,7 @@ Matrix3 Matrix3::Inverse(float det)
 
 Matrix3 Matrix3::QuaternionToMatrix(Quaternion r) 
 {
+	Matrix3 res;
 	m[0] = 1 - 2 * (r.y * r.y + r.z * r.z);
 	m[1] = 2 * (r.x * r.y + r.z * r.w);
 	m[2] = 2 * (r.x * r.z - r.y * r.w);
@@ -124,6 +129,8 @@ Matrix3 Matrix3::QuaternionToMatrix(Quaternion r)
 	m[6] = 2 * (r.x * r.z + r.y * r.w);
 	m[7] = 2 * (r.y * r.z - r.x * r.w);
 	m[8] = 1 - 2 * (r.x * r.x + r.y * r.y);
+
+	return res;
 }
 
 std::ostream& operator<<(std::ostream& os, Matrix3 mat)

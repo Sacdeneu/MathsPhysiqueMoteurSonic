@@ -56,6 +56,7 @@ public:
 	inline float GetRadius() { return radius; }
 	inline void AddForce(Vector3D force) { totalForce = totalForce + force; }
 	inline void CleanTotalForce() { totalForce = Vector3D(0, 0, 0); }
+	inline void CleanTotalTorque() { totalTorque = Vector3D(0, 0, 0); }
 
 	//VARIABLES
 protected: 
@@ -69,10 +70,11 @@ protected:
 	/// </summary>
 	Vector3D velocity;
 
+	Vector3D angularVelocity;
 	Quaternion orientation;
 	Vector3D totalTorque;
 	Matrix3 inverseInertiaTensor;
-
+	Matrix3 inverseInertiaTensorWorld;
 	/// <summary>
 	/// Rayon de la particule
 	/// </summary>

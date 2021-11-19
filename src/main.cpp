@@ -43,6 +43,7 @@ Rigidbody* Createrigidbody(Scene* scene, Vector3D pos, Vector3D velocity = Vecto
 	Rigidbody* p = new Rigidbody(pos, rigidbodyMass * massFactor);
 	scene->Addrigidbody(p);
 	p->SetVelocity(velocity);
+	p->AddForceAtPoint(Vector3D(0, 1, 1), Vector3D(velocity.x * 50, 0, 0));
 
 	forcesRegister.AddEntry(p, new RigidbodyGravityGenerator());
 	forcesRegister.AddEntry(p, new RigidbodyDampingGenerator());

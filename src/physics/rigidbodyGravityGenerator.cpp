@@ -11,4 +11,5 @@ void RigidbodyGravityGenerator::UpdateForce(Rigidbody* rigidbody, float deltaTim
 {
 	// On applique simplement la gravité sur la particule en fonction de sa masse
 	rigidbody->AddForce(gravity * rigidbody->GetMass());
+	//rigidbody->AddForceAtPoint(gravity * rigidbody->GetMass(), Vector3D(10,0,0));
 }

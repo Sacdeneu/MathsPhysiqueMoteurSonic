@@ -11,14 +11,20 @@ Rigidbody::Rigidbody()
 	position = Vector3D(0, 0, 0);
 	velocity = Vector3D(0, 0, 0);
 
+	angularVelocity = Vector3D(0, 0, 0);
 	orientation = Quaternion();
 	transformMatrix = Matrix4(position, orientation);
 
-
-	inverseInertiaTensor.Inverse(inverseInertiaTensor.Determinant());
-
 	isBlob, isAABB = false; // flag utilisé pour le blob
 	SetMass(1);
+
+	inverseInertiaTensor = Matrix3();
+	inverseInertiaTensor.SetValue((1 / 12.0f) * GetMass() * (radius * radius + radius * radius), 0, 0);
+	inverseInertiaTensor.SetValue((1 / 12.0f) * GetMass() * (radius * radius + radius * radius), 1, 1);
+	inverseInertiaTensor.SetValue((1 / 12.0f) * GetMass() * (radius * radius + radius * radius), 2, 2);
+	inverseInertiaTensor.Inverse(inverseInertiaTensor.Determinant());
+
+
 
 }
 
@@ -31,9 +37,15 @@ Rigidbody::Rigidbody(Vector3D initialPos, float mass)
 	isBlob, isAABB = false; // flag utilisé pour le blob
 	velocity = Vector3D(0, 0, 0);
 
+	angularVelocity = Vector3D(0, 0, 0);
 	orientation = Quaternion();
 	transformMatrix = Matrix4(position, orientation);
 
+	inverseInertiaTensor = Matrix3();
+	inverseInertiaTensor.SetValue((1 / 12.0f) * GetMass() * (radius * radius + radius * radius), 0, 0);
+	inverseInertiaTensor.SetValue((1 / 12.0f) * GetMass() * (radius * radius + radius * radius), 1, 1);
+	inverseInertiaTensor.SetValue((1 / 12.0f) * GetMass() * (radius * radius + radius * radius), 2, 2);
+	inverseInertiaTensor.Inverse(inverseInertiaTensor.Determinant());
 }
 
 void Rigidbody::SetMass(float newMass)
@@ -66,11 +78,16 @@ void Rigidbody::CalculDerivedData()
 	// Calcul du tenseur d'inertie
 	Matrix3 transformMatrix3;
 	transformMatrix3.QuaternionToMatrix(orientation);
-	inverseInertiaTensor = transformMatrix3 * inverseInertiaTensor * transformMatrix3.Inverse(transformMatrix3.Determinant());
+
+	if(transformMatrix3.Determinant() != 0)
+		inverseInertiaTensorWorld = transformMatrix3 * inverseInertiaTensor * transformMatrix3.Inverse(transformMatrix3.Determinant());
 }
 
 void Rigidbody::AddForceAtPoint(Vector3D force, Vector3D point)
 {
+	// Convertir point en coordonnée relative
+
+
 	AddForce(force);
 	totalTorque = totalTorque + Vector3D::CrossProduct(point, force);
 }
@@ -78,13 +95,16 @@ void Rigidbody::AddForceAtPoint(Vector3D force, Vector3D point)
 void Rigidbody::AddForceAtBodyPoint(Vector3D force, Vector3D point)
 {
 	// Convertir point en monde
+	//point = transformMatrix * point;
+
 	AddForceAtPoint(force, point);
 }
 
 void Rigidbody::Update(float dt)
 {
 	// Update Acceleration
-	Vector3D accelerationAngular = inverseInertiaTensor * totalTorque;
+	//totalTorque = Vector3D::CrossProduct(Vector3D(0, 0, 0), Vector3D(1,1,1));
+	Vector3D accelerationAngular = inverseInertiaTensorWorld * totalTorque;
 
 
 	// Update Velocity
@@ -93,8 +113,9 @@ void Rigidbody::Update(float dt)
 	velocity = velocity + deltaVelocity;
 
 	// Update Angular Velocity
-	Vector3D angularVelocity = angularVelocity + accelerationAngular * dt;
+	angularVelocity = angularVelocity + accelerationAngular * dt;
 	Quaternion qAngularVelocity(angularVelocity.x, angularVelocity.y, angularVelocity.z, 0);
+	//qAngularVelocity.Normalize();
 
 	// Drag
 	// (on fait pas)
@@ -105,12 +126,15 @@ void Rigidbody::Update(float dt)
 
 	// Update Orientation
 	orientation.UpdateAngularVelocity(qAngularVelocity, dt);
+	orientation.Normalize();
 
 	// Calculate Derived Data
 	CalculDerivedData();
 
+	std::cout << angularVelocity;
 	// Clear
 	CleanTotalForce();
+	CleanTotalTorque();
 
 	if (position.y < -100)
 		Scene::mainScene->RemoveRigidbody(this);
