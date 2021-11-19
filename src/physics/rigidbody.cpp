@@ -10,8 +10,14 @@ Rigidbody::Rigidbody()
 
 	position = Vector3D(0, 0, 0);
 	velocity = Vector3D(0, 0, 0);
+
+	orientation = Quaternion();
+	angularVelocity = Vector3D(0, 0, 0);
+	transformMatrix = Matrix4(position, orientation);
+
 	isBlob, isAABB = false; // flag utilisé pour le blob
 	SetMass(1);
+
 }
 
 Rigidbody::Rigidbody(Vector3D initialPos, float mass)
@@ -46,6 +52,14 @@ void Rigidbody::SetVelocity(Vector3D newVelocity)
 	velocity = newVelocity;
 }
 
+void Rigidbody::CalculDerivedData()
+{
+	// Update matrice transform
+	transformMatrix.UpdateTRS(position, orientation);
+
+	//inertiaTensor = matrixTransform
+}
+
 void Rigidbody::Update(float dt)
 {
 	// Update Position
@@ -58,6 +72,7 @@ void Rigidbody::Update(float dt)
 	velocity = velocity + deltaVelocity;
 
 	CleanTotalForce();
+	CalculDerivedData();
 
 	if (position.y < -100)
 		Scene::mainScene->Removerigidbody(this);

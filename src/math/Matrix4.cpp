@@ -28,6 +28,21 @@ Matrix4::Matrix4()
 // Matrice de transformation
 Matrix4::Matrix4(Vector3D pos, Quaternion r, Vector3D scale)
 {
+	UpdateTRS(pos, r, scale);
+
+	m[12] = 0;
+	m[13] = 0;
+	m[14] = 0;
+	m[15] = 1;
+}
+
+void Matrix4::SetValue(float val, int col, int row)
+{
+	m[col * 4 + row] = val;
+}
+
+void Matrix4::UpdateTRS(Vector3D pos, Quaternion r, Vector3D scale)
+{
 	m[0] = 1 - 2 * (r.y * r.y + r.z * r.z) * scale.x;
 	m[1] = 2 * (r.x * r.y + r.z * r.w);
 	m[2] = 2 * (r.x * r.z - r.y * r.w);
@@ -42,16 +57,6 @@ Matrix4::Matrix4(Vector3D pos, Quaternion r, Vector3D scale)
 	m[9] = 2 * (r.y * r.z - r.x * r.w);
 	m[10] = 1 - 2 * (r.x * r.x + r.y * r.y) * scale.z;
 	m[11] = pos.z;
-
-	m[12] = 0;
-	m[13] = 0;
-	m[14] = 0;
-	m[15] = 1;
-}
-
-void Matrix4::SetValue(float val, int col, int row)
-{
-	m[col * 4 + row] = val;
 }
 
 Matrix4 Matrix4::operator+(const Matrix4& other)

@@ -1,5 +1,8 @@
 #pragma once
 #include "../math/Vector3D.h"
+#include "../math/Quaternion.h"
+#include "../math/Matrix3.h"	
+#include "../math/Matrix4.h"
 
 class Rigidbody
 {
@@ -33,6 +36,8 @@ public:
 	/// <param name="newVelocity">Nouvelle vélocité</param>
 	void SetVelocity(Vector3D newVelocity);
 
+	void CalculDerivedData();
+
 	/// <summary>
 	/// Mise à jour de la masse de la particule
 	/// </summary>
@@ -40,6 +45,7 @@ public:
 	inline void SetMass(float newMass);
 	inline float GetInvMass() { return invMass; }
 	inline float GetMass() { return 1.0f / invMass; }
+
 
 	// GETTERS
 	Vector3D GetPosition() { return position; }
@@ -60,6 +66,10 @@ protected:
 	/// Vélocité de la particule
 	/// </summary>
 	Vector3D velocity;
+
+	Quaternion orientation;
+	Vector3D angularVelocity;
+	Matrix3 inertiaTensor;
 
 	/// <summary>
 	/// Rayon de la particule
@@ -91,5 +101,7 @@ public:
 	/// Booléen définissant si la particule possède un AABB
 	/// </summary>
 	bool isAABB;
+
+	Matrix4 transformMatrix;
 };
 
