@@ -55,7 +55,7 @@ void Rigidbody::SetMass(float newMass)
 	else
 		invMass = 1; //valeur par défaut si newMass est nul
 
-	//toutes les particules ont une densité constante,
+	//toutes les rigidbodys ont une densité constante,
 	//on calcule le rayon comme étant la racine cubique de la masse afin que la masse paraisse visuellement correcte
 	radius = cbrt(newMass) * 0.5f;
 }

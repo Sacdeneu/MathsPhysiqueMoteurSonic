@@ -7,7 +7,7 @@ ForcesRegister::ForcesRegister()
 
 void ForcesRegister::AddEntry(Rigidbody* rigidbody, RigidbodyForceGenerator* generator)
 {
-	// Pour chaque générateur de force qu'on ajoute, on rajoute également la rigidbody à laquelle elle est 
+	// Pour chaque générateur de force qu'on ajoute, on rajoute également le rigidbody à laquelle elle est 
 	// associée pour bien pouvoir appliquer la force dessus
 	ForceEntry newEntry;
 	newEntry.rigidbody = rigidbody;
@@ -25,7 +25,7 @@ void ForcesRegister::Update(float deltaTime)
 
 void ForcesRegister::Deleterigidbody(Rigidbody* p)
 {
-	// On itère sur la liste des forces pour retirer tous les générateurs de forces associés à la particule p
+	// On itère sur la liste des forces pour retirer tous les générateurs de forces associés au rigidbody p
 	std::vector<ForceEntry>::iterator forcesIterator;
 	for (forcesIterator = forces.begin(); forcesIterator != forces.end();)
 	{

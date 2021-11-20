@@ -45,7 +45,8 @@ public:
 	/// <summary>
 	/// Fonction d'application des forces
 	/// </summary>
-	/// <param name="deltaTime">Temps de la simulation</param>
+	/// <param name="
+	/// Time">Temps de la simulation</param>
 	void Update(float deltaTime);
 
 	//VARIABLES
