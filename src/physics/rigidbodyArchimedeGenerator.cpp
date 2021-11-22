@@ -13,7 +13,7 @@ RigidbodyArchimedeGenerator::RigidbodyArchimedeGenerator()
 
 void RigidbodyArchimedeGenerator::UpdateForce(Rigidbody* rigidbody, float deltaTime)
 {
-	// On calcule le volume de notre particule
+	// On calcule le volume de notre rigidbody
 	float radius = cbrt(rigidbody->GetMass()) * 0.5f;
 	volumeObj = (4 * 3.1415 * pow(radius, 3))/3;
 

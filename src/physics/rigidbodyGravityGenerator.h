@@ -18,7 +18,7 @@ public:
 	/// <summary>
 	/// Applique la force de gravité
 	/// </summary>
-	/// <param name="rigidbody">Particule sur laquelle on applique la force</param>
+	/// <param name="rigidbody">Rigidbody sur lequel on applique la force</param>
 	/// <param name="deltaTime">Temps de la simulation</param>
 	void UpdateForce(Rigidbody* rigidbody, float deltaTime);
 

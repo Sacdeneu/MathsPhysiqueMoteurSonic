@@ -24,7 +24,7 @@ public:
 	//VARIABLES
 
 	/// <summary>
-	/// Générateurs de contacts entre particules
+	/// Générateurs de contacts entre rigidbodys
 	/// </summary>
 	RigidbodyContactGenerator generator;
 

@@ -156,7 +156,7 @@ void Renderer::Update(Scene* scene)
 	glUniform3f(glGetUniformLocation(defaultShader.program, "lightDir"), -0.8f, -1.0f, -0.3f);
 	glUniform3f(glGetUniformLocation(defaultShader.program, "viewPos"), viewPos.x, viewPos.y, viewPos.z);
 
-	//affiche les particules
+	//affiche les rigidbodys
 	//sphereVAO.Bind();
 	cubeVAO.Bind();
 	for (int i = 0; i < scene->GetObjectsCount(); i++)

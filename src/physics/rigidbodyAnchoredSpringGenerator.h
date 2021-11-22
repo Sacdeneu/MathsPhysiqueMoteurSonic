@@ -12,7 +12,7 @@ public:
 	/// <summary>
 	/// Mise à jour des forces
 	/// </summary>
-	/// <param name="rigidbody">Particule affectée</param>
+	/// <param name="rigidbody">Rigidbody affecté</param>
 	/// <param name="deltaTime">Temps</param>
 	void UpdateForce(Rigidbody* rigidbody, float deltaTime);
 

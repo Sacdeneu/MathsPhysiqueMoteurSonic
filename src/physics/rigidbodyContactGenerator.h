@@ -28,9 +28,9 @@ public:
 	void AddrigidbodyLinks(RigidbodyLink* p);
 
 	/// <summary>
-	/// Supprime tous les liens associé à une particule
+	/// Supprime tous les liens associé à un rigidbody
 	/// </summary>
-	/// <param name="rigidbodyID">ID de la particule</param>
+	/// <param name="rigidbodyID">ID du rigidbody</param>
 	void RemoveAllLinksFromrigidbody(int rigidbodyID);
 
 	/// <summary>

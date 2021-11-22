@@ -9,7 +9,7 @@ RigidbodySpringGenerator::RigidbodySpringGenerator(Rigidbody* other, float lengt
 
 void RigidbodySpringGenerator::UpdateForce(Rigidbody* rigidbody, float deltaTime)
 {
-	// Application de la loi de Hooke entre deux particules
+	// Application de la loi de Hooke entre deux rigidbodys
 	Vector3D diff = rigidbody->GetPosition() - other->GetPosition();
 	float l = Vector3D::Norm(diff);
 	Vector3D dir = Vector3D::Normalisation(diff);

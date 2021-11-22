@@ -10,15 +10,15 @@ public:
 	//CONSTRUCTEURS
 	
 	/// <summary>
-	/// Crée un contact de particules
+	/// Crée un contact de rigidbodys
 	/// </summary>
 	RigidbodyContact();
 
 	/// <summary>
-	/// Crée un contact entre deux particules
+	/// Crée un contact entre deux rigidbodys
 	/// </summary>
-	/// <param name="a">Première particule</param>
-	/// <param name="b">Seconde particule</param>
+	/// <param name="a">Premier rigidbody</param>
+	/// <param name="b">Second rigidbody</param>
 	/// <param name="contactNormal">contactNormal</param>
 	/// <param name="interpenetration">Interpenetration</param>
 	/// <param name="coefRestitution">Coefficient de restitution</param>

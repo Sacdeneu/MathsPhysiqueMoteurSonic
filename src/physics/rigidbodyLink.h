@@ -11,8 +11,8 @@ public:
 
 	RigidbodyLink() = default;
 
-	/// <param name="A">Première particule à lier</param>
-	/// <param name="B">Seconde particule à lier</param>
+	/// <param name="A">Premier rigidbody à lier</param>
+	/// <param name="B">Second rigidbody à lier</param>
 	/// <param name="sizeLink">Taille du lien</param>
 	RigidbodyLink(Rigidbody* A, Rigidbody* B, float sizeLink);
 
@@ -27,7 +27,7 @@ public:
 	//VARIABLES PROTEGEES
 protected:
 	/// <summary>
-	/// Liste de particules liées
+	/// Liste de rigidbodys liés
 	/// </summary>
 	Rigidbody* rigidbodys[2];
 	/// <summary>

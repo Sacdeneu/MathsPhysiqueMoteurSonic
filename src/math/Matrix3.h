@@ -55,7 +55,7 @@ public:
 	Matrix3 QuaternionToMatrix(Quaternion r);
 
 	/// <summary>
-	/// Modification manuelle d'une valeur de la matrice
+	/// Modification manuelle d'une valeur de la matrice 3x3
 	/// </summary>
 	/// <param name="val">Valeur à assigner dans la matrice</param>
 	/// <param name="col">Indice de la colonne de la matrice à modifier</param>

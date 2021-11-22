@@ -7,10 +7,10 @@ std::vector<RigidbodyContact>* RigidbodyContactGenerator::UpdateContacts(Scene* 
 	int rigidbodyCount = scene->GetObjectsCount();
 	int aabbCount = scene->map.size();
 
-	//pour chaque particule on vérifie la collision...
+	//pour chaque rigidbody on vérifie la collision...
 	for (size_t i = 0; i < rigidbodyCount; i++)
 	{
-		//...avec toutes les autres particules pas encore explorées...
+		//...avec tous les autres rigidbodys pas encore explorées...
 		for (size_t j = i + 1; j < rigidbodyCount; j++)
 		{
 			RigidbodyContact* newContact = CheckCollision(scene->gameObjects[i], scene->gameObjects[j]);
@@ -40,7 +40,7 @@ std::vector<RigidbodyContact>* RigidbodyContactGenerator::UpdateContacts(Scene* 
 
 RigidbodyContact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, Rigidbody* b)
 {
-	//on détermine le direction et la distance des deux particules
+	//on détermine la direction et la distance des deux rigidbodys
 	float radius = a->GetRadius() + b->GetRadius();
 	Vector3D dir = a->GetPosition() - b->GetPosition();
 	float distance = std::abs(Vector3D::NormSquare(dir));
@@ -59,24 +59,24 @@ RigidbodyContact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, Rigidb
 
 RigidbodyContact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, AABB* b)
 {
-	//on détermine le point le plus proche de la particule compris dans l'AABB
+	//on détermine le point le plus proche du rigidbody compris dans l'AABB
 	Vector3D nearestPointInAABB;
 	nearestPointInAABB.x = max(b->GetMinX(), min(a->GetPosition().x, b->GetMaxX()));
 	nearestPointInAABB.y = max(b->GetMinY(), min(a->GetPosition().y, b->GetMaxY()));
 	nearestPointInAABB.z = max(b->GetMinZ(), min(a->GetPosition().z, b->GetMaxZ()));
 	
-	//on calcule la distance entre ce point et la particule
+	//on calcule la distance entre ce point et le rigidbody
 	float distance = Vector3D::Norm(nearestPointInAABB - a->GetPosition());
 
-	//si distance entre le point et la particule est plus grand que le rayon,
-	//alors la particule ne touche pas l'AABB on ne génère pas de contact
+	//si distance entre le point et le rigidbody est plus grand que le rayon,
+	//alors le rigidbody ne touche pas l'AABB on ne génère pas de contact
 	if (distance > a->GetRadius())
 		return NULL;
 
 	float interpenetration = a->GetRadius() - distance;
 
-	//si la particule est entièrement dans l'AABB (interpenetration = rayon)
-	//alors on met la normale vers le haut pour pousser les particules coincées à l'interieur de l'AABB
+	//si la rigidbody est entièrement dans l'AABB (interpenetration = rayon)
+	//alors on met la normale vers le haut pour pousser les rigidbodys coincées à l'interieur de l'AABB
 	Vector3D normal = interpenetration == a->GetRadius() ? Vector3D(0, 1, 0) : Vector3D::Normalisation(a->GetPosition() - nearestPointInAABB);
 
 	return new RigidbodyContact(a, (Rigidbody*)b, normal, interpenetration);
@@ -89,7 +89,7 @@ void RigidbodyContactGenerator::AddrigidbodyLinks(RigidbodyLink* p)
 	rigidbodysLinks.push_back(p);
 }
 
-// On retire tout les liens (tige ou cable) associés à la particule donné
+// On retire tous les liens (tige ou cable) associés au rigidbody donné
 void RigidbodyContactGenerator::RemoveAllLinksFromrigidbody(int rigidbodyID)
 {
 	for (int i = rigidbodysLinks.size() - 1; i >= 0; i--)

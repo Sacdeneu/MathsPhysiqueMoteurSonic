@@ -7,12 +7,12 @@
 struct ForceEntry
 {
 	/// <summary>
-	/// Particule à entrer dans le registre
+	/// Rigidbody à entrer dans le registre
 	/// </summary>
 	Rigidbody* rigidbody;
 
 	/// <summary>
-	/// Générateur de force appliquant une force à la particule
+	/// Générateur de force appliquant une force au rigigbody
 	/// </summary>
 	RigidbodyForceGenerator* generator;
 };
@@ -30,16 +30,16 @@ public:
 	//FONCTIONS
 
 	/// <summary>
-	/// Ajoute une force au registre des forces pour une particule
+	/// Ajoute une force au registre des forces pour un rigidbody
 	/// </summary>
-	/// <param name="rigidbody">Particule sur laquelle appliquer la force</param>
+	/// <param name="rigidbody">Rigidbody sur lequel appliquer la force</param>
 	/// <param name="generator">Générateur de force a appliquer</param>
 	void AddEntry(Rigidbody* rigidbody, RigidbodyForceGenerator* generator);
 	
 	/// <summary>
-	/// Supprime les entrées liées à une particule
+	/// Supprime les entrées liées à un rigidbody
 	/// </summary>
-	/// <param name="p">Particule dont les entrées doivent être supprimées</param>
+	/// <param name="p">Rigidbody dont les entrées doivent être supprimées</param>
 	void Deleterigidbody(Rigidbody* p);
 	
 	/// <summary>

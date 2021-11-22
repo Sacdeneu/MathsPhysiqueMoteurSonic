@@ -15,6 +15,13 @@ class Matrix4
 		/// Initialise une matrice identité 4x4
 		/// </summary>
 		Matrix4();
+
+		/// <summary>
+		/// Initalise une matrice 4x4 avec des paramètres donnés
+		/// </summary>
+		/// <param name="pos">Vecteur position</param>
+		/// <param name="r">Quaternion orientation</param>
+		/// <param name="scale">Vecteur scale</param>
 		Matrix4(Vector3D pos, Quaternion r, Vector3D scale = Vector3D(1, 1, 1));
 
 
@@ -25,7 +32,21 @@ class Matrix4
 
 		//FONCTIONS
 
+
+		/// <summary>
+		/// Modification manuelle d'une valeur de la matrice 4x4
+		/// </summary>
+		/// <param name="val">Valeur à assigner dans la matrice</param>
+		/// <param name="col">Indice de la colonne de la matrice à modifier</param>
+		/// <param name="row">Indice de la ligne de la matrice à modifier</param>
 		void SetValue(float val, int col, int row);
+
+		/// <summary>
+		/// Mise à jour de la matrice transformation
+		/// </summary>
+		/// <param name="pos">Vecteur position</param>
+		/// <param name="r">Quaternion orientation</param>
+		/// <param name="scale">Vecteur scale</param>
 		void UpdateTRS(Vector3D pos, Quaternion r, Vector3D scale = Vector3D(1, 1, 1));
 
 		const GLfloat* GetGLMatrix();

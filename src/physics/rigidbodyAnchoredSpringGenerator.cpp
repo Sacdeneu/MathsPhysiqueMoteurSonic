@@ -9,7 +9,7 @@ RigidbodyAnchoredSpringGenerator::RigidbodyAnchoredSpringGenerator(Vector3D pos,
 
 void RigidbodyAnchoredSpringGenerator::UpdateForce(Rigidbody* rigidbody, float deltaTime)
 {
-	// Application de la loi de Hooke entre une particule et point d'ancrage (statique)
+	// Application de la loi de Hooke entre un rigidbody et point d'ancrage (statique)
 	Vector3D diff = rigidbody->GetPosition() - anchorPoint;
 	float l = Vector3D::Norm(diff);
 	Vector3D dir = Vector3D::Normalisation(diff);

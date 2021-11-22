@@ -31,13 +31,13 @@ RigidbodyContactSolver contactSolver;
 
 //############################
 //#                          #
-//#  CREATION DE PARTICULES  #
+//#  CREATION DE RIGIBDODY   #
 //#                          #
 //############################
 
 
-// Création d'une particule selon les paramètres gérés par la fenêtre ImGUI.
-// La particule créée est soumise à la gravité et au damping.
+// Création d'un rigidbody selon les paramètres gérés par la fenêtre ImGUI.
+// Le rigidbody créé est soumis à la gravité et au damping.
 Rigidbody* Createrigidbody(Scene* scene, Vector3D pos, Vector3D velocity = Vector3D(0, 0, 0), float massFactor = 1)
 {
 	Rigidbody* p = new Rigidbody(pos, rigidbodyMass * massFactor);
@@ -52,8 +52,8 @@ Rigidbody* Createrigidbody(Scene* scene, Vector3D pos, Vector3D velocity = Vecto
 }
 
 
-// Création de deux particules liées par un ressort selon les paramètres gérés par la fenêtre ImGUI.
-// Les deux particule créées sont soumises aux forces générées par le ressort et au damping
+// Création de deux rigibodys liés par un ressort selon les paramètres gérés par la fenêtre ImGUI.
+// Les deux rigidbody créés sont soumises aux forces générées par le ressort et au damping
 void CreateSpring(Scene* scene)
 {
 	//création des rigidbodys
@@ -69,17 +69,17 @@ void CreateSpring(Scene* scene)
 	forcesRegister.AddEntry(p2, new RigidbodySpringGenerator(p1, rigidbodyLinkLength));
 }
 
-// Création d'une particule liée par un ressort.
+// Création d'un rigidbody liée par un ressort.
 // Le ressort est à une position fixe.
 void CreateAnchoredSpring(Scene* scene)
 {
-	//création des particules
+	//création des rigidbodys
 	Rigidbody* p = Createrigidbody(scene, Vector3D(0, 2, 0), Vector3D(10, 0, randomZDirection));
 	forcesRegister.AddEntry(p, new RigidbodyAnchoredSpringGenerator(Vector3D(0, 5, 0), rigidbodyLinkLength));
 }
 
-// Création de deux particules reliées par un élastique de bungee.
-// Les deux particule créées sont soumises aux forces générées par l'élastique de bungee et au damping
+// Création de deux rigibodys reliées par un élastique de bungee.
+// Les deux rigibodys créés sont soumis aux forces générées par l'élastique de bungee et au damping
 void CreateBungee(Scene* scene)
 {
 	//création des rigidbodys
@@ -95,14 +95,14 @@ void CreateBungee(Scene* scene)
 	forcesRegister.AddEntry(p2, new RigidbodyBungeeGenerator(p1, rigidbodyLinkLength));
 }
 
-//crée deux particules reliées par une tige
+//crée deux rigibodys reliés par une tige
 void CreateRod(Scene* scene)
 {
-	//création des particules
+	//création des rigidbodys
 	Createrigidbody(scene, Vector3D(-rigidbodyLinkLength * 0.5f, 2, 0), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0));
 	Createrigidbody(scene, Vector3D(rigidbodyLinkLength * 0.5f, 2, 0), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0));
 	
-	//on récupère des pointeurs vers ces particules...
+	//on récupère des pointeurs vers ces rigibodys...
 	Rigidbody* first = scene->gameObjects[scene->gameObjects.size() - 2];
 	Rigidbody* second = scene->gameObjects[scene->gameObjects.size() - 1];
 
@@ -111,14 +111,14 @@ void CreateRod(Scene* scene)
 	contactSolver.generator.AddrigidbodyLinks(rod);
 }
 
-//crée deux particules reliées par un cable
+//crée deux rigidbodyss reliées par un cable
 void CreateCable(Scene* scene)
 {
-	//création des particules
+	//création des rigidbodys
 	Createrigidbody(scene, Vector3D(-rigidbodyLinkLength * 0.5f, 2, 0), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0));
 	Createrigidbody(scene, Vector3D(rigidbodyLinkLength * 0.5f, 2, 0), Vector3D(rand() % 10 - 5, rand() % 10 - 5, 0));
 
-	//on récupère des pointeurs vers ces particules...
+	//on récupère des pointeurs vers ces rigidbodys...
 	Rigidbody* first = scene->gameObjects[scene->gameObjects.size() - 2];
 	Rigidbody* second = scene->gameObjects[scene->gameObjects.size() - 1];
 
@@ -127,12 +127,12 @@ void CreateCable(Scene* scene)
 	contactSolver.generator.AddrigidbodyLinks(cable);
 }
 
-//création d'un cube composé de 8 particules reliées par des tiges
+//création d'un cube composé de 8 rigidbodys reliés par des tiges
 void CreateRodCube(Scene* scene)
 {
 	float halfLen = rigidbodyLinkLength * 0.5f;
 
-	//création des particules
+	//création des rigidbodys
 	std::vector<Rigidbody*> rigidbodys;
 	rigidbodys.push_back(Createrigidbody(scene, Vector3D(-halfLen, halfLen + 2, -halfLen), Vector3D(20, 10, rand() % 10 - 5))); //côté avant haut-gauche
 	rigidbodys.push_back(Createrigidbody(scene, Vector3D(halfLen, halfLen + 2, -halfLen), Vector3D(0, 0, 0))); // côté avant haut-droit
@@ -154,10 +154,10 @@ void CreateRodCube(Scene* scene)
 	}
 }
 
-// Création d'une particule soumise aux forces de flottaison (Archimède)
+// Création d'un rigidbody soumis aux forces de flottaison (Archimède)
 void CreateArchimede(Scene* scene)
 {
-	//création des particules
+	//création des rigidbodys
 	Rigidbody* p = Createrigidbody(scene, Vector3D(20, 10, 0), Vector3D(0, 0, 0));
 	forcesRegister.AddEntry(p, new RigidbodyArchimedeGenerator());
 }
@@ -181,10 +181,10 @@ void UpdateBlobInput(SDL_Keycode key, bool state)
 	else if (key == SDLK_RIGHT) blobMoveX = state ? 1 : 0;
 }
 
-// Attache une nouvelle particule au Blob
+// Attache un nouveau rigidbody au Blob
 void AttachNewBlobElement(Rigidbody* p)
 {
-	// Set le flag pour bien dire que la particule est une particule de blob
+	// Set le flag pour bien dire que le rigidbody est un rigidbody de blob
 	p->isBlob = true;
 
 	// On parcourt les éléments du blob pour créer les liaisons
@@ -194,7 +194,7 @@ void AttachNewBlobElement(Rigidbody* p)
 		// On applique une liaison de manière aléatoire pour ne pas surcharger le blob de lien dans tous les sens
 		if (other != p && rand() % 10 < 4) 
 		{
-			// On crée le câble et le ressort entre les deux particules.
+			// On crée le câble et le ressort entre les deux rigidbodys.
 			Rigidbody* other = blobElements[j];
 			float length = Vector3D::Norm(p->GetPosition() - blobElements[j]->GetPosition());
 			forcesRegister.AddEntry(p, new RigidbodySpringGenerator(other, length * 0.5f));
@@ -221,10 +221,10 @@ void SliceBlob()
 	*/
 }
 
-// Update la position du blob et on check s'il peut absorber des nouvelles particules.
+// Update la position du blob et on check s'il peut absorber des nouveaux rigidbodys.
 void UpdateBlobForce()
 {
-	// Applique le déplacement du blob (sur toutes les particules constituant le blob pour créer moins de problèmes)
+	// Applique le déplacement du blob (sur tous les rigidbodys constituant le blob pour créer moins de problèmes)
 	for (int i = 0; i < blobElements.size(); i++)
 		blobElements[i]->AddForce(Vector3D(blobMoveX * blobForce, 0, -blobMoveY * blobForce));
 
@@ -234,10 +234,10 @@ void UpdateBlobForce()
 	for (int i = 0; i < contactSolver.contactsLastFrame.size(); i++)
 	{
 		RigidbodyContact* contact = &contactSolver.contactsLastFrame.at(i);
-		// Si le contact est entre une particule blob et une particule non blob...
+		// Si le contact est entre un rigidbody blob et un rigidbody non blob...
 		if (contact->GetrigidbodyA()->isBlob != contact->GetrigidbodyB()->isBlob && !contact->GetrigidbodyB()->isAABB)
 		{
-			// ...on attache la particule au blob.
+			// ...on attache le rigidbody au blob.
 			AttachNewBlobElement(contact->GetrigidbodyA()->isBlob ? contact->GetrigidbodyB() : contact->GetrigidbodyA());
 		}
 	}
@@ -250,12 +250,12 @@ void CreateBlob()
 {
 	for (int i = 0; i < 20; i++)
 	{
-		// crée une particule et l'ajoute à une liste représentant tous les éléments du blob
-		// les particules spawn en grille.
+		// crée un rigidbody et l'ajoute à une liste représentant tous les éléments du blob
+		// les rigidbodys spawn en grille.
 		Rigidbody* p = Createrigidbody(Scene::mainScene, Vector3D(i % 5, 3, i / 5), Vector3D(0, 1, 0), (rand() % 150 + 50) / 200.0f);
 		blobElements.push_back(p);
 		
-		// Attache la particule aux éléments de la liste du blob.
+		// Attache le rigidbody aux éléments de la liste du blob.
 		AttachNewBlobElement(p);
 	}
 }
@@ -263,13 +263,13 @@ void CreateBlob()
 // Création d'un serpent
 void CreateSnake(Scene* scene)
 {
-	//création des particules
+	//création des rigidbodys
 	std::vector<Rigidbody*> rigidbodys;
 	int nbrigidbody = 10;
 	float size = cbrt(rigidbodyMass) * 0.8f;
 	float spawnX = -6;
 
-	// Fait apparaître les particules en ligne droite et les attaches via une tige
+	// Fait apparaître les rigidbodys en ligne droite et les attaches via une tige
 	for (int i = 0; i < nbrigidbody; i++)
 	{
 		spawnX += size;
@@ -313,7 +313,7 @@ int HandleInputs(Renderer* renderer)
 			break;
 
 		case SDL_KEYDOWN:
-			if (event.key.keysym.sym == SDLK_SPACE) // Fait spawn une particule en fonction de la position de la souris
+			if (event.key.keysym.sym == SDLK_SPACE) // Fait spawn un rigidbody en fonction de la position de la souris
 			{
 				int pixelMouseX, pixelMouseY;
 				SDL_GetMouseState(&pixelMouseX, &pixelMouseY);
@@ -371,11 +371,11 @@ void MakeImGuiWindow(float physicsUpdateTime)
 	ImGui::SetWindowSize(ImVec2(0, 0));
 	ImGui::SetWindowPos(ImVec2(20, 20));
 
-	ImGui::Text("Particules dans la scene: %d", Scene::mainScene->GetObjectsCount());
+	ImGui::Text("Rigidbodys dans la scene: %d", Scene::mainScene->GetObjectsCount());
 	ImGui::Text("Mise a jour de la physique: %.5fms", physicsUpdateTime);
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
 	ImGui::PushItemWidth(150);
-	ImGui::SliderFloat("Masse des particules", &rigidbodyMass, 0.1, 10, "%.2f");
+	ImGui::SliderFloat("Masse des rigidbodys", &rigidbodyMass, 0.1, 10, "%.2f");
 	ImGui::SliderFloat("Dispersion Z", &randomZDirection, 0, 5, "%.1f");
 
 	ImGui::Dummy(ImVec2(0.0f, 20.0f));
