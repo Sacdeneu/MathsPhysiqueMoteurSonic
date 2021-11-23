@@ -50,7 +50,6 @@ public:
 	/// <returns>Quaternion normalisé</returns>
 	Quaternion Normalize(Quaternion);
 
-	void RotateByVector();
 
 	/// <summary>
 	/// Fonction de mise à jour de la vitesse angulaire

@@ -115,6 +115,7 @@ Matrix3 Matrix3::Inverse(float det)
 	return res;
 }
 
+// Converti un quaternion en Matrice
 Matrix3 Matrix3::QuaternionToMatrix(Quaternion r) 
 {
 	Matrix3 res;

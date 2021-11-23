@@ -1,6 +1,7 @@
 #include "Quaternion.h"
 #include "math.h"
 
+// Quaternion identité
 Quaternion::Quaternion()
 {
     this->x = 0;
@@ -44,15 +45,17 @@ Quaternion Quaternion::operator*(const Quaternion& b)
 }
 
 
+// Rotationne un vecteur
 Vector3D Quaternion::operator*(const Vector3D& v)
 {
-    // On convertit le quaternion en matrix et on la multiplie à v
+    // On convertit le quaternion en matrice et on la multiplie à v
     float vectorX = (1.0f - 2 * (y*y + z*z)) * v.x +    2 * (x*y - z*w) * v.y +             2 * (x*z + w*y) * v.z;
     float vectorY = 2 * (x*y + z*w) * v.x +             (1.0f - 2 * (x*x + z*z)) * v.y +    2 * (y*z - w*x) * v.z;
     float vectorZ = 2 * (x*z - w*y) * v.x +             2 * (y*z + w*x) * v.y +             (1.0f - 2 * (x*x + y*y)) * v.z;
     return Vector3D(vectorX, vectorY, vectorZ);
 }
 
+// Setter
 float& Quaternion::operator[](size_t index)
 {
     switch (index) 
@@ -70,6 +73,7 @@ float& Quaternion::operator[](size_t index)
     return x;
 }
 
+// Getter
 const float& Quaternion::operator[](size_t index) const
 {
     switch (index)
@@ -91,6 +95,8 @@ void Quaternion::Normalize()
     *this = Normalize(*this);
 }
 
+// Normalise un quaternion, important car si le quaternion n'a pas une longueur de 1, ce dernier
+// ne peut pas être utilisé pour représenter une rotation
 Quaternion Quaternion::Normalize(Quaternion q)
 {
     float norm = sqrt(q.x*q.x + q.y*q.y + q.z*q.z + q.w*q.w);
@@ -102,11 +108,8 @@ Quaternion Quaternion::Normalize(Quaternion q)
     return Quaternion(q.x / norm, q.y / norm, q.z / norm, q.w / norm);
 }
 
-void Quaternion::RotateByVector()
-{
 
-}
-
+// Mise à jour du quaternion en fonction d'une vitesse angulaire
 void Quaternion::UpdateAngularVelocity(Quaternion angularVelocity, float deltaTime)
 {
     *this = *this + angularVelocity * *this * 0.5f * deltaTime;

@@ -41,6 +41,7 @@ void Matrix4::SetValue(float val, int col, int row)
 	m[col * 4 + row] = val;
 }
 
+// Update la matrice de transformation
 void Matrix4::UpdateTRS(Vector3D pos, Quaternion r, Vector3D scale)
 {
 	m[0] = (1 - 2 * (r.y * r.y + r.z * r.z)) * scale.x;
