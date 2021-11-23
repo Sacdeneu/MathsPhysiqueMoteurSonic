@@ -97,7 +97,7 @@ Matrix4 Matrix4::operator*(const Matrix4& other)
 
 const GLfloat* Matrix4::GetGLMatrix()
 {
-	std::cout << (Matrix4)*this;
+	//std::cout << (Matrix4)*this;
 	return (GLfloat*)&m;
 }
 

@@ -100,9 +100,11 @@ void Quaternion::Normalize()
 Quaternion Quaternion::Normalize(Quaternion q)
 {
     float norm = sqrt(q.x*q.x + q.y*q.y + q.z*q.z + q.w*q.w);
+    /*
     std::cout << '\n';
     std::cout << norm;
     std::cout << '\n';
+    */
     if (norm <= 0.01f)
         return Quaternion();
     return Quaternion(q.x / norm, q.y / norm, q.z / norm, q.w / norm);

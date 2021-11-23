@@ -127,7 +127,7 @@ void Rigidbody::Update(float dt)
 	// Calculate Derived Data
 	CalculDerivedData();
 
-	std::cout << angularVelocity;
+	//std::cout << angularVelocity;
 	// Clear
 	CleanTotalForce();
 	CleanTotalTorque();
