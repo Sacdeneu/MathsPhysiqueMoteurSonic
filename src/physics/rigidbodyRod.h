@@ -1,6 +1,6 @@
 #pragma once
 #include "rigidbodyLink.h"
-#include "rigidbodyContact.h"
+#include "contact.h"
 #include "../math/Vector3D.h"
 #include <vector>
 
@@ -23,5 +23,5 @@ public:
 	/// Vérifie si la distance entre les deux rigidbodys est différente de la longueur de la tige
 	/// </summary>
 	/// <returns>Retourne un contact si distance différente, retourne NULL sinon</returns>
-	RigidbodyContact* CheckCollision() override;
+	Contact* CheckCollision() override;
 };

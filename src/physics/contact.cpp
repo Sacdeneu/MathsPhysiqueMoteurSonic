@@ -1,0 +1,42 @@
+#include "contact.h"
+
+Contact::Contact()
+{
+}
+
+Contact::Contact(Rigidbody* a, Rigidbody* b, Vector3D contactNormal, float interpenetration, float coefRestitution)
+{
+	this->rigidbodyA = a;
+	this->rigidbodyB = b;
+	this->normal = contactNormal;
+	this->interpenetration = interpenetration;
+	this->restitutionFactor = coefRestitution;
+}
+
+// Méthode pour résoudre la collision
+void Contact::Resolve()
+{
+	// On calcule la vitesse d'approche des deux objets
+	float totalMass = rigidbodyA->GetInvMass() + rigidbodyB->GetInvMass();
+	float separationVelocity = Vector3D::ScalarProduct(rigidbodyA->GetVelocity() - rigidbodyB->GetVelocity(), this->normal);
+	// Si la vitesse d'approche est inférieure à zéro cela veut dire que les rigidbodys s'éloignent entre elles, 
+	// donc on a déjà le comportement souhaité
+	if (separationVelocity > 0) 
+		return;
+	
+	// Sinon on calcule la vitesse de séparation pour justement les éloigner
+	float separationVelocity2 = -restitutionFactor * separationVelocity;
+	float deltaSeparationVelocity = separationVelocity2 - separationVelocity;
+
+	// On applique une impulsion sur les deux rigidbodys
+	Vector3D impulsion = this->normal * (deltaSeparationVelocity / totalMass);
+
+	rigidbodyA->SetVelocity(rigidbodyA->GetVelocity() + impulsion * rigidbodyA->GetInvMass());
+	rigidbodyB->SetVelocity(rigidbodyB->GetVelocity() - impulsion * rigidbodyB->GetInvMass());
+		
+	// On résout également l'interpénétration en modifiant les positions des rigidbodys
+	Vector3D correction = this->normal * (this->interpenetration / (rigidbodyA->GetInvMass() + rigidbodyB->GetInvMass()));
+	rigidbodyA->SetPosition(rigidbodyA->GetPosition() + correction * rigidbodyA->GetInvMass());
+	rigidbodyB->SetPosition(rigidbodyB->GetPosition() - correction * rigidbodyB->GetInvMass());
+}
+  

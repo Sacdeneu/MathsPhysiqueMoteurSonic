@@ -117,7 +117,7 @@
     <ClCompile Include="src\physics\rigidbodyCable.cpp">
       <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\physics\rigidbodyContact.cpp">
+    <ClCompile Include="src\physics\contact.cpp">
       <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
     <ClCompile Include="src\physics\rigidbodyContactGenerator.cpp">
@@ -141,11 +141,20 @@
     <ClCompile Include="src\physics\rigidbodySpringGenerator.cpp">
       <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\physics\collisionData.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\primitive.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\plane.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\box.cpp">
+      <Filter>Fichiers sources\physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Physics\Particle.h">
-      <Filter>Fichiers sources</Filter>
-    </ClInclude>
     <ClInclude Include="include\imgui\imconfig.h">
       <Filter>Fichiers d%27en-tête\imgui</Filter>
     </ClInclude>
@@ -230,7 +239,7 @@
     <ClInclude Include="src\physics\rigidbodyCable.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\physics\rigidbodyContact.h">
+    <ClInclude Include="src\physics\contact.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\physics\rigidbodyContactGenerator.h">
@@ -255,6 +264,18 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\physics\rigidbodySpringGenerator.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\collisionData.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\primitive.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\plane.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\box.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

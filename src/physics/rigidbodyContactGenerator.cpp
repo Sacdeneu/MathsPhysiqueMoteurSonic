@@ -1,9 +1,9 @@
 #include "rigidbodyContactGenerator.h"
 #include "Math.h"
 
-std::vector<RigidbodyContact>* RigidbodyContactGenerator::UpdateContacts(Scene* scene)
+std::vector<Contact>* RigidbodyContactGenerator::UpdateContacts(Scene* scene)
 {
-	std::vector<RigidbodyContact>* collisions = new std::vector<RigidbodyContact>();
+	std::vector<Contact>* collisions = new std::vector<Contact>();
 	int rigidbodyCount = scene->GetObjectsCount();
 	int aabbCount = scene->map.size();
 
@@ -13,7 +13,7 @@ std::vector<RigidbodyContact>* RigidbodyContactGenerator::UpdateContacts(Scene* 
 		//...avec tous les autres rigidbodys pas encore explorées...
 		for (size_t j = i + 1; j < rigidbodyCount; j++)
 		{
-			RigidbodyContact* newContact = CheckCollision(scene->gameObjects[i], scene->gameObjects[j]);
+			Contact* newContact = CheckCollision(scene->gameObjects[i], scene->gameObjects[j]);
 			if (newContact != NULL) //si il y a eu de collision
 				collisions->push_back(*newContact);
 		}
@@ -21,7 +21,7 @@ std::vector<RigidbodyContact>* RigidbodyContactGenerator::UpdateContacts(Scene* 
 		//...et avec les AABB qui consistuent le niveau
 		for (size_t j = 0; j < aabbCount; j++)
 		{
-			RigidbodyContact* newContact = CheckCollision(scene->gameObjects[i], &scene->map[j]);
+			Contact* newContact = CheckCollision(scene->gameObjects[i], &scene->map[j]);
 			if (newContact != NULL) //si il y a eu de collision
 				collisions->push_back(*newContact);
 		}
@@ -30,7 +30,7 @@ std::vector<RigidbodyContact>* RigidbodyContactGenerator::UpdateContacts(Scene* 
 	// on génère égalment des collisions pour chaque lien
 	for (size_t i = 0; i < rigidbodysLinks.size(); i++)
 	{
-		RigidbodyContact* newContact = rigidbodysLinks[i]->CheckCollision();
+		Contact* newContact = rigidbodysLinks[i]->CheckCollision();
 		if (newContact != NULL) //si il y a eu de collision
 			collisions->push_back(*newContact);
 	}
@@ -38,7 +38,7 @@ std::vector<RigidbodyContact>* RigidbodyContactGenerator::UpdateContacts(Scene* 
 	return collisions;
 }
 
-RigidbodyContact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, Rigidbody* b)
+Contact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, Rigidbody* b)
 {
 	//on détermine la direction et la distance des deux rigidbodys
 	float radius = a->GetRadius() + b->GetRadius();
@@ -54,10 +54,10 @@ RigidbodyContact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, Rigidb
 	float interpenetration = radius - Vector3D::Norm(dir);
 
 	//...et on génère le contact
-	return new RigidbodyContact(a, b, normal, interpenetration);
+	return new Contact(a, b, normal, interpenetration);
 }
 
-RigidbodyContact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, AABB* b)
+Contact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, AABB* b)
 {
 	//on détermine le point le plus proche du rigidbody compris dans l'AABB
 	Vector3D nearestPointInAABB;
@@ -79,7 +79,7 @@ RigidbodyContact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, AABB* 
 	//alors on met la normale vers le haut pour pousser les rigidbodys coincées à l'interieur de l'AABB
 	Vector3D normal = interpenetration == a->GetRadius() ? Vector3D(0, 1, 0) : Vector3D::Normalisation(a->GetPosition() - nearestPointInAABB);
 
-	return new RigidbodyContact(a, (Rigidbody*)b, normal, interpenetration);
+	return new Contact(a, (Rigidbody*)b, normal, interpenetration);
 }
 
 

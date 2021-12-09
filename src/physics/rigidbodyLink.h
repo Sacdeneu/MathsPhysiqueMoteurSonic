@@ -1,7 +1,7 @@
 #pragma once
 
 #include "rigidbody.h"
-#include "rigidbodyContact.h"
+#include "contact.h"
 #include <vector>
 
 class RigidbodyLink 
@@ -17,7 +17,7 @@ public:
 	RigidbodyLink(Rigidbody* A, Rigidbody* B, float sizeLink);
 
 
-	virtual RigidbodyContact* CheckCollision();
+	virtual Contact* CheckCollision();
 
 	//GETTERS
 

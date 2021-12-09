@@ -4,7 +4,7 @@ RigidbodyCable::RigidbodyCable(Rigidbody* A, Rigidbody* B, float length) : Rigid
 {
 }
 
-RigidbodyContact* RigidbodyCable::CheckCollision()
+Contact* RigidbodyCable::CheckCollision()
 {
 	Vector3D vectorDistance = rigidbodys[0]->GetPosition() - rigidbodys[1]->GetPosition();
 	float distance = Vector3D::NormSquare(vectorDistance);
@@ -13,7 +13,7 @@ RigidbodyContact* RigidbodyCable::CheckCollision()
 	// collision pour faire rapprocher les rigidbodys
 	if (distance > (length * length))
 	{
-		return new RigidbodyContact(rigidbodys[0], rigidbodys[1], Vector3D::Normalisation(-vectorDistance), 0, 0);
+		return new Contact(rigidbodys[0], rigidbodys[1], Vector3D::Normalisation(-vectorDistance), 0, 0);
 	}
 
 	return NULL;

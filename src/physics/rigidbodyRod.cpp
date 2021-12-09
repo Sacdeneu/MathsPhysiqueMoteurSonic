@@ -4,7 +4,7 @@ RigidbodyRod::RigidbodyRod(Rigidbody* A, Rigidbody* B, float length) : Rigidbody
 {
 }
 
-RigidbodyContact* RigidbodyRod::CheckCollision()
+Contact* RigidbodyRod::CheckCollision()
 {
 	// Calcul de la distance entre les 2 rigidbodys.
 	Vector3D vectorDistance = rigidbodys[0]->GetPosition() - rigidbodys[1]->GetPosition();
@@ -14,11 +14,11 @@ RigidbodyContact* RigidbodyRod::CheckCollision()
 	// une collision pour que les deux rigidbodys se rejoignent, soit pour qu'elles s'éloignent.
 	if (distance > (length * length))
 	{
-		return new RigidbodyContact(rigidbodys[0], rigidbodys[1], Vector3D::Normalisation(-vectorDistance), 0, 0);
+		return new Contact(rigidbodys[0], rigidbodys[1], Vector3D::Normalisation(-vectorDistance), 0, 0);
 	}
 	else  
 	{
-		return new RigidbodyContact(rigidbodys[0], rigidbodys[1], Vector3D::Normalisation(vectorDistance), 0, 0);
+		return new Contact(rigidbodys[0], rigidbodys[1], Vector3D::Normalisation(vectorDistance), 0, 0);
 	}
 	
 	return NULL;

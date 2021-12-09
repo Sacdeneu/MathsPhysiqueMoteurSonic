@@ -8,7 +8,7 @@ void RigidbodyContactSolver::UpdateCollisions(Scene* scene, int iterations)
 	// On itère l'algorithme plusieurs fois pour plus de précisions
 	for (int i = 0; i < iterations; i++)
 	{
-		std::vector<RigidbodyContact>* contacts = generator.UpdateContacts(scene);
+		std::vector<Contact>* contacts = generator.UpdateContacts(scene);
 
 		//génération de la liste publique de contacts (utilisée pour le blob)
 		if (i == 0)

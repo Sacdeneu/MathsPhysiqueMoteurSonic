@@ -1,6 +1,6 @@
 #pragma once
 #include "rigidbodyLink.h"
-#include "rigidbodyContact.h"
+#include "contact.h"
 #include "../math/Vector3D.h"
 #include <vector>
 
@@ -23,5 +23,5 @@ public:
 	/// Vérifie s'il y a éloignement entre les deux rigidbodys
 	/// </summary>
 	/// <returns>Retourne un contact si éloignement, retourne NULL sinon</returns>
-	RigidbodyContact* CheckCollision() override;
+	Contact* CheckCollision() override;
 };

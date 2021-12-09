@@ -233,12 +233,12 @@ void UpdateBlobForce()
 	// qui est entré en contact avec le blob.
 	for (int i = 0; i < contactSolver.contactsLastFrame.size(); i++)
 	{
-		RigidbodyContact* contact = &contactSolver.contactsLastFrame.at(i);
+		Contact* contact = &contactSolver.contactsLastFrame.at(i);
 		// Si le contact est entre un rigidbody blob et un rigidbody non blob...
-		if (contact->GetrigidbodyA()->isBlob != contact->GetrigidbodyB()->isBlob && !contact->GetrigidbodyB()->isAABB)
+		if (contact->GetRigidbodyA()->isBlob != contact->GetRigidbodyB()->isBlob && !contact->GetRigidbodyB()->isAABB)
 		{
 			// ...on attache le rigidbody au blob.
-			AttachNewBlobElement(contact->GetrigidbodyA()->isBlob ? contact->GetrigidbodyB() : contact->GetrigidbodyA());
+			AttachNewBlobElement(contact->GetRigidbodyA()->isBlob ? contact->GetRigidbodyB() : contact->GetRigidbodyA());
 		}
 	}
 }

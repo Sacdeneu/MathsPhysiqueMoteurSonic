@@ -7,7 +7,7 @@ RigidbodyLink::RigidbodyLink(Rigidbody* A, Rigidbody* B, float lengthLink)
 	length = lengthLink;
 }
 
-RigidbodyContact* RigidbodyLink::CheckCollision()
+Contact* RigidbodyLink::CheckCollision()
 {
 	return NULL;
 }

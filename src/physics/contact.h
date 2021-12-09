@@ -4,7 +4,7 @@
 
 #define c 0.4f
 
-class RigidbodyContact
+class Contact
 {
 public:
 	//CONSTRUCTEURS
@@ -12,7 +12,7 @@ public:
 	/// <summary>
 	/// Crée un contact de rigidbodys
 	/// </summary>
-	RigidbodyContact();
+	Contact();
 
 	/// <summary>
 	/// Crée un contact entre deux rigidbodys
@@ -22,8 +22,8 @@ public:
 	/// <param name="contactNormal">contactNormal</param>
 	/// <param name="interpenetration">Interpenetration</param>
 	/// <param name="coefRestitution">Coefficient de restitution</param>
-	RigidbodyContact(Rigidbody* a, Rigidbody* b, Vector3D contactNormal, float interpenetration, float coefRestitution = c);
-	~RigidbodyContact() = default;
+	Contact(Rigidbody* a, Rigidbody* b, Vector3D contactNormal, float interpenetration, float coefRestitution = c);
+	~Contact() = default;
 
 	//FONCTIONS
 
@@ -35,17 +35,17 @@ public:
 	//GETTERS
 
 	inline Vector3D GetNormal() { return normal; }
+	inline Vector3D GetPoint() { return point; }
 	inline float GetInterpenetration() { return interpenetration; }
-	inline Rigidbody* GetrigidbodyA() { return rigidbodys[0]; }
-	inline Rigidbody* GetrigidbodyB() { return rigidbodys[1]; }
+	inline Rigidbody* GetRigidbodyA() { return rigidbodyA; }
+	inline Rigidbody* GetRigidbodyB() { return rigidbodyB; }
 
 	//VARIABLES PRIVEES
 private:
-	Rigidbody* rigidbodys[2];
+	Rigidbody* rigidbodyA;
+	Rigidbody* rigidbodyB;
+	Vector3D point;
 	Vector3D normal;
 	float interpenetration; 
-	float coefRestitution;
-
-
-
+	float restitutionFactor;
 };

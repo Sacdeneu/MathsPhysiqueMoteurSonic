@@ -31,5 +31,5 @@ public:
 	/// <summary>
 	/// Liste de contacts lors de la dernière frame 
 	/// </summary>
-	std::vector<RigidbodyContact> contactsLastFrame;
+	std::vector<Contact> contactsLastFrame;
 };

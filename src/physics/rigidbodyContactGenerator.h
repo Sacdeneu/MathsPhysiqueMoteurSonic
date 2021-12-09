@@ -1,6 +1,6 @@
 #pragma once
 #include "rigidbody.h"
-#include "rigidbodyContact.h"
+#include "contact.h"
 #include "../rendering/scene.h"
 #include <vector>
 #include "rigidbodyLink.h"
@@ -19,7 +19,7 @@ public:
 	/// </summary>
 	/// <param name="scene">Scène sur laquelle on vérifie les contacts</param>
 	/// <returns>Liste des collisions</returns>
-	std::vector<RigidbodyContact>* UpdateContacts(Scene* scene);
+	std::vector<Contact>* UpdateContacts(Scene* scene);
 
 	/// <summary>
 	/// Ajoute un lien à la liste des liens générant des collisions
@@ -45,7 +45,7 @@ private:
 	/// <param name="a">Première sphère</param>
 	/// <param name="b">Deuxième sphère</param>
 	/// <returns>Retourne un contact s'il y a une collision, sinon retourne NULL</returns>
-	RigidbodyContact* CheckCollision(Rigidbody* a, Rigidbody* b);
+	Contact* CheckCollision(Rigidbody* a, Rigidbody* b);
 
 	/// <summary>
 	/// Vérification de collision entre une sphère et un AABB
@@ -53,7 +53,7 @@ private:
 	/// <param name="a">Sphère</param>
 	/// <param name="b">AABB</param>
 	/// <returns>Retourne un contact s'il y a une collision, sinon retourne NULL</returns>
-	RigidbodyContact* CheckCollision(Rigidbody* a, AABB* b);
+	Contact* CheckCollision(Rigidbody* a, AABB* b);
 	
 	/// <summary>
 	/// Liste des liens qui génèrent des collisions
