@@ -48,6 +48,7 @@ private:
 
 class Octree {
 public:
+    //Octree(Vector3D pos, Vector3D size, unsigned _capacity, unsigned _maxLevel);
     Octree(const Rect& _bound, unsigned _capacity, unsigned _maxLevel);
     Octree(const Octree&);
     Octree();

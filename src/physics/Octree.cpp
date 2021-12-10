@@ -3,7 +3,12 @@
 
 //** Rect **//
 Rect::Rect(const Rect& other) : Rect(other.position, other.scale) { }
-Rect::Rect(Vector3D pos, Vector3D size) : position(pos), scale(size) { }
+Rect::Rect(Vector3D pos, Vector3D size)
+{ 
+    position = Vector3D(pos);
+    scale = Vector3D(size);
+
+}
 
 
 bool Rect::contains(Rigidbody* a) {
@@ -79,13 +84,18 @@ bool Octree::insert(Rigidbody* obj) {
     }
 
     // Octree est une feuille, donc on ajoute l'objet
+    if (!bounds.contains(obj))
+        return false;
+
     objects.push_back(obj);
     //obj->qt = this;
 
     // Subdivide if required
     if (isLeaf && level < maxLevel && objects.size() >= capacity) {
+        std::cout << "Au secours" << std::endl;
         subdivide();
         update(obj);
+
     }
     return true;
 }
@@ -191,7 +201,7 @@ void Octree::subdivide() {
     double depth = childSize.z;
     double x = 0, y = 0, z = 0;
 
-    for (unsigned i = 0; i < 4; ++i) 
+    for (unsigned i = 0; i < 8; ++i) 
     {
         if(i < 4) // Top
             z = bounds.position.z + depth;
@@ -216,7 +226,8 @@ void Octree::subdivide() {
             y = bounds.position.y + height;
             break; 
         }
-        children[i] = new Octree({ Vector3D(x,y,z), childSize }, capacity, maxLevel);
+        //Rect* r = new Rect(Vector3D(x, y, z), Vector3D(childSize.x, childSize.y, childSize.z));
+        children[i] = new Octree(Rect(Vector3D(x, y, z), childSize), capacity, maxLevel);
         children[i]->level = level + 1;
         children[i]->parent = this;
     }

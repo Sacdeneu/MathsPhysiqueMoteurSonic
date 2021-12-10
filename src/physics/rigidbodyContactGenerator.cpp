@@ -26,7 +26,7 @@ std::vector<CollisionData>* RigidbodyContactGenerator::UpdateContacts(Scene* sce
 				for (size_t l = 0; l < other->GetPrimitiveCount(); l++)
 				{
 					Primitive* otherPrimitive = other->GetPrimitive(l);
-					//...on vérifie les contacts potentiels
+					//...on vï¿½rifie les contacts potentiels
 					CollisionData* newCollision = CheckCollision(primitive, otherPrimitive);
 					if (newCollision != NULL) //si il y a eu une collision
 						collisions->push_back(*newCollision);
@@ -35,7 +35,7 @@ std::vector<CollisionData>* RigidbodyContactGenerator::UpdateContacts(Scene* sce
 		}
 	}
 
-	// on génère égalment des collisions pour chaque lien
+	// on gï¿½nï¿½re ï¿½galment des collisions pour chaque lien
 	/*
 	for (size_t i = 0; i < rigidbodysLinks.size(); i++)
 	{
@@ -90,12 +90,12 @@ CollisionData* RigidbodyContactGenerator::CheckCollision(Plane* primitiveA, Box*
 /*
 Contact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, Rigidbody* b)
 {
-	//on détermine la direction et la distance des deux rigidbodys
+	//on dï¿½termine la direction et la distance des deux rigidbodys
 	float radius = a->GetRadius() + b->GetRadius();
 	Vector3D dir = a->GetPosition() - b->GetPosition();
 	float distance = std::abs(Vector3D::NormSquare(dir));
 
-	//si elles ne se touchent pas, on ne génère pas de contact
+	//si elles ne se touchent pas, on ne gï¿½nï¿½re pas de contact
 	if (distance > radius)
 		return NULL;
 
@@ -103,13 +103,13 @@ Contact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, Rigidbody* b)
 	Vector3D normal = Vector3D::Normalisation(dir);
 	float interpenetration = radius - Vector3D::Norm(dir);
 
-	//...et on génère le contact
+	//...et on gï¿½nï¿½re le contact
 	return new Contact(a, b, normal, interpenetration);
 }
 
 Contact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, AABB* b)
 {
-	//on détermine le point le plus proche du rigidbody compris dans l'AABB
+	//on dï¿½termine le point le plus proche du rigidbody compris dans l'AABB
 	Vector3D nearestPointInAABB;
 	nearestPointInAABB.x = max(b->GetMinX(), min(a->GetPosition().x, b->GetMaxX()));
 	nearestPointInAABB.y = max(b->GetMinY(), min(a->GetPosition().y, b->GetMaxY()));
@@ -119,14 +119,14 @@ Contact* RigidbodyContactGenerator::CheckCollision(Rigidbody* a, AABB* b)
 	float distance = Vector3D::Norm(nearestPointInAABB - a->GetPosition());
 
 	//si distance entre le point et le rigidbody est plus grand que le rayon,
-	//alors le rigidbody ne touche pas l'AABB on ne génère pas de contact
+	//alors le rigidbody ne touche pas l'AABB on ne gï¿½nï¿½re pas de contact
 	if (distance > a->GetRadius())
 		return NULL;
 
 	float interpenetration = a->GetRadius() - distance;
 
-	//si la rigidbody est entièrement dans l'AABB (interpenetration = rayon)
-	//alors on met la normale vers le haut pour pousser les rigidbodys coincées à l'interieur de l'AABB
+	//si la rigidbody est entiï¿½rement dans l'AABB (interpenetration = rayon)
+	//alors on met la normale vers le haut pour pousser les rigidbodys coincï¿½es ï¿½ l'interieur de l'AABB
 	Vector3D normal = interpenetration == a->GetRadius() ? Vector3D(0, 1, 0) : Vector3D::Normalisation(a->GetPosition() - nearestPointInAABB);
 
 	return new Contact(a, (Rigidbody*)b, normal, interpenetration);
@@ -140,7 +140,7 @@ void RigidbodyContactGenerator::AddrigidbodyLinks(RigidbodyLink* p)
 	rigidbodysLinks.push_back(p);
 }
 
-// On retire tous les liens (tige ou cable) associés au rigidbody donné
+// On retire tous les liens (tige ou cable) associï¿½s au rigidbody donnï¿½
 void RigidbodyContactGenerator::RemoveAllLinksFromrigidbody(int rigidbodyID)
 {
 	for (int i = rigidbodysLinks.size() - 1; i >= 0; i--)
@@ -154,7 +154,7 @@ void RigidbodyContactGenerator::RemoveAllLinksFromrigidbody(int rigidbodyID)
 	}
 }
 
-// On retire tout les liens enregistrés
+// On retire tout les liens enregistrï¿½s
 void RigidbodyContactGenerator::RemoveAllrigidbodyLink()
 {
 	for (int i = rigidbodysLinks.size() - 1; i >= 0; i--)

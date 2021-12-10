@@ -20,26 +20,26 @@ public:
 	//FONCTIONS
 
 	/// <summary>
-	/// Vérification et mise à jour des contacts
+	/// Vï¿½rification et mise ï¿½ jour des contacts
 	/// </summary>
-	/// <param name="scene">Scène sur laquelle on vérifie les contacts</param>
+	/// <param name="scene">Scï¿½ne sur laquelle on vï¿½rifie les contacts</param>
 	/// <returns>Liste des collisions</returns>
 	std::vector<CollisionData>* UpdateContacts(Scene* scene);
 
 	/// <summary>
-	/// Ajoute un lien à la liste des liens générant des collisions
+	/// Ajoute un lien ï¿½ la liste des liens gï¿½nï¿½rant des collisions
 	/// </summary>
-	/// <param name="p">Lien à ajouter</param>
+	/// <param name="p">Lien ï¿½ ajouter</param>
 	void AddrigidbodyLinks(RigidbodyLink* p);
 
 	/// <summary>
-	/// Supprime tous les liens associé à un rigidbody
+	/// Supprime tous les liens associï¿½ ï¿½ un rigidbody
 	/// </summary>
 	/// <param name="rigidbodyID">ID du rigidbody</param>
 	void RemoveAllLinksFromrigidbody(int rigidbodyID);
 
 	/// <summary>
-	/// Suppression de la liste des liens générant des collisions
+	/// Suppression de la liste des liens gï¿½nï¿½rant des collisions
 	/// </summary>
 	void RemoveAllrigidbodyLink();
 
@@ -48,7 +48,7 @@ private:
 	CollisionData* CheckCollision(Plane* primitiveA, Box* primitiveB);
 	
 	/// <summary>
-	/// Liste des liens qui génèrent des collisions
+	/// Liste des liens qui gï¿½nï¿½rent des collisions
 	/// </summary>
 	std::vector<RigidbodyLink*> rigidbodysLinks;
 };
