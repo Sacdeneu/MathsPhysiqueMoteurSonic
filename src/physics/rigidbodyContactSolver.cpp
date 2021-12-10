@@ -3,6 +3,23 @@
 
 //#define DEBUG_MODE
 
+void PrintCollisions(std::vector<CollisionData>* collisions)
+{
+	for (int i = 0; i < collisions->size(); i++)
+	{
+		CollisionData collision = collisions->at(i);
+		std::cout << "[Collision " << i << " entre les rigidbodies " << collision.GetContact(0)->GetRigidbodyA()->id << " et " << collision.GetContact(0)->GetRigidbodyB()->id << ']' << std::endl;
+		for (int j = 0; j < collision.GetContactCount(); j++)
+		{
+			Contact* contact = collision.GetContact(j);
+			std::cout << "    [Contact " << j << "] Normal:" << (contact->GetNormal())
+				<< "; Interpenetration:" << (contact->GetInterpenetration())
+				<< "; Point de contact (local) :" << (contact->GetPoint())
+				<< "; Point de contact (monde) :" << (contact->GetRigidbodyB()->transformMatrix * contact->GetPoint()) << std::endl;
+		}
+	}
+}
+
 void RigidbodyContactSolver::UpdateCollisions(Scene* scene, int iterations)
 {
 	// On itère l'algorithme plusieurs fois pour plus de précisions
@@ -20,18 +37,7 @@ void RigidbodyContactSolver::UpdateCollisions(Scene* scene, int iterations)
 
 		//DEMO PHASE 4
 		Scene::mainScene->isPaused = true;
-
-		for (int k = 0; k < collisions->at(0).GetContactCount(); k++)
-		{
-			std::cout << "[Contact " << k << "] Normal:"
-				<< (collisions->at(0).GetContact(k)->GetNormal())
-				<< "; Interpenetration:" << (collisions->at(0).GetContact(k)->GetInterpenetration())
-				<< "; Point de contact (local) :" << (collisions->at(0).GetContact(k)->GetPoint())
-				<< "; Point de contact (monde) :" << (collisions->at(0).GetContact(k)->GetRigidbodyB()->transformMatrix * collisions->at(0).GetContact(k)->GetPoint())
-				<< " IDs : " << collisions->at(0).GetContact(k)->GetRigidbodyA()->id
-				<< " et " << collisions->at(0).GetContact(k)->GetRigidbodyB()->id << std::endl;
-		}
-
+		PrintCollisions(collisions);
 		return;
 
 		//Pour chaque collision...
@@ -55,3 +61,4 @@ void RigidbodyContactSolver::UpdateCollisions(Scene* scene, int iterations)
 		}
 	}
 }
+

@@ -53,6 +53,11 @@ Rigidbody* Createrigidbody(Scene* scene, Vector3D pos, Vector3D velocity = Vecto
 
 	p->AddPrimitive(new Box(Vector3D(0.8f, 0.5f, 0.5f)));
 	p->AddPrimitive(new Box(Vector3D(1.1f, -0.2f, 0), Vector3D(0.3f, 0.3f, 0.5f)));
+	p->AddPrimitive(new Box(Vector3D(-0.9f, -0.2f, 0), Vector3D(0.1f, 0.3f, 0.5f)));
+	p->AddPrimitive(new Box(Vector3D(-0.6f, -0.35f, 0.6f), Vector3D(0.2f, 0.2f, 0.1f)));
+	p->AddPrimitive(new Box(Vector3D(0.7f, -0.35f, 0.6f), Vector3D(0.2f, 0.2f, 0.1f)));
+	p->AddPrimitive(new Box(Vector3D(-0.6f, -0.35f, -0.6f), Vector3D(0.2f, 0.2f, 0.1f)));
+	p->AddPrimitive(new Box(Vector3D(0.7f, -0.35f, -0.6f), Vector3D(0.2f, 0.2f, 0.1f)));
 
 	return p;
 }
