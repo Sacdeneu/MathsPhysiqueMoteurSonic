@@ -2,7 +2,7 @@
 #include "rigidbody.h"
 #include <vector>
 
-#define c 0.4f
+#define restitutionFactor 0.4f
 
 class Contact
 {
@@ -22,7 +22,7 @@ public:
 	/// <param name="contactNormal">contactNormal</param>
 	/// <param name="interpenetration">Interpenetration</param>
 	/// <param name="coefRestitution">Coefficient de restitution</param>
-	Contact(Rigidbody* a, Rigidbody* b, Vector3D contactNormal, float interpenetration, float coefRestitution = c);
+	Contact(Rigidbody* a, Rigidbody* b, Vector3D contactNormal, float interpenetration, Vector3D point);
 	~Contact() = default;
 
 	//FONCTIONS
@@ -46,6 +46,5 @@ private:
 	Rigidbody* rigidbodyB;
 	Vector3D point;
 	Vector3D normal;
-	float interpenetration; 
-	float restitutionFactor;
+	float interpenetration;
 };

@@ -13,7 +13,7 @@ Contact* RigidbodyCable::CheckCollision()
 	// collision pour faire rapprocher les rigidbodys
 	if (distance > (length * length))
 	{
-		return new Contact(rigidbodys[0], rigidbodys[1], Vector3D::Normalisation(-vectorDistance), 0, 0);
+		return new Contact(rigidbodys[0], rigidbodys[1], Vector3D::Normalisation(-vectorDistance), 0, Vector3D(0, 0, 0));
 	}
 
 	return NULL;

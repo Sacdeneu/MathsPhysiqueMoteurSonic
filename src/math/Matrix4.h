@@ -28,6 +28,7 @@ class Matrix4
 		// SURCHARGES D'OPERATEURS
 		Matrix4 operator+(const Matrix4&);
 		Matrix4 operator*(const Matrix4&);
+		Vector3D operator*(const Vector3D& other);
 		friend std::ostream& operator<<(std::ostream& os, Matrix4 mat);
 
 		//FONCTIONS

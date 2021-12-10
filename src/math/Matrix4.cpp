@@ -95,6 +95,15 @@ Matrix4 Matrix4::operator*(const Matrix4& other)
 	return res;
 }
 
+Vector3D Matrix4::operator*(const Vector3D& other)
+{
+	Vector3D res;
+	res.x = m[0] * other.x + m[4] * other.y + m[8] * other.z + m[12];
+	res.y = m[1] * other.x + m[5] * other.y + m[9] * other.z + m[13];
+	res.z = m[2] * other.x + m[6] * other.y + m[10] * other.z + m[14];
+	return res;
+}
+
 const GLfloat* Matrix4::GetGLMatrix()
 {
 	//std::cout << (Matrix4)*this;

@@ -11,8 +11,10 @@ public:
 
 	int GetContactCount();
 	Contact* GetContact(int index);
+	void AddContact(Contact* newContact);
+	Contact* GetDeepestContact();
 
 private:
-	vector<Contact> contacts;
+	vector<Contact*> contacts;
 	int maxContacts;
 };
