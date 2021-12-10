@@ -114,6 +114,7 @@ bool Octree::remove(Rigidbody* obj) {
     return true;
 }
 
+
 // Removes and re-inserts object into Octree (for objects that move)
 bool Octree::update(Rigidbody* obj) {
     if (!remove(obj)) return false;
@@ -175,6 +176,26 @@ unsigned Octree::totalObjects() const noexcept {
             total += child->totalObjects();
     }
     return total;
+}
+
+void Octree::drawOctree(int childId)
+{
+    if (!isLeaf) {
+        int i = 0;
+        for (Octree* child : children) {
+            if (child != nullptr) {
+                ++i;
+                child->drawOctree(i);
+            }
+        }
+    }
+    else {
+
+        for (Rigidbody* child : objects) {
+            std::cout << "ID Rigibody : " << child->id << " - ID de la sous-division " << childId << " - Profondeur de l'arbre " << level << std::endl;
+        }
+        
+    }
 }
 
 // Removes all objects and children from this Octree

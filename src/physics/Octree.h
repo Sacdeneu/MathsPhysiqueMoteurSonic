@@ -59,6 +59,7 @@ public:
     //std::vector<Rigidbody*>& getObjectsInBound(const Rect& bound);
     unsigned totalChildren() const noexcept;
     unsigned totalObjects() const noexcept;
+    void drawOctree(int childId = -1);
     void clear() noexcept;
 
     ~Octree();
