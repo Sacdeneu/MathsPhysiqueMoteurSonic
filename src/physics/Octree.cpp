@@ -92,10 +92,8 @@ bool Octree::insert(Rigidbody* obj) {
 
     // Subdivide if required
     if (isLeaf && level < maxLevel && objects.size() >= capacity) {
-        std::cout << "Au secours" << std::endl;
         subdivide();
         update(obj);
-
     }
     return true;
 }
@@ -120,14 +118,16 @@ bool Octree::update(Rigidbody* obj) {
     if (!remove(obj)) return false;
 
     // Not contained in this node -- insert into parent
-    if (parent != nullptr && !bounds.contains(obj))
-        return parent->insert(obj);
-    if (!isLeaf) {
+    /*if (parent != nullptr && !bounds.contains(obj))
+        return parent->insert(obj);*/
+     if (!isLeaf) {
         // Still within current node -- insert into leaf
         for (auto& child : children)
         {
-            if (child->bounds.contains(obj))
-                return child->insert(obj); // Si les collisions sont bizarre, enlever le return
+            if (child->bounds.contains(obj)) {
+                return child->insert(obj);// Si les collisions sont bizarre, enlever le return
+            }
+                 
         }
         /*if (Octree* child = getChild(obj->bound))
             return child->insert(obj);*/
@@ -189,12 +189,9 @@ void Octree::drawOctree(int childId)
             }
         }
     }
-    else {
-
-        for (Rigidbody* child : objects) {
-            std::cout << "ID Rigibody : " << child->id << " - ID de la sous-division " << childId << " - Profondeur de l'arbre " << level << std::endl;
-        }
-        
+    else 
+    {
+        std::cout << "Nb Rigibody : " << objects.size() << " - ID de la sous-division " << childId << " - Profondeur de l'arbre " << level << std::endl;
     }
 }
 
@@ -232,22 +229,21 @@ void Octree::subdivide() {
         switch (i%4) {
         case 0: // Top right
             x = bounds.position.x + width;
-            y = bounds.position.y;
+            y = bounds.position.y + height;
             break;
         case 1:  // Top left
-            x = bounds.position.x;
-            y = bounds.position.y; 
+            x = bounds.position.x - width;
+            y = bounds.position.y + height;
             break;
         case 2:  // Bottom left
-            x = bounds.position.x;
-            y = bounds.position.y + height;
+            x = bounds.position.x - width;
+            y = bounds.position.y - height;
             break;
         case 3: // Bottom right
             x = bounds.position.x + width;
-            y = bounds.position.y + height;
+            y = bounds.position.y - height;
             break; 
         }
-        //Rect* r = new Rect(Vector3D(x, y, z), Vector3D(childSize.x, childSize.y, childSize.z));
         children[i] = new Octree(Rect(Vector3D(x, y, z), childSize), capacity, maxLevel);
         children[i]->level = level + 1;
         children[i]->parent = this;

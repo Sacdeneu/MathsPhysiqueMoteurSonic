@@ -11,21 +11,15 @@ struct Rect
 {
     Vector3D position;
     Vector3D scale;
-    //double x, y, width, height;
 
     bool contains(Rigidbody* other);
-    //bool intersects(const Rect& other) const noexcept;
-    /*double getLeft() const noexcept;
-    double getTop() const noexcept;
-    double getRight() const noexcept;
-    double getBottom() const noexcept;*/
 
-    float GetMinX() { return position.x - scale.x * 0.5f; };
-    float GetMaxX() { return position.x + scale.x * 0.5f; };
-    float GetMinY() { return position.y - scale.y * 0.5f; };
-    float GetMaxY() { return position.y + scale.y * 0.5f; };
-    float GetMinZ() { return position.z - scale.z * 0.5f; };
-    float GetMaxZ() { return position.z + scale.z * 0.5f; };
+    float GetMinX() { return position.x - scale.x; };
+    float GetMaxX() { return position.x + scale.x; };
+    float GetMinY() { return position.y - scale.y; };
+    float GetMaxY() { return position.y + scale.y; };
+    float GetMinZ() { return position.z - scale.z; };
+    float GetMaxZ() { return position.z + scale.z; };
     Vector3D GetScale() { return scale; };
     Vector3D GetPosition() { return position; };
 
