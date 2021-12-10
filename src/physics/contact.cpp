@@ -18,6 +18,11 @@ void Contact::Resolve()
 {
 	// On calcule la vitesse d'approche des deux objets
 	float totalMass = rigidbodyA->GetInvMass() + rigidbodyB->GetInvMass();
+
+	//collision entre deux objets statiques
+	if (totalMass == 0)
+		return; //empeche les divisions par 0
+
 	float separationVelocity = Vector3D::ScalarProduct(rigidbodyA->GetVelocity() - rigidbodyB->GetVelocity(), this->normal);
 	// Si la vitesse d'approche est inférieure à zéro cela veut dire que les rigidbodys s'éloignent entre elles, 
 	// donc on a déjà le comportement souhaité

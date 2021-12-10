@@ -4,6 +4,8 @@
 #include "../math/Matrix3.h"	
 #include "../math/Matrix4.h"
 
+class Primitive;
+
 class Rigidbody
 {
 public:
@@ -56,14 +58,19 @@ public:
 	/// </summary>
 	void CalculDerivedData();
 
+	void AddPrimitive(Primitive* newPrimitive);
+	Primitive* GetPrimitive(int index);
+	void UpdateTRS();
+
 	/// <summary>
 	/// Mise à jour de la masse du rigidbody
 	/// </summary>
 	/// <param name="newMass">Nouvelle masse</param>
 	inline void SetMass(float newMass);
 	inline float GetInvMass() { return invMass; }
-	inline float GetMass() { return 1.0f / invMass; }
+	inline void SetStatic() { invMass = 0; }
 
+	float GetMass();
 
 	// GETTERS + SETTERS
 	Vector3D GetPosition() { return position; }
@@ -73,6 +80,7 @@ public:
 	inline void AddForce(Vector3D force) { totalForce = totalForce + force; }
 	inline void CleanTotalForce() { totalForce = Vector3D(0, 0, 0); }
 	inline void CleanTotalTorque() { totalTorque = Vector3D(0, 0, 0); }
+	inline int GetPrimitiveCount() { return primitives.size(); }
 
 	//VARIABLES
 protected: 
@@ -116,6 +124,11 @@ protected:
 	/// Inverse de la masse du rigidbody
 	/// </summary>
 	float invMass;
+
+	/// <summary>
+	/// Primitives qui composent le rigidbody
+	/// </summary>
+	std::vector<Primitive*> primitives;
 
 public:
 	/// <summary>

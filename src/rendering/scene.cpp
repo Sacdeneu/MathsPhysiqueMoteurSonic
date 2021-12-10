@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "../physics/plane.h"
 
 Scene* Scene::mainScene = NULL;
 
@@ -6,11 +7,16 @@ Scene::Scene(ForcesRegister* forcesRegister)
 {
 	this->forcesRegister = forcesRegister;
 
+	Rigidbody* ground = new Rigidbody(Vector3D(10, -10.5f, 0), 1);
+	ground->SetStatic();
+	ground->AddPrimitive(new Plane());
+	gameObjects.push_back(ground);
+
 	//spawn
 	AddCubeToMap(Vector3D(0, -5.5f, 0), Vector3D(8, 10, 8), 0);
 	AddCubeToMap(Vector3D(0, -0.5f, 0), Vector3D(8.5f, 0.5f, 8.5f), 1);
 	//sol
-	AddCubeToMap(Vector3D(10, -10.5f, 0), Vector3D(40, 1, 20), 1);
+	//AddCubeToMap(Vector3D(10, -10.5f, 0), Vector3D(40, 1, 20), 1);
 	//escalier
 	AddCubeToMap(Vector3D(5, -6.5f, 0), Vector3D(2, 8, 6), 0);
 	AddCubeToMap(Vector3D(5.125f, -2.25f, 0), Vector3D(2.25f, 0.5f, 6.5f), 1);

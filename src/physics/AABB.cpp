@@ -5,13 +5,13 @@
 
 AABB::AABB() : Rigidbody()
 {
-	invMass = 0;
+	SetStatic();
 	isAABB = true;
 }
 
 AABB::AABB(Vector3D position, Vector3D scale, int textureID) : Rigidbody()
 {
-	invMass = 0;
+	SetStatic();
 	isAABB = true;
 	this->position = position;
 	this->scale = scale;

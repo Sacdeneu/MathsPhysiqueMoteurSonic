@@ -21,6 +21,12 @@
 
 #include "math/Quaternion.h"
 
+#include "physics/primitive.h";
+#include "physics/box.h";
+
+#pragma warning(disable : 4996)
+unsigned int fp_control_state = _controlfp(_EM_INEXACT, _MCW_EM);
+
 bool runGame = true;
 float rigidbodyMass = 1;
 float randomZDirection = 0;// 2.5f;
@@ -47,6 +53,9 @@ Rigidbody* Createrigidbody(Scene* scene, Vector3D pos, Vector3D velocity = Vecto
 
 	forcesRegister.AddEntry(p, new RigidbodyGravityGenerator());
 	forcesRegister.AddEntry(p, new RigidbodyDampingGenerator());
+
+	p->AddPrimitive(new Box(Vector3D(0.8f, 0.5f, 0.5f)));
+	p->AddPrimitive(new Box(Vector3D(1.1f, -0.2f, 0), Vector3D(0.3f, 0.3f, 0.5f)));
 
 	return p;
 }

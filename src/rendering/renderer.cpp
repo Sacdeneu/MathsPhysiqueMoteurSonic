@@ -137,6 +137,19 @@ Renderer::Renderer(SDL_Window* targetWindow)
 	cubeVBO.Unbind();
 	cubeEBO.Unbind();
 
+	planeVertices = { 1000,0,1000,0,1,0,    1000,0,-1000,0,1,0,    -1000,0,-1000,0,1,0,    -1000,0,1000,0,1,0 };
+	planeIndices = { 0,1,2,0,2,3 };
+
+	planeVAO.Init();
+	planeVAO.Bind();
+	VBO planeVBO(planeVertices);
+	EBO planeEBO(planeIndices);
+	planeVAO.LinkAttrib(planeVBO, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)0);
+	planeVAO.LinkAttrib(planeVBO, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	planeVAO.Unbind();
+	planeVBO.Unbind();
+	planeEBO.Unbind();
+
 	LoadTexture("resources/grass.png", &grassTexture);
 	LoadTexture("resources/dirt.png", &dirtTexture);
 }
@@ -156,15 +169,28 @@ void Renderer::Update(Scene* scene)
 	glUniform3f(glGetUniformLocation(defaultShader.program, "lightDir"), -0.8f, -1.0f, -0.3f);
 	glUniform3f(glGetUniformLocation(defaultShader.program, "viewPos"), viewPos.x, viewPos.y, viewPos.z);
 
-	//affiche les rigidbodys
-	//sphereVAO.Bind();
-	cubeVAO.Bind();
 	for (int i = 0; i < scene->GetObjectsCount(); i++)
 	{
-		int modelLoc = glGetUniformLocation(defaultShader.program, "model");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, scene->gameObjects[i]->transformMatrix.GetGLMatrix());
+		Rigidbody* obj = scene->gameObjects[i];
+		for (int j = 0; j < obj->GetPrimitiveCount(); j++)
+		{
+			Primitive* primitive = obj->GetPrimitive(j);
+			int modelLoc = glGetUniformLocation(defaultShader.program, "model");
+			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, primitive->GetTransform().GetGLMatrix());
 
-		glDrawElements(GL_TRIANGLES, s.indices.size(), GL_UNSIGNED_INT, 0);
+			if (primitive->type == PrimitiveType::box)
+			{
+				cubeVAO.Bind();
+				glDrawElements(GL_TRIANGLES, cubeIndices.size(), GL_UNSIGNED_INT, 0);
+				cubeVAO.Unbind();
+			}
+			else if(primitive->type == PrimitiveType::plane)
+			{
+				planeVAO.Bind();
+				glDrawElements(GL_TRIANGLES, planeIndices.size(), GL_UNSIGNED_INT, 0);
+				planeVAO.Unbind();
+			}
+		}
 	}
 	//sphereVAO.Unbind();
 
@@ -177,7 +203,7 @@ void Renderer::Update(Scene* scene)
 	glUniform1i(glGetUniformLocation(mapShader.program, "mainTex"), 0);
 	
 	camera.SetMatrix(60, 0.1f, 500.0f, mapShader, "cameraMatrix");
-	//cubeVAO.Bind();
+	cubeVAO.Bind();
 	for (int i = 0; i < scene->map.size(); i++)
 	{
 		glm::mat4 model = glm::mat4(1.0f);

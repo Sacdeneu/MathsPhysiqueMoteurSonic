@@ -1,6 +1,7 @@
 #include "rigidbody.h"
 #include "Math.h"
 #include "../rendering/scene.h"
+#include "primitive.h"
 
 int rigidbodyCounter = 0;
 
@@ -62,16 +63,28 @@ void Rigidbody::SetMass(float newMass)
 	radius = cbrt(newMass) * 0.5f;
 }
 
+float Rigidbody::GetMass()
+{
+	if (invMass == 0)
+		return 1;
+	else
+		return 1.0f / invMass;
+}
 
 void Rigidbody::SetVelocity(Vector3D newVelocity)
 {
 	velocity = newVelocity;
 }
 
+void Rigidbody::UpdateTRS()
+{
+	transformMatrix.UpdateTRS(position, orientation, Vector3D(radius, radius, radius));
+}
+
 void Rigidbody::CalculDerivedData()
 {
 	// Mise à jour de matrice transform
-	transformMatrix.UpdateTRS(position, orientation, Vector3D(radius, radius, radius));
+	UpdateTRS();
 
 	// Mise à jour du tenseur d'inertie en fonction de la matrice transform
 	Matrix3 transformMatrix3;
@@ -98,8 +111,22 @@ void Rigidbody::AddForceAtBodyPoint(Vector3D force, Vector3D point)
 	AddForceAtPoint(force, point);
 }
 
+void Rigidbody::AddPrimitive(Primitive* newPrimitive)
+{
+	newPrimitive->rigidbody = this;
+	primitives.push_back(newPrimitive);
+}
+
+Primitive* Rigidbody::GetPrimitive(int index)
+{
+	return primitives[index];
+}
+
 void Rigidbody::Update(float dt)
 {
+	if (invMass == 0) //static
+		return;
+
 	// Update Acceleration
 	Vector3D accelerationAngular = inverseInertiaTensorWorld * totalTorque;
 

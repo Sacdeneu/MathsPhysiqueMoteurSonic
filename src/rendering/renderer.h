@@ -15,6 +15,7 @@
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
+#include "../physics/primitive.h"
 
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 #include "imgui.h"
@@ -33,11 +34,13 @@ public:
 private:
 	SDL_GLContext context;
 	Shader defaultShader, gridShader, mapShader;
-	VAO sphereVAO, gridVAO, cubeVAO;
+	VAO sphereVAO, gridVAO, cubeVAO, planeVAO;
 	std::vector<GLfloat> gridVertices;
 	std::vector<GLuint> gridIndices;
 	std::vector<GLfloat> cubeVertices;
 	std::vector<GLuint> cubeIndices;
+	std::vector<GLfloat> planeVertices;
+	std::vector<GLuint> planeIndices;
 	GLuint grassTexture, dirtTexture;
 };
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "primitive.h"
 
-class Plane : Primitive
+class Plane : public Primitive
 {
 public:
 	//CONSTRUCTEURS

@@ -1,6 +1,10 @@
 #pragma once
 #include "rigidbody.h"
 
+class Rigidbody;
+
+enum class PrimitiveType { plane, box };
+
 class Primitive
 {
 public:
@@ -8,9 +12,13 @@ public:
 	Primitive();
 	~Primitive() = default;
 
-	inline Matrix4 GetTransform() { return body->transformMatrix; }
-	inline Rigidbody* GetRigidbody() { return body; }
+	Matrix4 GetTransform();
+	void UpdateOffsetTRS(Vector3D position, Quaternion orientation, Vector3D scale);
 
-private:
-	Rigidbody* body;
+public:
+	Rigidbody* rigidbody;
+	PrimitiveType type;
+
+protected:
+	Matrix4 transformOffset;
 };
