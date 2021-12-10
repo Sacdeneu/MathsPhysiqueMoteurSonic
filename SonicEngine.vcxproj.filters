@@ -153,6 +153,9 @@
     <ClCompile Include="src\physics\box.cpp">
       <Filter>Fichiers sources\physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\physics\Octree.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\imgui\imconfig.h">
@@ -276,6 +279,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\physics\box.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\physics\Octree.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
