@@ -159,25 +159,62 @@ void Renderer::Update(Scene* scene)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glUseProgram(defaultShader.program);
-
 	//transformations de la caméra
 	glm::vec3 viewPos = camera.position;
-	camera.SetMatrix(60, 0.1f, 500.0f, defaultShader, "cameraMatrix");
-
-	//position de la lumière
-	glUniform3f(glGetUniformLocation(defaultShader.program, "lightDir"), -0.8f, -1.0f, -0.3f);
-	glUniform3f(glGetUniformLocation(defaultShader.program, "viewPos"), viewPos.x, viewPos.y, viewPos.z);
+	glm::mat4 cameraMatrix = camera.GetMatrix(60, 0.1f, 500.0f);
 
 	for (int i = 0; i < scene->GetObjectsCount(); i++)
 	{
 		Rigidbody* obj = scene->gameObjects[i];
+
+		//shader qui sera utilisé pour le rendu de ce rigidbody
+		Shader rigidbodyShader;
+
+		//on séléctionne le bon shader en fonction du type
+		switch(obj->renderingType)
+		{
+			case RenderingType::grass:
+			case RenderingType::dirt:
+				rigidbodyShader = mapShader;
+				break;
+
+			default: //RenderingType::blue
+				rigidbodyShader = defaultShader;
+				break;
+		}
+
+		//on active le shader séléctionné et on applique les uniform communs à tous (caméra et lumère)
+		glUseProgram(rigidbodyShader.program);
+		glUniformMatrix4fv(glGetUniformLocation(rigidbodyShader.program, "cameraMatrix"), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
+		glUniform3f(glGetUniformLocation(rigidbodyShader.program, "lightDir"), -0.8f, -1.0f, 0.3f);
+
+		//on applique les uniform spécifique à chaque type de rendu
+		switch (obj->renderingType)
+		{
+		case RenderingType::grass:
+			glUniform1i(glGetUniformLocation(rigidbodyShader.program, "mainTex"), 0);
+			glBindTexture(GL_TEXTURE_2D, grassTexture);
+			break;
+
+		case RenderingType::dirt:
+			glUniform1i(glGetUniformLocation(rigidbodyShader.program, "mainTex"), 0);
+			glBindTexture(GL_TEXTURE_2D, dirtTexture);
+			break;
+
+		default: //RenderingType::blue
+			glUniform3f(glGetUniformLocation(rigidbodyShader.program, "viewPos"), viewPos.x, viewPos.y, viewPos.z);
+			break;
+		}
+		
+		//on affiche chaque primitive de ce rigidbody
 		for (int j = 0; j < obj->GetPrimitiveCount(); j++)
 		{
 			Primitive* primitive = obj->GetPrimitive(j);
-			int modelLoc = glGetUniformLocation(defaultShader.program, "model");
-			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, primitive->GetTransform().GetGLMatrix());
 
+			//on change la matrice model pour afficher la primitive au bon endroit
+			glUniformMatrix4fv(glGetUniformLocation(rigidbodyShader.program, "model"), 1, GL_FALSE, primitive->GetTransform().GetGLMatrix());
+
+			//on active un VAO différent en fonction du type de la primitive
 			if (primitive->type == PrimitiveType::box)
 			{
 				cubeVAO.Bind();
@@ -192,35 +229,6 @@ void Renderer::Update(Scene* scene)
 			}
 		}
 	}
-	//sphereVAO.Unbind();
-
-	//if(scene->GetObjectsCount() > 0)
-	//std::cout << scene->gameObjects[0]->transformMatrix.GetGLMatrix() << std::endl;
-
-	//affiche la map
-	glUseProgram(mapShader.program);
-	glUniform3f(glGetUniformLocation(mapShader.program, "lightDir"), -0.8f, -1.0f, 0.3f);
-	glUniform1i(glGetUniformLocation(mapShader.program, "mainTex"), 0);
-	
-	camera.SetMatrix(60, 0.1f, 500.0f, mapShader, "cameraMatrix");
-	cubeVAO.Bind();
-	for (int i = 0; i < scene->map.size(); i++)
-	{
-		glm::mat4 model = glm::mat4(1.0f);
-
-		Vector3D pos = scene->map[i].GetPosition();
-		Vector3D scale = scene->map[i].GetScale();
-		model = glm::translate(model, glm::vec3(pos.x, pos.y, pos.z));
-		model = glm::scale(model, glm::vec3(scale.x, scale.y, scale.z));
-
-		int modelLoc = glGetUniformLocation(mapShader.program, "model");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-		glBindTexture(GL_TEXTURE_2D, scene->map[i].GetTextureID() != 0 ? grassTexture : dirtTexture);
-
-		glDrawElements(GL_TRIANGLES, cubeIndices.size(), GL_UNSIGNED_INT, 0);
-	}
-	cubeVAO.Unbind();
 
 	/*
 	//affichage de la grille

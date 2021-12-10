@@ -20,7 +20,7 @@ void Camera::Update(float deltaTime)
 	position += (forward * (moveY * 10 * deltaTime)) + (right * (moveX * 10 * deltaTime));
 }
 
-void Camera::SetMatrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform)
+glm::mat4 Camera::GetMatrix(float FOVdeg, float nearPlane, float farPlane)
 {
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
@@ -31,8 +31,7 @@ void Camera::SetMatrix(float FOVdeg, float nearPlane, float farPlane, Shader& sh
 	//perspective
 	projection = glm::perspective(glm::radians(FOVdeg), (float)SCREEN_WIDTH / SCREEN_HEIGHT, nearPlane, farPlane);
 
-	// Exports the camera matrix to the Vertex Shader
-	glUniformMatrix4fv(glGetUniformLocation(shader.program, uniform), 1, GL_FALSE, glm::value_ptr(projection * view));
+	return projection * view;
 }
 
 void Camera::UpdateKeyboardInput(char key, bool state)

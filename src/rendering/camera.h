@@ -20,7 +20,7 @@ public:
 	Camera();
 	void SetPosition(float x, float y, float z);
 	void Update(float deltaTime);
-	void SetMatrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform);
+	glm::mat4 GetMatrix(float FOVdeg, float nearPlane, float farPlane);
 	
 	void UpdateKeyboardInput(char key, bool state);
 	void UpdateMouseInput(float mouseX, float mouseY);

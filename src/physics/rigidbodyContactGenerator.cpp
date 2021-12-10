@@ -5,7 +5,6 @@ std::vector<Contact>* RigidbodyContactGenerator::UpdateContacts(Scene* scene)
 {
 	std::vector<Contact>* collisions = new std::vector<Contact>();
 	int rigidbodyCount = scene->GetObjectsCount();
-	int aabbCount = scene->map.size();
 
 	//pour chaque rigidbody on vérifie la collision...
 	for (size_t i = 0; i < rigidbodyCount; i++)
@@ -19,12 +18,14 @@ std::vector<Contact>* RigidbodyContactGenerator::UpdateContacts(Scene* scene)
 		}
 
 		//...et avec les AABB qui consistuent le niveau
+		/*
 		for (size_t j = 0; j < aabbCount; j++)
 		{
 			Contact* newContact = CheckCollision(scene->gameObjects[i], &scene->map[j]);
 			if (newContact != NULL) //si il y a eu de collision
 				collisions->push_back(*newContact);
 		}
+		*/
 	}
 
 	// on génère égalment des collisions pour chaque lien

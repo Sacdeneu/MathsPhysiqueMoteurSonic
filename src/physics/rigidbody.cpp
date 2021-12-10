@@ -17,6 +17,7 @@ Rigidbody::Rigidbody()
 	transformMatrix = Matrix4(position, orientation);
 
 	isBlob, isAABB = false; // flag utilisé pour le blob
+	renderingType = RenderingType::blue;
 	SetMass(1);
 
 	// Initialise un tenseur d'iniertie, ici on utilise le tenseur d'inertie du rectangle
@@ -25,9 +26,6 @@ Rigidbody::Rigidbody()
 	inverseInertiaTensor.SetValue((1 / 12.0f) * GetMass() * (radius * radius + radius * radius), 1, 1);
 	inverseInertiaTensor.SetValue((1 / 12.0f) * GetMass() * (radius * radius + radius * radius), 2, 2);
 	inverseInertiaTensor.Inverse(inverseInertiaTensor.Determinant());
-
-
-
 }
 
 Rigidbody::Rigidbody(Vector3D initialPos, float mass)
@@ -37,6 +35,7 @@ Rigidbody::Rigidbody(Vector3D initialPos, float mass)
 	position = initialPos;
 	SetMass(mass);
 	isBlob, isAABB = false; // flag utilisé pour le blob
+	renderingType = RenderingType::blue;
 	velocity = Vector3D(0, 0, 0);
 
 	angularVelocity = Vector3D(0, 0, 0);

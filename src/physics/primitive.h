@@ -1,7 +1,7 @@
 #pragma once
 #include "rigidbody.h"
 
-class Rigidbody;
+class Rigidbody; //permet de lier mututellement les classes sans erreur d'import
 
 enum class PrimitiveType { plane, box };
 

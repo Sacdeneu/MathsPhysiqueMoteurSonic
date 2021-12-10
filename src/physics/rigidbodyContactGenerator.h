@@ -5,6 +5,8 @@
 #include <vector>
 #include "rigidbodyLink.h"
 
+#include "AABB.h"
+
 class RigidbodyContactGenerator
 {
 public:

@@ -4,7 +4,9 @@
 #include "../math/Matrix3.h"	
 #include "../math/Matrix4.h"
 
-class Primitive;
+class Primitive; //permet de lier mututellement les classes sans erreur d'import
+
+enum class RenderingType { blue, grass, dirt };
 
 class Rigidbody
 {
@@ -150,6 +152,8 @@ public:
 	/// Booléen définissant si le rigidbody possède un AABB
 	/// </summary>
 	bool isAABB;
+
+	RenderingType renderingType;
 
 	Matrix4 transformMatrix;
 };
