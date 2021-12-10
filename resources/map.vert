@@ -13,7 +13,16 @@ void main()
 {
 	fragPos = vec3(model * vec4(aPos, 1.0f));
 	vertexNormal = aNormal;
-	uvCoord = vec2(fragPos.x, fragPos.y + fragPos.z) * 0.5;
+
+	float absNX = abs(vertexNormal.x);
+	float absNY = abs(vertexNormal.y);
+	float absNZ = abs(vertexNormal.z);
+	if(absNX > absNY && absNX > absNY) // projection sur X
+		uvCoord = vec2(fragPos.z, fragPos.y) * 0.5;
+	else if(absNY > absNX && absNY > absNZ) // projection sur Y
+		uvCoord = vec2(fragPos.x, fragPos.z) * 0.5;
+	else // projection sur Z
+		uvCoord = vec2(fragPos.x, fragPos.y) * 0.5;
 
 	gl_Position = cameraMatrix * vec4(fragPos, 1.0);
 	
