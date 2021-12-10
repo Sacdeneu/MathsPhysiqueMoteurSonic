@@ -3,22 +3,38 @@
 #include <any>
 #include <vector>
 #include <algorithm>
+#include "../math/Vector3D.h";
+#include "rigidbody.h";
 
-struct Rect {
-    double x, y, width, height;
+// C'est AABB en fait
+struct Rect 
+{
+    Vector3D position;
+    Vector3D scale;
+    //double x, y, width, height;
 
-    bool contains(const Rect& other) const noexcept;
-    bool intersects(const Rect& other) const noexcept;
-    double getLeft() const noexcept;
+    bool contains(Rigidbody* other);
+    //bool intersects(const Rect& other) const noexcept;
+    /*double getLeft() const noexcept;
     double getTop() const noexcept;
     double getRight() const noexcept;
-    double getBottom() const noexcept;
+    double getBottom() const noexcept;*/
+
+    float GetMinX() { return position.x - scale.x * 0.5f; };
+    float GetMaxX() { return position.x + scale.x * 0.5f; };
+    float GetMinY() { return position.y - scale.y * 0.5f; };
+    float GetMaxY() { return position.y + scale.y * 0.5f; };
+    float GetMinZ() { return position.z - scale.z * 0.5f; };
+    float GetMaxZ() { return position.z + scale.z * 0.5f; };
+    Vector3D GetScale() { return scale; };
+    Vector3D GetPosition() { return position; };
 
     Rect(const Rect&);
-    Rect(double _x = 0, double _y = 0, double _width = 0, double _height = 0);
+    Rect(Vector3D pos, Vector3D size);
 };
 
-struct Collidable {
+// Noeud
+/*struct Collidable {
     friend class Octree;
 public:
     Rect bound;
@@ -28,7 +44,7 @@ public:
 private:
     Octree* qt = nullptr;
     Collidable(const Collidable&) = delete;
-};
+};*/
 
 class Octree {
 public:
@@ -36,10 +52,10 @@ public:
     Octree(const Octree&);
     Octree();
 
-    bool insert(Collidable* obj);
-    bool remove(Collidable* obj);
-    bool update(Collidable* obj);
-    std::vector<Collidable*>& getObjectsInBound(const Rect& bound);
+    bool insert(Rigidbody* obj);
+    bool remove(Rigidbody* obj);
+    bool update(Rigidbody* obj);
+    //std::vector<Rigidbody*>& getObjectsInBound(const Rect& bound);
     unsigned totalChildren() const noexcept;
     unsigned totalObjects() const noexcept;
     void clear() noexcept;
@@ -52,10 +68,10 @@ private:
     unsigned  maxLevel;
     Rect      bounds;
     Octree* parent = nullptr;
-    Octree* children[4] = { nullptr, nullptr, nullptr, nullptr };
-    std::vector<Collidable*> objects, foundObjects;
+    Octree* children[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+    std::vector<Rigidbody*> objects, foundObjects;
 
     void subdivide();
     void discardEmptyBuckets();
-    inline Octree* getChild(const Rect& bound) const noexcept;
+    //inline Octree* getChild(const Rect& bound) const noexcept;
 };
