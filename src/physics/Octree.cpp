@@ -10,7 +10,6 @@ Rect::Rect(Vector3D pos, Vector3D size)
 
 }
 
-
 bool Rect::Contains(Rigidbody* a) {
     //on détermine le point le plus proche du rigidbody compris dans l'AABB
     Vector3D nearestPointInAABB;
@@ -28,26 +27,8 @@ bool Rect::Contains(Rigidbody* a) {
     return true;
 }
 
-/*bool Rect::contains(const Rect& other) const noexcept {
-    if (position.x > other.position.x) return false;
-    if (position.y > other.position.y) return false;
-    if (position.x + size.x < other.position.x + other.size.x) return false;
-    if (position.y + size.y < other.position.y + other.size.y) return false;
 
-    return true; // within bounds
-}
-bool Rect::intersects(const Rect& other) const noexcept {
-    if (x > other.x + other.width)  return false;
-    if (x + width < other.x)        return false;
-    if (y > other.y + other.height) return false;
-    if (y + height < other.y)       return false;
-    return true; // intersection
-}*/
-/*double Rect::getLeft()   const noexcept { return x - (width * 0.5f); }
-double Rect::getTop()    const noexcept { return y + (height * 0.5f); }
-double Rect::getRight()  const noexcept { return x + (width * 0.5f); }
-double Rect::getBottom() const noexcept { return y - (height * 0.5f); }
-*/
+
 
 
 
@@ -59,7 +40,6 @@ Octree::Octree(const Rect& _bound, unsigned _capacity, unsigned _maxLevel) :
     capacity(_capacity),
     maxLevel(_maxLevel) {
     objects.reserve(_capacity);
-    //foundObjects.reserve(_capacity);
 }
 
 // Inserts an object into this Octree
@@ -83,7 +63,6 @@ bool Octree::Insert(Rigidbody* obj) {
         return false;
 
     objects.push_back(obj);
-    //obj->qt = this;
 
     // Subdivide if required
     if (isLeaf && level < maxLevel && objects.size() >= capacity) {
@@ -95,14 +74,11 @@ bool Octree::Insert(Rigidbody* obj) {
 
 // Removes an object from this Octree
 bool Octree::Remove(Rigidbody* obj) {
-    //if (obj->qt == nullptr) return false; // Cannot exist in vector
-    //if (obj->qt != this) return obj->qt->remove(obj);
     auto objToFind = std::find(objects.begin(), objects.end(), obj);
     if (objToFind == objects.end())
         return false;
 
     objects.erase(objToFind);
-    //obj->qt = nullptr;
     DiscardEmptyBuckets();
     return true;
 }
@@ -120,39 +96,14 @@ bool Octree::Update(Rigidbody* obj) {
         for (auto& child : children)
         {
             if (child->bounds.Contains(obj)) {
-                return child->Insert(obj);// Si les collisions sont bizarre, enlever le return
+                return child->Insert(obj); // Si les collisions sont bizarre, enlever le return
+
             }
                  
         }
-        /*if (Octree* child = getChild(obj->bound))
-            return child->insert(obj);*/
     }
     return Insert(obj);
 }
-
-// Searches Octree for objects within the provided boundary and returns them in vector
-/*std::vector<Rigidbody*>& Octree::getObjectsInBound(const Rect& bound) {
-    foundObjects.clear();
-    for (const auto& obj : objects) {
-        // Only check for intersection with OTHER boundaries
-        if (&obj->bound != &bound && obj->bound.intersects(bound))
-            foundObjects.push_back(obj);
-    }
-    if (!isLeaf) {
-        // Get objects from leaves
-        if (Octree* child = getChild(bound)) {
-            child->getObjectsInBound(bound);
-            foundObjects.insert(foundObjects.end(), child->foundObjects.begin(), child->foundObjects.end());
-        }
-        else for (Octree* leaf : children) {
-            if (leaf->bounds.intersects(bound)) {
-                leaf->getObjectsInBound(bound);
-                foundObjects.insert(foundObjects.end(), leaf->foundObjects.begin(), leaf->foundObjects.end());
-            }
-        }
-    }
-    return foundObjects;
-}*/
 
 // Returns total children count for this Octree
 unsigned Octree::TotalChildren() const noexcept {
@@ -193,8 +144,6 @@ void Octree::DrawOctree(int childId)
 // Removes all objects and children from this Octree
 void Octree::Clear() noexcept {
     if (!objects.empty()) {
-        /*for (auto&& obj : objects)
-            obj->qt = nullptr;*/
         objects.clear();
     }
     if (!isLeaf) {
@@ -215,6 +164,17 @@ void Octree::GetAllLeafs(std::vector<Octree*>& listLeafs)
 
     if(objects.size() > 1)// optimization for the collision case
         listLeafs.push_back(this);
+}
+
+// Return all the bounds of the tree
+void Octree::GetAllBounds(std::vector<Rect>& boundsList)
+{
+    boundsList.push_back(bounds);
+    if (!isLeaf)
+    {
+        for (Octree* child : children)
+            child->GetAllBounds(boundsList);
+    }
 }
 
 // Subdivides into eight quadrants
@@ -271,21 +231,6 @@ void Octree::DiscardEmptyBuckets() {
         parent->DiscardEmptyBuckets();
 }
 
-// Returns child that contains the provided boundary
-/*Octree* Octree::getChild(const Rect& bound) const noexcept {
-    bool left = bound.x + bound.width < bounds.getRight();
-    bool right = bound.x > bounds.getRight();
-
-    if (bound.y + bound.height < bounds.getTop()) {
-        if (left)  return children[1]; // Top left
-        if (right) return children[0]; // Top right
-    }
-    else if (bound.y > bounds.getTop()) {
-        if (left)  return children[2]; // Bottom left
-        if (right) return children[3]; // Bottom right
-    }
-    return nullptr; // Cannot contain boundary -- too large
-}*/
 
 Octree::~Octree() {
     Clear();

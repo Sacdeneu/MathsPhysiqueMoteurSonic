@@ -44,6 +44,8 @@ public:
 	/// </summary>
 	void RemoveAllrigidbodyLink();
 
+	Octree octree;
+
 private:
 	CollisionData* CheckCollision(Primitive* primitiveA, Primitive* primitiveB);
 	CollisionData* CheckCollision(Plane* primitiveA, Box* primitiveB);
@@ -53,5 +55,5 @@ private:
 	/// </summary>
 	std::vector<RigidbodyLink*> rigidbodysLinks;
 
-	Octree octree;
+
 };

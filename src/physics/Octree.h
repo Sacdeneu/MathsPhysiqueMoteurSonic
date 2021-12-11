@@ -44,7 +44,7 @@ public:
     void DrawOctree(int childId = -1);
     void Clear() noexcept;
     void GetAllLeafs(std::vector<Octree*>& listLeafs);
-
+    void GetAllBounds(std::vector<Rect>& bounds);
     ~Octree();
 
 
