@@ -17,6 +17,8 @@ public:
 	std::vector<Rigidbody*> gameObjects;
 	ForcesRegister* forcesRegister;
 
+	bool isPaused = false;
+
 	static Scene* mainScene;
 };
 #endif

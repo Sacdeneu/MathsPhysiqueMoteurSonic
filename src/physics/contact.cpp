@@ -4,13 +4,13 @@ Contact::Contact()
 {
 }
 
-Contact::Contact(Rigidbody* a, Rigidbody* b, Vector3D contactNormal, float interpenetration, float coefRestitution)
+Contact::Contact(Rigidbody* a, Rigidbody* b, Vector3D contactNormal, float interpenetration, Vector3D point)
 {
 	this->rigidbodyA = a;
 	this->rigidbodyB = b;
 	this->normal = contactNormal;
 	this->interpenetration = interpenetration;
-	this->restitutionFactor = coefRestitution;
+	this->point = point;
 }
 
 // Méthode pour résoudre la collision
@@ -26,8 +26,10 @@ void Contact::Resolve()
 	float separationVelocity = Vector3D::ScalarProduct(rigidbodyA->GetVelocity() - rigidbodyB->GetVelocity(), this->normal);
 	// Si la vitesse d'approche est inférieure à zéro cela veut dire que les rigidbodys s'éloignent entre elles, 
 	// donc on a déjà le comportement souhaité
-	if (separationVelocity > 0) 
+	if (separationVelocity < 0) 
 		return;
+
+	//std::cout << "ça passe ptdr sepration go brrr : " << separationVelocity << std::endl;
 	
 	// Sinon on calcule la vitesse de séparation pour justement les éloigner
 	float separationVelocity2 = -restitutionFactor * separationVelocity;
@@ -36,12 +38,12 @@ void Contact::Resolve()
 	// On applique une impulsion sur les deux rigidbodys
 	Vector3D impulsion = this->normal * (deltaSeparationVelocity / totalMass);
 
-	rigidbodyA->SetVelocity(rigidbodyA->GetVelocity() + impulsion * rigidbodyA->GetInvMass());
-	rigidbodyB->SetVelocity(rigidbodyB->GetVelocity() - impulsion * rigidbodyB->GetInvMass());
+	rigidbodyA->AddForceAtPoint(impulsion * rigidbodyA->GetInvMass(), this->point);
+	rigidbodyB->AddForceAtPoint(-impulsion * rigidbodyB->GetInvMass(), this->point);
 		
 	// On résout également l'interpénétration en modifiant les positions des rigidbodys
-	Vector3D correction = this->normal * (this->interpenetration / (rigidbodyA->GetInvMass() + rigidbodyB->GetInvMass()));
-	rigidbodyA->SetPosition(rigidbodyA->GetPosition() + correction * rigidbodyA->GetInvMass());
-	rigidbodyB->SetPosition(rigidbodyB->GetPosition() - correction * rigidbodyB->GetInvMass());
+	//Vector3D correction = this->normal * (-this->interpenetration / (rigidbodyA->GetInvMass() + rigidbodyB->GetInvMass()));
+	//rigidbodyA->SetPosition(rigidbodyA->GetPosition() + correction * rigidbodyA->GetInvMass());
+	//rigidbodyB->SetPosition(rigidbodyB->GetPosition() - correction * rigidbodyB->GetInvMass());
 }
   

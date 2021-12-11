@@ -33,7 +33,6 @@ Quaternion Quaternion::operator-(const Quaternion& q)
     return Quaternion(x - q.x, y - q.y, z - q.z, w - q.w);
 }
 
-
 Quaternion Quaternion::operator*(const Quaternion& b)
 {
     float newW = w * w - x * b.x - y * b.y - z * b.z;
@@ -43,7 +42,6 @@ Quaternion Quaternion::operator*(const Quaternion& b)
 
     return Quaternion(newX, newY, newZ, newW);
 }
-
 
 // Rotationne un vecteur
 Vector3D Quaternion::operator*(const Vector3D& v)
@@ -110,16 +108,11 @@ Quaternion Quaternion::Normalize(Quaternion q)
     return Quaternion(q.x / norm, q.y / norm, q.z / norm, q.w / norm);
 }
 
-
 // Mise à jour du quaternion en fonction d'une vitesse angulaire
 void Quaternion::UpdateAngularVelocity(Quaternion angularVelocity, float deltaTime)
 {
     *this = *this + angularVelocity * *this * 0.5f * deltaTime;
 }
-
-
-
-
 
 std::ostream& operator<<(std::ostream& os, Quaternion q)
 {

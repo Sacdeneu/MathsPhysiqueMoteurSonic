@@ -105,9 +105,7 @@ void Rigidbody::AddForceAtPoint(Vector3D force, Vector3D point)
 void Rigidbody::AddForceAtBodyPoint(Vector3D force, Vector3D point)
 {
 	// Convertir point en monde
-	//point = transformMatrix * point;
-
-	AddForceAtPoint(force, point);
+	AddForceAtPoint(force, transformMatrix * point);
 }
 
 void Rigidbody::AddPrimitive(Primitive* newPrimitive)
@@ -125,6 +123,11 @@ void Rigidbody::Update(float dt)
 {
 	if (invMass == 0) //static
 		return;
+
+	if (id == 2)
+	{
+		std::cout << "Velocite : " << velocity << " ; Position : " << position << std::endl;
+	}
 
 	// Update Acceleration
 	Vector3D accelerationAngular = inverseInertiaTensorWorld * totalTorque;
@@ -158,6 +161,6 @@ void Rigidbody::Update(float dt)
 	CleanTotalForce();
 	CleanTotalTorque();
 
-	if (position.y < -100)
-		Scene::mainScene->RemoveRigidbody(this);
+	//if (position.y < -100)
+	//	Scene::mainScene->RemoveRigidbody(this);
 }

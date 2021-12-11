@@ -1,9 +1,12 @@
 #pragma once
 #include "rigidbody.h"
-#include "contact.h"
+#include "collisionData.h"
 #include "../rendering/scene.h"
 #include <vector>
 #include "rigidbodyLink.h"
+#include "primitive.h"
+#include "box.h"
+#include "plane.h"
 
 #include "AABB.h"
 
@@ -21,7 +24,7 @@ public:
 	/// </summary>
 	/// <param name="scene">Scène sur laquelle on vérifie les contacts</param>
 	/// <returns>Liste des collisions</returns>
-	std::vector<Contact>* UpdateContacts(Scene* scene);
+	std::vector<CollisionData>* UpdateContacts(Scene* scene);
 
 	/// <summary>
 	/// Ajoute un lien à la liste des liens générant des collisions
@@ -41,21 +44,8 @@ public:
 	void RemoveAllrigidbodyLink();
 
 private:
-	/// <summary>
-	/// Vérification de collision entre deux sphères
-	/// </summary>
-	/// <param name="a">Première sphère</param>
-	/// <param name="b">Deuxième sphère</param>
-	/// <returns>Retourne un contact s'il y a une collision, sinon retourne NULL</returns>
-	Contact* CheckCollision(Rigidbody* a, Rigidbody* b);
-
-	/// <summary>
-	/// Vérification de collision entre une sphère et un AABB
-	/// </summary>
-	/// <param name="a">Sphère</param>
-	/// <param name="b">AABB</param>
-	/// <returns>Retourne un contact s'il y a une collision, sinon retourne NULL</returns>
-	Contact* CheckCollision(Rigidbody* a, AABB* b);
+	CollisionData* CheckCollision(Primitive* primitiveA, Primitive* primitiveB);
+	CollisionData* CheckCollision(Plane* primitiveA, Box* primitiveB);
 	
 	/// <summary>
 	/// Liste des liens qui génèrent des collisions

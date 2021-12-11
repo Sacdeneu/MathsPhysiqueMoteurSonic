@@ -24,9 +24,6 @@
 #include "physics/primitive.h";
 #include "physics/box.h";
 
-#pragma warning(disable : 4996)
-unsigned int fp_control_state = _controlfp(_EM_INEXACT, _MCW_EM);
-
 bool runGame = true;
 float rigidbodyMass = 1;
 float randomZDirection = 0;// 2.5f;
@@ -49,13 +46,18 @@ Rigidbody* Createrigidbody(Scene* scene, Vector3D pos, Vector3D velocity = Vecto
 	Rigidbody* p = new Rigidbody(pos, rigidbodyMass * massFactor);
 	scene->Addrigidbody(p);
 	p->SetVelocity(velocity);
-	p->AddForceAtPoint(Vector3D(0, 1, 0), Vector3D(velocity.x * 50, 0, 0));
+	p->AddForceAtPoint(Vector3D(0, 1, 0), Vector3D(velocity.x * 50, 0, velocity.z * 50));
 
 	forcesRegister.AddEntry(p, new RigidbodyGravityGenerator());
 	forcesRegister.AddEntry(p, new RigidbodyDampingGenerator());
 
 	p->AddPrimitive(new Box(Vector3D(0.8f, 0.5f, 0.5f)));
 	p->AddPrimitive(new Box(Vector3D(1.1f, -0.2f, 0), Vector3D(0.3f, 0.3f, 0.5f)));
+	p->AddPrimitive(new Box(Vector3D(-0.9f, -0.2f, 0), Vector3D(0.1f, 0.3f, 0.5f)));
+	p->AddPrimitive(new Box(Vector3D(-0.6f, -0.35f, 0.6f), Vector3D(0.2f, 0.2f, 0.1f)));
+	p->AddPrimitive(new Box(Vector3D(0.7f, -0.35f, 0.6f), Vector3D(0.2f, 0.2f, 0.1f)));
+	p->AddPrimitive(new Box(Vector3D(-0.6f, -0.35f, -0.6f), Vector3D(0.2f, 0.2f, 0.1f)));
+	p->AddPrimitive(new Box(Vector3D(0.7f, -0.35f, -0.6f), Vector3D(0.2f, 0.2f, 0.1f)));
 
 	return p;
 }
@@ -578,12 +580,16 @@ int main( int argc, char* args[])
 				lastUpdate = now;
 
 				//mise à jour de la physique et de la logique
-				forcesRegister.Update(deltaTime);
-				Scene::mainScene->Update(deltaTime);
-				UpdateBlobForce();
+				if (!Scene::mainScene->isPaused)
+				{
+					forcesRegister.Update(deltaTime);
+					Scene::mainScene->Update(deltaTime);
+					UpdateBlobForce();
+
+					//test collisions
+					contactSolver.UpdateCollisions(Scene::mainScene, 4);
+				}
 				
-				//test collisions
-				contactSolver.UpdateCollisions(Scene::mainScene, 4);
 				float physicsUpdateTime = ((SDL_GetPerformanceCounter() - lastUpdate) / (float)SDL_GetPerformanceFrequency()) * 1000;
 
 				renderer->camera.Update(deltaTime);
