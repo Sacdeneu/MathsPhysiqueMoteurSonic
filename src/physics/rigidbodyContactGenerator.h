@@ -7,6 +7,7 @@
 #include "primitive.h"
 #include "box.h"
 #include "plane.h"
+#include "Octree.h"
 
 #include "AABB.h"
 
@@ -14,7 +15,7 @@ class RigidbodyContactGenerator
 {
 public:
 	//CONSTRUCTEURS
-	RigidbodyContactGenerator() = default;
+	RigidbodyContactGenerator();
 	~RigidbodyContactGenerator() = default;
 
 	//FONCTIONS
@@ -51,4 +52,6 @@ private:
 	/// Liste des liens qui g�n�rent des collisions
 	/// </summary>
 	std::vector<RigidbodyLink*> rigidbodysLinks;
+
+	Octree octree;
 };

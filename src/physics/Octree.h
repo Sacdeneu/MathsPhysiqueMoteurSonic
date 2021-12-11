@@ -50,6 +50,7 @@ public:
 
     Rect      bounds;
     Octree* children[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+    std::vector<Rigidbody*> objects;
 
 private:
     bool      isLeaf = true;
@@ -58,7 +59,7 @@ private:
     unsigned  maxLevel;
 
     Octree* parent = nullptr; 
-    std::vector<Rigidbody*> objects;
+
 
     void Subdivide();
     void DiscardEmptyBuckets();

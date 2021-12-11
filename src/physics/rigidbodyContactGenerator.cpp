@@ -1,13 +1,70 @@
 #include "rigidbodyContactGenerator.h"
 #include "Math.h"
 
+RigidbodyContactGenerator::RigidbodyContactGenerator() 
+{
+	// Initialise l'octree
+	octree = Octree(Rect(Vector3D(0, 0, 0), Vector3D(10,10,10)), 4, 4);
+}
+
+
 std::vector<CollisionData>* RigidbodyContactGenerator::UpdateContacts(Scene* scene)
 {
 	std::vector<CollisionData>* collisions = new std::vector<CollisionData>();
 	int rigidbodyCount = scene->GetObjectsCount();
 
-	//pour chaque rigidbody...
+	// On remplit l'octree
+	octree.Clear();
 	for (size_t i = 0; i < rigidbodyCount; i++)
+	{
+		octree.Insert(scene->gameObjects[i]);
+	}
+	
+	// On récupère les feuilles
+	std::vector<Octree*> collisionsNodes;
+	octree.GetAllLeafs(collisionsNodes);
+
+	// pour chaque feuille on parcourt la liste des rigidbody et on ajoute les contacts
+	for (size_t n = 0; n < collisionsNodes.size(); n++)
+	{
+		rigidbodyCount = collisionsNodes[n]->objects.size();
+
+		//pour chaque rigidbody...
+		for (size_t i = 0; i < rigidbodyCount; i++)
+		{
+			Rigidbody* rb = collisionsNodes[n]->objects[i];
+			//...pour chaque primitive de ce rigidbody...
+			for (size_t j = 0; j < rb->GetPrimitiveCount(); j++)
+			{
+				Primitive* primitive = rb->GetPrimitive(j);
+				//...pour chaque autre rigidbody...
+				for (size_t k = i + 1; k < rigidbodyCount; k++)
+				{
+					Rigidbody* other = collisionsNodes[n]->objects[k];
+
+					if (rb->GetInvMass() + other->GetInvMass() == 0) //les deux objets sont statiques
+						continue;
+
+					//...pour chaque primitive de cet autre rigidbody...
+					for (size_t l = 0; l < other->GetPrimitiveCount(); l++)
+					{
+						Primitive* otherPrimitive = other->GetPrimitive(l);
+						//...on v�rifie les contacts potentiels
+						CollisionData* newCollision = CheckCollision(primitive, otherPrimitive);
+						if (newCollision != NULL) //si il y a eu une collision
+							collisions->push_back(*newCollision);
+					}
+				}
+			}
+		}
+	}
+
+
+
+
+
+	//pour chaque rigidbody...
+	/*for (size_t i = 0; i < rigidbodyCount; i++)
 	{
 		Rigidbody* rb = scene->gameObjects[i];
 		//...pour chaque primitive de ce rigidbody...
@@ -33,7 +90,7 @@ std::vector<CollisionData>* RigidbodyContactGenerator::UpdateContacts(Scene* sce
 				}
 			}
 		}
-	}
+	}*/
 
 	// on g�n�re �galment des collisions pour chaque lien
 	/*
