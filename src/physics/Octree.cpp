@@ -11,7 +11,7 @@ Rect::Rect(Vector3D pos, Vector3D size)
 }
 
 
-bool Rect::contains(Rigidbody* a) {
+bool Rect::Contains(Rigidbody* a) {
     //on détermine le point le plus proche du rigidbody compris dans l'AABB
     Vector3D nearestPointInAABB;
     nearestPointInAABB.x = max(GetMinX(), min(a->GetPosition().x, GetMaxX()));
@@ -50,11 +50,6 @@ double Rect::getBottom() const noexcept { return y - (height * 0.5f); }
 */
 
 
-//** Collidable **//
-/* Collidable::Collidable(const Rect& _bounds, SimpleGE::ColliderComponent* _data) :
-    bound(_bounds),
-    data(_data) {
-};*/
 
 //** Octree **//
 Octree::Octree() : Octree(Rect(Vector3D(0,0,0), Vector3D(0,0,0)), 0, 0) { }
@@ -64,19 +59,19 @@ Octree::Octree(const Rect& _bound, unsigned _capacity, unsigned _maxLevel) :
     capacity(_capacity),
     maxLevel(_maxLevel) {
     objects.reserve(_capacity);
-    foundObjects.reserve(_capacity);
+    //foundObjects.reserve(_capacity);
 }
 
 // Inserts an object into this Octree
-bool Octree::insert(Rigidbody* obj) {
+bool Octree::Insert(Rigidbody* obj) {
     //if (obj->qt != nullptr) return false;
 
     if (!isLeaf) // Octree n'est pas une feuille donc on ajoute dans les enfants de manière récursive
     {
         for (auto& child : children)
         {
-           if(child->bounds.contains(obj))
-                return child->insert(obj); // Si les collisions sont bizarre, enlever le return
+           if(child->bounds.Contains(obj))
+                return child->Insert(obj); // Si les collisions sont bizarre, enlever le return
         }
         // insert object into leaf
         //if (Octree* child = getChild(obj->bound))
@@ -84,7 +79,7 @@ bool Octree::insert(Rigidbody* obj) {
     }
 
     // Octree est une feuille, donc on ajoute l'objet
-    if (!bounds.contains(obj))
+    if (!bounds.Contains(obj))
         return false;
 
     objects.push_back(obj);
@@ -92,14 +87,14 @@ bool Octree::insert(Rigidbody* obj) {
 
     // Subdivide if required
     if (isLeaf && level < maxLevel && objects.size() >= capacity) {
-        subdivide();
-        update(obj);
+        Subdivide();
+        Update(obj);
     }
     return true;
 }
 
 // Removes an object from this Octree
-bool Octree::remove(Rigidbody* obj) {
+bool Octree::Remove(Rigidbody* obj) {
     //if (obj->qt == nullptr) return false; // Cannot exist in vector
     //if (obj->qt != this) return obj->qt->remove(obj);
     auto objToFind = std::find(objects.begin(), objects.end(), obj);
@@ -108,31 +103,31 @@ bool Octree::remove(Rigidbody* obj) {
 
     objects.erase(objToFind);
     //obj->qt = nullptr;
-    discardEmptyBuckets();
+    DiscardEmptyBuckets();
     return true;
 }
 
 
 // Removes and re-inserts object into Octree (for objects that move)
-bool Octree::update(Rigidbody* obj) {
-    if (!remove(obj)) return false;
+bool Octree::Update(Rigidbody* obj) {
+    if (!Remove(obj)) return false;
 
     // Not contained in this node -- insert into parent
-    /*if (parent != nullptr && !bounds.contains(obj))
-        return parent->insert(obj);*/
+     if (parent != nullptr && !bounds.Contains(obj))
+        return parent->Insert(obj);
      if (!isLeaf) {
         // Still within current node -- insert into leaf
         for (auto& child : children)
         {
-            if (child->bounds.contains(obj)) {
-                return child->insert(obj);// Si les collisions sont bizarre, enlever le return
+            if (child->bounds.Contains(obj)) {
+                return child->Insert(obj);// Si les collisions sont bizarre, enlever le return
             }
                  
         }
         /*if (Octree* child = getChild(obj->bound))
             return child->insert(obj);*/
     }
-    return insert(obj);
+    return Insert(obj);
 }
 
 // Searches Octree for objects within the provided boundary and returns them in vector
@@ -160,33 +155,33 @@ bool Octree::update(Rigidbody* obj) {
 }*/
 
 // Returns total children count for this Octree
-unsigned Octree::totalChildren() const noexcept {
+unsigned Octree::TotalChildren() const noexcept {
     unsigned total = 0;
     if (isLeaf) return total;
     for (Octree* child : children)
-        total += child->totalChildren();
+        total += child->TotalChildren();
     return 8 + total;
 }
 
 // Returns total object count for this Octree
-unsigned Octree::totalObjects() const noexcept {
+unsigned Octree::TotalObjects() const noexcept {
     unsigned total = (unsigned)objects.size();
     if (!isLeaf) {
         for (Octree* child : children)
-            total += child->totalObjects();
+            total += child->TotalObjects();
     }
     return total;
 }
 
-void Octree::drawOctree(int childId)
+void Octree::DrawOctree(int childId)
 {
-    if (!isLeaf) {
+    if (!isLeaf) 
+    {
         int i = 0;
-        for (Octree* child : children) {
-            if (child != nullptr) {
-                ++i;
-                child->drawOctree(i);
-            }
+        for (Octree* child : children) 
+        {
+            if (child != nullptr) 
+                child->DrawOctree(++i);
         }
     }
     else 
@@ -196,7 +191,7 @@ void Octree::drawOctree(int childId)
 }
 
 // Removes all objects and children from this Octree
-void Octree::clear() noexcept {
+void Octree::Clear() noexcept {
     if (!objects.empty()) {
         /*for (auto&& obj : objects)
             obj->qt = nullptr;*/
@@ -204,13 +199,26 @@ void Octree::clear() noexcept {
     }
     if (!isLeaf) {
         for (Octree* child : children)
-            child->clear();
+            child->Clear();
         isLeaf = true;
     }
 }
 
+// Return all the leafs of the tree
+void Octree::GetAllLeafs(std::vector<Octree*>& listLeafs)
+{
+    if (!isLeaf)
+    {
+        for (Octree* child : children)
+            child->GetAllLeafs(listLeafs);
+    }
+
+    if(objects.size() > 1)// optimization for the collision case
+        listLeafs.push_back(this);
+}
+
 // Subdivides into eight quadrants
-void Octree::subdivide() {
+void Octree::Subdivide() {
 
     Vector3D childSize = Vector3D(bounds.scale.x * 0.5f, bounds.scale.y * 0.5f, bounds.scale.z * 0.5f);
 
@@ -252,15 +260,15 @@ void Octree::subdivide() {
 }
 
 // Discards buckets if all children are leaves and contain no objects
-void Octree::discardEmptyBuckets() {
+void Octree::DiscardEmptyBuckets() {
     if (!objects.empty()) return;
     if (!isLeaf) {
         for (Octree* child : children)
             if (!child->isLeaf || !child->objects.empty())
                 return;
     }
-    if (clear(), parent != nullptr)
-        parent->discardEmptyBuckets();
+    if (Clear(), parent != nullptr)
+        parent->DiscardEmptyBuckets();
 }
 
 // Returns child that contains the provided boundary
@@ -280,7 +288,7 @@ void Octree::discardEmptyBuckets() {
 }*/
 
 Octree::~Octree() {
-    clear();
+    Clear();
     if (children[0]) delete children[0];
     if (children[1]) delete children[1];
     if (children[2]) delete children[2];

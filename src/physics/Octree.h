@@ -12,7 +12,7 @@ struct Rect
     Vector3D position;
     Vector3D scale;
 
-    bool contains(Rigidbody* other);
+    bool Contains(Rigidbody* other);
 
     float GetMinX() { return position.x - scale.x; };
     float GetMaxX() { return position.x + scale.x; };
@@ -27,47 +27,39 @@ struct Rect
     Rect(Vector3D pos, Vector3D size);
 };
 
-// Noeud
-/*struct Collidable {
-    friend class Octree;
-public:
-    Rect bound;
-    //SimpleGE::ColliderComponent* data;
 
-    //Collidable(const Rect& _bounds = {}, SimpleGE::ColliderComponent* _data = {});
-private:
-    Octree* qt = nullptr;
-    Collidable(const Collidable&) = delete;
-};*/
 
 class Octree {
 public:
-    //Octree(Vector3D pos, Vector3D size, unsigned _capacity, unsigned _maxLevel);
     Octree(const Rect& _bound, unsigned _capacity, unsigned _maxLevel);
     Octree(const Octree&);
     Octree();
 
-    bool insert(Rigidbody* obj);
-    bool remove(Rigidbody* obj);
-    bool update(Rigidbody* obj);
+    bool Insert(Rigidbody* obj);
+    bool Remove(Rigidbody* obj);
+    bool Update(Rigidbody* obj);
     //std::vector<Rigidbody*>& getObjectsInBound(const Rect& bound);
-    unsigned totalChildren() const noexcept;
-    unsigned totalObjects() const noexcept;
-    void drawOctree(int childId = -1);
-    void clear() noexcept;
+    unsigned TotalChildren() const noexcept;
+    unsigned TotalObjects() const noexcept;
+    void DrawOctree(int childId = -1);
+    void Clear() noexcept;
+    void GetAllLeafs(std::vector<Octree*>& listLeafs);
 
     ~Octree();
+
+
+    Rect      bounds;
+    Octree* children[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+
 private:
     bool      isLeaf = true;
     unsigned  level = 0;
     unsigned  capacity;
     unsigned  maxLevel;
-    Rect      bounds;
-    Octree* parent = nullptr;
-    Octree* children[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
-    std::vector<Rigidbody*> objects, foundObjects;
 
-    void subdivide();
-    void discardEmptyBuckets();
-    //inline Octree* getChild(const Rect& bound) const noexcept;
+    Octree* parent = nullptr; 
+    std::vector<Rigidbody*> objects;
+
+    void Subdivide();
+    void DiscardEmptyBuckets();
 };
