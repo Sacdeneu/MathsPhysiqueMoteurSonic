@@ -476,6 +476,37 @@ int main( int argc, char* args[])
 	testMat7 = testMat6.Inverse(det1);
 	std::cout << "Inverse :\n" << testMat7 << std::endl;
 
+	Matrix4 testMat8;
+	testMat8.SetValue(2, 0, 0);
+	testMat8.SetValue(2, 0, 1);
+	testMat8.SetValue(3, 0, 2);
+	testMat8.SetValue(3, 0, 3);
+
+	testMat8.SetValue(8, 1, 0);
+	testMat8.SetValue(5, 1, 1);
+	testMat8.SetValue(6, 1, 2);
+	testMat8.SetValue(4, 1, 3);
+
+	testMat8.SetValue(7, 2, 0);
+	testMat8.SetValue(8, 2, 1);
+	testMat8.SetValue(9, 2, 2);
+	testMat8.SetValue(10, 2, 3);
+
+	testMat8.SetValue(9, 3, 0);
+	testMat8.SetValue(7, 3, 1);
+	testMat8.SetValue(2, 3, 2);
+	testMat8.SetValue(1, 3, 3);
+	std::cout << "Matrice test8 :\n" << testMat8 << std::endl;
+
+	float det2;
+	det2 = testMat8.Determinant();
+	std::cout << "Determinant :\n" << det2 << std::endl;
+
+	Matrix4 testMat9;
+	testMat9 = testMat8.Inverse(det2);
+	std::cout << "Inverse :\n" << testMat9 << std::endl;
+
+
 
 	// Test Quaternion
 	#pragma region TestQuaternion

@@ -51,6 +51,10 @@ class Matrix4
 
 		const GLfloat* GetGLMatrix();
 
+		float Determinant();
+
+		Matrix4 Inverse(float det);
+
 	private:
 		/// <summary>
 		/// Valeurs contenues dans la matrice
