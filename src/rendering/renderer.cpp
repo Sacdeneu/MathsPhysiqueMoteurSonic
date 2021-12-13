@@ -241,3 +241,41 @@ void Renderer::Update(Scene* scene)
 	glDrawArrays(GL_LINES, 0, gridVertices.size() / 3);
 	*/
 }
+
+
+// Pardon stéphane, sauras-tu me pardonner
+void Renderer::DrawOctree(Octree& octree)
+{
+	std::vector<Rect> listBounds;
+	octree.GetAllBounds(listBounds);
+
+	/*glm::mat4 cameraMatrix = camera.GetMatrix(60, 0.1f, 500.0f);
+	glUseProgram(gridShader.program);
+	glUniformMatrix4fv(glGetUniformLocation(gridShader.program, "cameraMatrix"), 1, GL_FALSE, glm::value_ptr(cameraMatrix));*/
+	for (size_t i = 0; i < listBounds.size(); i++)
+	{
+		Rect rect = listBounds[i];
+
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(rect.position.x, rect.position.y, rect.position.z));
+		model = glm::scale(model, glm::vec3(rect.scale.x*2, rect.scale.y * 2, rect.scale.z * 2)); // * 2 car scale représente le half extend
+
+		int modelLoc = glGetUniformLocation(gridShader.program, "cameraMatrix");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		cubeVAO.Bind();
+		glDrawArrays(GL_LINES, 0, cubeVertices.size() / 3);
+		cubeVAO.Unbind();
+
+		// Technique du sheitan pour dessiner les autres faces
+		model = glm::rotate(model, 3.14f * 0.5f, glm::vec3(0, 1, 0));
+		modelLoc = glGetUniformLocation(gridShader.program, "cameraMatrix");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		cubeVAO.Bind();
+		glDrawArrays(GL_LINES, 0, cubeVertices.size() / 3);
+		cubeVAO.Unbind();
+
+	}
+
+}

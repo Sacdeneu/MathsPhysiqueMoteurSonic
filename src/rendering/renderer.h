@@ -17,6 +17,9 @@
 #include "EBO.h"
 #include "../physics/primitive.h"
 
+// Octree
+#include "../physics/Octree.h"
+
 #define IMGUI_IMPL_OPENGL_LOADER_GLEW
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
@@ -31,6 +34,10 @@ public:
 	Renderer(SDL_Window* targetWindow);
 	Camera camera;
 	void Update(Scene* scene);
+
+	// Grille octree
+	void DrawOctree(Octree& octree);
+
 private:
 	SDL_GLContext context;
 	Shader defaultShader, gridShader, mapShader;

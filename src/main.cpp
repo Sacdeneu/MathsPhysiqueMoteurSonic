@@ -596,6 +596,7 @@ int main( int argc, char* args[])
 
 				//mise à jour de l'affichage
 				renderer->Update(Scene::mainScene);
+				renderer->DrawOctree(contactSolver.generator.octree);
 				MakeImGuiWindow(physicsUpdateTime);
 				SDL_GL_SwapWindow(window);
 
