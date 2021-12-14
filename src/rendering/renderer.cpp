@@ -79,36 +79,6 @@ Renderer::Renderer(SDL_Window* targetWindow)
 	glEnable(GL_DEPTH_TEST);
 	camera.SetPosition(0, 3, 15);
 
-	//génération de la grille
-	int minGrid = -20;
-	int maxGrid = 20;
-	for (int i = minGrid; i <= maxGrid; i++)
-	{
-		gridVertices.push_back(minGrid);
-		gridVertices.push_back(i);
-		gridVertices.push_back(0);
-
-		gridVertices.push_back(maxGrid);
-		gridVertices.push_back(i);
-		gridVertices.push_back(0);
-
-		gridVertices.push_back(i);
-		gridVertices.push_back(minGrid);
-		gridVertices.push_back(0);
-
-		gridVertices.push_back(i);
-		gridVertices.push_back(maxGrid);
-		gridVertices.push_back(0);
-	}
-
-	//VAO de la grille
-	gridVAO.Init();
-	gridVAO.Bind();
-	VBO gridVBO(gridVertices);
-	gridVAO.LinkAttrib(gridVBO, 0, 3, GL_FLOAT, 3 * sizeof(GLfloat), (void*)0);
-	gridVAO.Unbind();
-	gridVBO.Unbind();
-
 	cubeVertices = {
 		.5f,.5f,.5f,0,1,0,    .5f,.5f,-.5f,0,1,0,    -.5f,.5f,-.5f,0,1,0,    -.5f,.5f,.5f,0,1,0,   //top
 		.5f,-.5f,.5f,0,-1,0,  .5f,-.5f,-.5f,0,-1,0,  -.5f,-.5f,-.5f,0,-1,0,  -.5f,-.5f,.5f,0,-1,0, //bottom
@@ -229,53 +199,60 @@ void Renderer::Update(Scene* scene)
 			}
 		}
 	}
-
-	/*
-	//affichage de la grille
-	glUseProgram(gridShader.program);
-	camera.SetMatrix(60, 0.1f, 500.0f, gridShader, "cameraMatrix");
-	gridVAO.Bind();
-	glm::mat4 model = glm::mat4(1.0f);
-	int modelLoc = glGetUniformLocation(gridShader.program, "model");
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	glDrawArrays(GL_LINES, 0, gridVertices.size() / 3);
-	*/
 }
 
-
-// Pardon stéphane, sauras-tu me pardonner
+// Affiche l'octree dans la scene
 void Renderer::DrawOctree(Octree& octree)
 {
 	std::vector<Rect> listBounds;
 	octree.GetAllBounds(listBounds);
+	gridVertices.clear();
 
-	/*glm::mat4 cameraMatrix = camera.GetMatrix(60, 0.1f, 500.0f);
-	glUseProgram(gridShader.program);
-	glUniformMatrix4fv(glGetUniformLocation(gridShader.program, "cameraMatrix"), 1, GL_FALSE, glm::value_ptr(cameraMatrix));*/
 	for (size_t i = 0; i < listBounds.size(); i++)
 	{
 		Rect rect = listBounds[i];
 
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(rect.position.x, rect.position.y, rect.position.z));
-		model = glm::scale(model, glm::vec3(rect.scale.x*2, rect.scale.y * 2, rect.scale.z * 2)); // * 2 car scale représente le half extend
+		Vector3D regionCorners[] =
+		{
+			Vector3D(rect.position.x - rect.scale.x, rect.position.y - rect.scale.y, rect.position.z - rect.scale.z),
+			Vector3D(rect.position.x + rect.scale.x, rect.position.y - rect.scale.y, rect.position.z - rect.scale.z),
+			Vector3D(rect.position.x + rect.scale.x, rect.position.y + rect.scale.y, rect.position.z - rect.scale.z),
+			Vector3D(rect.position.x - rect.scale.x, rect.position.y + rect.scale.y, rect.position.z - rect.scale.z),
+			Vector3D(rect.position.x - rect.scale.x, rect.position.y - rect.scale.y, rect.position.z + rect.scale.z),
+			Vector3D(rect.position.x + rect.scale.x, rect.position.y - rect.scale.y, rect.position.z + rect.scale.z),
+			Vector3D(rect.position.x + rect.scale.x, rect.position.y + rect.scale.y, rect.position.z + rect.scale.z),
+			Vector3D(rect.position.x - rect.scale.x, rect.position.y + rect.scale.y, rect.position.z + rect.scale.z)
+		};
 
-		int modelLoc = glGetUniformLocation(gridShader.program, "cameraMatrix");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-		cubeVAO.Bind();
-		glDrawArrays(GL_LINES, 0, cubeVertices.size() / 3);
-		cubeVAO.Unbind();
-
-		// Technique du sheitan pour dessiner les autres faces
-		model = glm::rotate(model, 3.14f * 0.5f, glm::vec3(0, 1, 0));
-		modelLoc = glGetUniformLocation(gridShader.program, "cameraMatrix");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-		cubeVAO.Bind();
-		glDrawArrays(GL_LINES, 0, cubeVertices.size() / 3);
-		cubeVAO.Unbind();
-
+		AddLineToGrid(&regionCorners[0], &regionCorners[1]);
+		AddLineToGrid(&regionCorners[1], &regionCorners[2]);
+		AddLineToGrid(&regionCorners[2], &regionCorners[3]);
+		AddLineToGrid(&regionCorners[3], &regionCorners[0]);
+		AddLineToGrid(&regionCorners[4], &regionCorners[5]);
+		AddLineToGrid(&regionCorners[5], &regionCorners[6]);
+		AddLineToGrid(&regionCorners[6], &regionCorners[7]);
+		AddLineToGrid(&regionCorners[7], &regionCorners[4]);
+		AddLineToGrid(&regionCorners[0], &regionCorners[4]);
+		AddLineToGrid(&regionCorners[1], &regionCorners[5]);
+		AddLineToGrid(&regionCorners[2], &regionCorners[6]);
+		AddLineToGrid(&regionCorners[3], &regionCorners[7]);
 	}
 
+	//VAO de la grille
+	gridVAO.Bind();
+	VBO gridVBO(gridVertices);
+	gridVAO.LinkAttrib(gridVBO, 0, 3, GL_FLOAT, 3 * sizeof(GLfloat), (void*)0);
+	gridVBO.Unbind();
+
+	glUseProgram(gridShader.program);
+	glm::mat4 cameraMatrix = camera.GetMatrix(60, 0.1f, 500.0f);
+	glUniformMatrix4fv(glGetUniformLocation(gridShader.program, "cameraMatrix"), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
+	gridVAO.Bind();
+	glDrawArrays(GL_LINES, 0, gridVertices.size() / 3);
+	gridVAO.Unbind();
+}
+
+void Renderer::AddLineToGrid(Vector3D* pointA, Vector3D* pointB)
+{
+	gridVertices.insert(gridVertices.end(), { pointA->x, pointA->y, pointA->z, pointB->x, pointB->y, pointB->z });
 }

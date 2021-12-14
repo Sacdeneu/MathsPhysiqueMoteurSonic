@@ -49,6 +49,8 @@ private:
 	std::vector<GLfloat> planeVertices;
 	std::vector<GLuint> planeIndices;
 	GLuint grassTexture, dirtTexture;
+
+	void AddLineToGrid(Vector3D* pointA, Vector3D* pointB);
 };
 
 #endif

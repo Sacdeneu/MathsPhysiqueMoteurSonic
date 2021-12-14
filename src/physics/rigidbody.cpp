@@ -124,11 +124,6 @@ void Rigidbody::Update(float dt)
 	if (invMass == 0) //static
 		return;
 
-	if (id == 2)
-	{
-		std::cout << "Velocite : " << velocity << " ; Position : " << position << std::endl;
-	}
-
 	// Update Acceleration
 	Vector3D accelerationAngular = inverseInertiaTensorWorld * totalTorque;
 
