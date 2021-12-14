@@ -42,9 +42,7 @@ Octree::Octree(const Rect& _bound, unsigned _capacity, unsigned _maxLevel) :
     objects.reserve(_capacity);
 }
 
-// Inserts an object into this Octree
 bool Octree::Insert(Rigidbody* obj) {
-    //if (obj->qt != nullptr) return false;
 
     if (!isLeaf) // Octree n'est pas une feuille donc on ajoute dans les enfants de manière récursive
     {
@@ -53,9 +51,6 @@ bool Octree::Insert(Rigidbody* obj) {
            if(child->bounds.Contains(obj))
                 return child->Insert(obj); // Si les collisions sont bizarre, enlever le return
         }
-        // insert object into leaf
-        //if (Octree* child = getChild(obj->bound))
-            //return child->insert(obj);
     }
 
     // Octree est une feuille, donc on ajoute l'objet
@@ -64,7 +59,7 @@ bool Octree::Insert(Rigidbody* obj) {
 
     objects.push_back(obj);
 
-    // Subdivide if required
+    // Subdivise si nécessaire
     if (isLeaf && level < maxLevel && objects.size() >= capacity) {
         Subdivide();
         Update(obj);
@@ -72,7 +67,7 @@ bool Octree::Insert(Rigidbody* obj) {
     return true;
 }
 
-// Removes an object from this Octree
+
 bool Octree::Remove(Rigidbody* obj) {
     auto objToFind = std::find(objects.begin(), objects.end(), obj);
     if (objToFind == objects.end())
@@ -84,19 +79,19 @@ bool Octree::Remove(Rigidbody* obj) {
 }
 
 
-// Removes and re-inserts object into Octree (for objects that move)
+
 bool Octree::Update(Rigidbody* obj) {
     if (!Remove(obj)) return false;
 
-    // Not contained in this node -- insert into parent
+    // Pas contenu dans ce noeud -- on insère dans le parent
      if (parent != nullptr && !bounds.Contains(obj))
         return parent->Insert(obj);
      if (!isLeaf) {
-        // Still within current node -- insert into leaf
+        // Toujours à l'intérieur du noeud actuel -- on insère dans la feuille
         for (auto& child : children)
         {
             if (child->bounds.Contains(obj)) {
-                return child->Insert(obj); // Si les collisions sont bizarre, enlever le return
+                return child->Insert(obj); // Si les collisions sont bizarres, enlever le return
 
             }
                  
@@ -105,7 +100,6 @@ bool Octree::Update(Rigidbody* obj) {
     return Insert(obj);
 }
 
-// Returns total children count for this Octree
 unsigned Octree::TotalChildren() const noexcept {
     unsigned total = 0;
     if (isLeaf) return total;
@@ -114,7 +108,7 @@ unsigned Octree::TotalChildren() const noexcept {
     return 8 + total;
 }
 
-// Returns total object count for this Octree
+
 unsigned Octree::TotalObjects() const noexcept {
     unsigned total = (unsigned)objects.size();
     if (!isLeaf) {
@@ -141,7 +135,7 @@ void Octree::DrawOctree(int childId)
     }
 }
 
-// Removes all objects and children from this Octree
+
 void Octree::Clear() noexcept {
     if (!objects.empty()) {
         objects.clear();
@@ -153,7 +147,7 @@ void Octree::Clear() noexcept {
     }
 }
 
-// Return all the leafs of the tree
+
 void Octree::GetAllLeafs(std::vector<Octree*>& listLeafs)
 {
     if (!isLeaf)
@@ -162,11 +156,10 @@ void Octree::GetAllLeafs(std::vector<Octree*>& listLeafs)
             child->GetAllLeafs(listLeafs);
     }
 
-    if(objects.size() > 1)// optimization for the collision case
+    if(objects.size() > 1) // optimization pour le cas de la collision
         listLeafs.push_back(this);
 }
 
-// Return all the bounds of the tree
 void Octree::GetAllBounds(std::vector<Rect>& boundsList)
 {
     boundsList.push_back(bounds);
@@ -177,7 +170,6 @@ void Octree::GetAllBounds(std::vector<Rect>& boundsList)
     }
 }
 
-// Subdivides into eight quadrants
 void Octree::Subdivide() {
 
     Vector3D childSize = Vector3D(bounds.scale.x * 0.5f, bounds.scale.y * 0.5f, bounds.scale.z * 0.5f);
@@ -189,25 +181,25 @@ void Octree::Subdivide() {
 
     for (unsigned i = 0; i < 8; ++i) 
     {
-        if(i < 4) // Top
+        if(i < 4) // Haut
             z = bounds.position.z + depth;
-        else    // Bottom
+        else    // Bas
             z = bounds.position.z - depth;
 
         switch (i%4) {
-        case 0: // Top right
+        case 0: // Haut droit
             x = bounds.position.x + width;
             y = bounds.position.y + height;
             break;
-        case 1:  // Top left
+        case 1:  // Haut gauche
             x = bounds.position.x - width;
             y = bounds.position.y + height;
             break;
-        case 2:  // Bottom left
+        case 2:  // Bas gauche
             x = bounds.position.x - width;
             y = bounds.position.y - height;
             break;
-        case 3: // Bottom right
+        case 3: // Bas droite
             x = bounds.position.x + width;
             y = bounds.position.y - height;
             break; 
@@ -219,7 +211,7 @@ void Octree::Subdivide() {
     isLeaf = false;
 }
 
-// Discards buckets if all children are leaves and contain no objects
+
 void Octree::DiscardEmptyBuckets() {
     if (!objects.empty()) return;
     if (!isLeaf) {
