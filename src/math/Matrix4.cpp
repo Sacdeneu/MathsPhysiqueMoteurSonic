@@ -147,10 +147,13 @@ float Matrix4::Determinant()
 	return det;
 }
 
-Matrix4 Matrix4::Inverse(float det)
+Matrix4 Matrix4::Inverse()
 {
+	float det = Determinant();
+
 	if (det == 0) {
 		std::cout << "Je ne suis pas inversible";
+		return *this;
 	}
 	Matrix4 res;
 	float invDet = 1.0 / det;

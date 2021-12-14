@@ -54,7 +54,7 @@ class Matrix4
 
 		float Determinant();
 
-		Matrix4 Inverse(float det);
+		Matrix4 Inverse();
 
 	private:
 		/// <summary>

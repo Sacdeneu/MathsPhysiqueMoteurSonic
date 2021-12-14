@@ -8,14 +8,14 @@ void PrintCollisions(std::vector<CollisionData>* collisions)
 	for (int i = 0; i < collisions->size(); i++)
 	{
 		CollisionData collision = collisions->at(i);
-		std::cout << "[Collision " << i << " entre les rigidbodies " << collision.GetContact(0)->GetRigidbodyA()->id << " et " << collision.GetContact(0)->GetRigidbodyB()->id << ']' << std::endl;
+		std::cout << "\n[Collision " << i << " entre les rigidbodies " << collision.GetContact(0)->GetRigidbodyA()->id << " et " << collision.GetContact(0)->GetRigidbodyB()->id << ']' << std::endl;
 		for (int j = 0; j < collision.GetContactCount(); j++)
 		{
 			Contact* contact = collision.GetContact(j);
-			std::cout << "    [Contact " << j << "] Normal:" << (contact->GetNormal())
-				<< "; Interpenetration:" << (contact->GetInterpenetration())
-				<< "; Point de contact (local) :" << (contact->GetPoint())
-				<< "; Point de contact (monde) :" << (contact->GetRigidbodyB()->transformMatrix * contact->GetPoint()) << std::endl;
+			std::cout << "  [Contact " << j << "]\n    - Normale : " << (contact->GetNormal())
+				<< "\n    - Interpenetration : " << (contact->GetInterpenetration())
+				<< "\n    - Point de contact (monde) : " << (contact->GetPoint())
+				<< "\n    - Point de contact (local) : " << (contact->GetRigidbodyB()->transformMatrix.Inverse() * contact->GetPoint()) << std::endl;
 		}
 	}
 }
@@ -48,7 +48,7 @@ void RigidbodyContactSolver::UpdateCollisions(Scene* scene, int iterations)
 
 			for (int k = 0; k < collisions->at(j).GetContactCount(); k++)
 			{
-				//collisions->at(j).GetContact(k)->Resolve();
+				collisions->at(j).GetContact(k)->Resolve();
 
 #ifdef DEBUG_MODE
 				std::cout << "    [Collision " << j << "; Contact "<<k<<"] Normal:"

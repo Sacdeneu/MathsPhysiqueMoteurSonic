@@ -7,7 +7,6 @@ Rect::Rect(Vector3D pos, Vector3D size)
 { 
     position = Vector3D(pos);
     scale = Vector3D(size);
-
 }
 
 bool Rect::Contains(Rigidbody* a) {
@@ -26,11 +25,6 @@ bool Rect::Contains(Rigidbody* a) {
         return false;
     return true;
 }
-
-
-
-
-
 
 //** Octree **//
 Octree::Octree() : Octree(Rect(Vector3D(0,0,0), Vector3D(0,0,0)), 0, 0) { }
@@ -53,7 +47,7 @@ bool Octree::Insert(Rigidbody* obj) {
         }
     }
 
-    // Octree est une feuille, donc on ajoute l'objet
+    // Si l'objet est deja insere, on ignore
     if (!bounds.Contains(obj))
         return false;
 
@@ -67,7 +61,6 @@ bool Octree::Insert(Rigidbody* obj) {
     return true;
 }
 
-
 bool Octree::Remove(Rigidbody* obj) {
     auto objToFind = std::find(objects.begin(), objects.end(), obj);
     if (objToFind == objects.end())
@@ -77,8 +70,6 @@ bool Octree::Remove(Rigidbody* obj) {
     DiscardEmptyBuckets();
     return true;
 }
-
-
 
 bool Octree::Update(Rigidbody* obj) {
     if (!Remove(obj)) return false;
@@ -92,9 +83,7 @@ bool Octree::Update(Rigidbody* obj) {
         {
             if (child->bounds.Contains(obj)) {
                 return child->Insert(obj); // Si les collisions sont bizarres, enlever le return
-
-            }
-                 
+            }  
         }
     }
     return Insert(obj);
@@ -107,7 +96,6 @@ unsigned Octree::TotalChildren() const noexcept {
         total += child->TotalChildren();
     return 8 + total;
 }
-
 
 unsigned Octree::TotalObjects() const noexcept {
     unsigned total = (unsigned)objects.size();
@@ -135,7 +123,6 @@ void Octree::DrawOctree(int childId)
     }
 }
 
-
 void Octree::Clear() noexcept {
     if (!objects.empty()) {
         objects.clear();
@@ -146,7 +133,6 @@ void Octree::Clear() noexcept {
         isLeaf = true;
     }
 }
-
 
 void Octree::GetAllLeafs(std::vector<Octree*>& listLeafs)
 {
@@ -211,7 +197,6 @@ void Octree::Subdivide() {
     isLeaf = false;
 }
 
-
 void Octree::DiscardEmptyBuckets() {
     if (!objects.empty()) return;
     if (!isLeaf) {
@@ -223,7 +208,6 @@ void Octree::DiscardEmptyBuckets() {
         parent->DiscardEmptyBuckets();
 }
 
-
 Octree::~Octree() {
     Clear();
     if (children[0]) delete children[0];
@@ -234,5 +218,4 @@ Octree::~Octree() {
     if (children[5]) delete children[5];
     if (children[6]) delete children[6];
     if (children[7]) delete children[7];
-
 }

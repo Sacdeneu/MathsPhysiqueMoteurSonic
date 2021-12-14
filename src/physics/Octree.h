@@ -138,6 +138,7 @@ public:
     /// </summary>
     /// <param name="bounds">Liste récupérant les résultats</param>
     void GetAllBounds(std::vector<Rect>& bounds);
+
     ~Octree();
 
     //VARIABLES
