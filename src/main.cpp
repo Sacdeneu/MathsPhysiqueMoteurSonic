@@ -26,7 +26,7 @@
 
 bool runGame = true;
 float rigidbodyMass = 1;
-float randomZDirection = 0;// 2.5f;
+float randomZDirection = 2.5f;
 float rigidbodyLinkLength = 2;
 
 ForcesRegister forcesRegister;

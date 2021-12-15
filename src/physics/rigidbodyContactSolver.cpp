@@ -3,6 +3,7 @@
 
 //#define DEBUG_MODE
 
+//Affiche toutes les informations du vecteur de CollisionData
 void PrintCollisions(std::vector<CollisionData>* collisions)
 {
 	for (int i = 0; i < collisions->size(); i++)

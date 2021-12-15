@@ -212,6 +212,7 @@ void Renderer::DrawOctree(Octree& octree)
 	{
 		Rect rect = listBounds[i];
 
+		//array des coins de la boite
 		Vector3D regionCorners[] =
 		{
 			Vector3D(rect.position.x - rect.scale.x, rect.position.y - rect.scale.y, rect.position.z - rect.scale.z),
@@ -224,6 +225,7 @@ void Renderer::DrawOctree(Octree& octree)
 			Vector3D(rect.position.x - rect.scale.x, rect.position.y + rect.scale.y, rect.position.z + rect.scale.z)
 		};
 
+		//arretes de la boite
 		AddLineToGrid(&regionCorners[0], &regionCorners[1]);
 		AddLineToGrid(&regionCorners[1], &regionCorners[2]);
 		AddLineToGrid(&regionCorners[2], &regionCorners[3]);
@@ -238,16 +240,16 @@ void Renderer::DrawOctree(Octree& octree)
 		AddLineToGrid(&regionCorners[3], &regionCorners[7]);
 	}
 
-	//VAO de la grille
+	//mise a jour du VBO de la grille
 	gridVAO.Bind();
 	VBO gridVBO(gridVertices);
 	gridVAO.LinkAttrib(gridVBO, 0, 3, GL_FLOAT, 3 * sizeof(GLfloat), (void*)0);
 	gridVBO.Unbind();
 
+	//Affichage de la grille
 	glUseProgram(gridShader.program);
 	glm::mat4 cameraMatrix = camera.GetMatrix(60, 0.1f, 500.0f);
 	glUniformMatrix4fv(glGetUniformLocation(gridShader.program, "cameraMatrix"), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
-	gridVAO.Bind();
 	glDrawArrays(GL_LINES, 0, gridVertices.size() / 3);
 	gridVAO.Unbind();
 }
